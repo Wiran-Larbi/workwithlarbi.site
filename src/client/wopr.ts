@@ -125,6 +125,8 @@ function initWopr() {
   let startingGame = false;
   let board: Cell[] = Array(9).fill(null);
   let humanLocked = false;
+  /** Focused cell for arrow-key navigation (0–8). */
+  let kbdFocusIdx = 0;
 
   function setHeatmapVisible(on: boolean) {
     heatmap.classList.toggle('wopr-heatmap--visible', on);
@@ -170,12 +172,21 @@ function initWopr() {
     promptReady = true;
   }
 
+  function updateKbdHighlight() {
+    const show = gameActive && !humanLocked;
+    squares.forEach((sq, i) => {
+      sq.classList.toggle('wopr-square--kbd', show && i === kbdFocusIdx);
+    });
+  }
+
   function renderBoard() {
     squares.forEach((sq, i) => {
       const v = board[i];
       sq.textContent = v ?? '';
       sq.disabled = v !== null || humanLocked || gameActive === false;
+      sq.tabIndex = -1;
     });
+    updateKbdHighlight();
   }
 
   function setTerminalVisible(on: boolean) {
@@ -210,9 +221,10 @@ function initWopr() {
       resetBtn.hidden = true;
       board = Array(9).fill(null);
       humanLocked = false;
+      kbdFocusIdx = 0;
 
       await appendGameLine('> GREETINGS, PROFESSOR FALKEN.');
-      await appendGameLine('> LET US PLAY GLOBAL THERMONUCLEAR TIC-TAC-TOE.');
+      await appendGameLine('> LET US PLAY TIC-TAC-TOE.');
       await appendGameLine('> YOU ARE X. I AM O. YOUR MOVE.');
       renderBoard();
       gamePanel.focus();
@@ -227,6 +239,7 @@ function initWopr() {
     squares.forEach((sq) => {
       sq.disabled = true;
     });
+    updateKbdHighlight();
   }
 
   async function woprThinkingLine(show: boolean) {
@@ -273,7 +286,7 @@ function initWopr() {
 
     const w = winner(board);
     if (w === 'O') {
-      await appendGameLine('> WINNER: JOSHUA. GLOBAL THERMONUCLEAR WAR AVERTED.');
+      await appendGameLine('> GAME OVER. JOSHUA WINS.');
       endGame();
       return;
     }
@@ -314,6 +327,32 @@ function initWopr() {
       return;
     }
 
+    if (gameActive && !humanLocked) {
+      const arrows =
+        e.key === 'ArrowUp' ||
+        e.key === 'ArrowDown' ||
+        e.key === 'ArrowLeft' ||
+        e.key === 'ArrowRight';
+      const place = e.key === 'Enter' || e.key === ' ';
+      if (arrows || place) {
+        if (e.target === resetBtn) return;
+        if (!gamePanel.contains(e.target as Node)) return;
+        e.preventDefault();
+        if (place) {
+          void onHumanMove(kbdFocusIdx);
+          return;
+        }
+        let i = kbdFocusIdx;
+        if (e.key === 'ArrowLeft' && i % 3 > 0) i--;
+        if (e.key === 'ArrowRight' && i % 3 < 2) i++;
+        if (e.key === 'ArrowUp' && i >= 3) i -= 3;
+        if (e.key === 'ArrowDown' && i <= 5) i += 3;
+        kbdFocusIdx = i;
+        updateKbdHighlight();
+        return;
+      }
+    }
+
     if (!promptReady || gameActive) return;
 
     if (e.key === 'y' || e.key === 'Y') {
@@ -343,6 +382,7 @@ function initWopr() {
     sq.addEventListener('click', () => {
       const idx = Number(sq.dataset.idx);
       if (Number.isNaN(idx)) return;
+      kbdFocusIdx = idx;
       void onHumanMove(idx);
     });
   });
@@ -354,6 +394,7 @@ function initWopr() {
       resetBtn.hidden = true;
       board = Array(9).fill(null);
       humanLocked = false;
+      kbdFocusIdx = 0;
       await appendGameLine('> NEW GAME. YOUR MOVE.');
       renderBoard();
     })();

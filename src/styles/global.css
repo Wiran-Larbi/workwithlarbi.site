@@ -1444,6 +1444,13 @@ html.orange-mode {
   outline-offset: -1px;
 }
 
+/* Arrow-key selection (game panel focused or a square focused) */
+.wopr-square.wopr-square--kbd {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
 .wopr-game-status {
   min-height: 1.5em;
   margin-bottom: var(--space-2);
