@@ -40,7 +40,7 @@ Everything is imported with `draft: true`. Review, expand, and flip to publish.
 
 ## Fathom Analytics
 
-`src/layouts/Base.astro` has a `<script>` with `data-site="FATHOM_SITE_ID"`. Replace that placeholder with your Fathom site ID.
+Site ID is set in `src/layouts/Base.astro` (`data-site` on the Fathom script).
 
 ## Deploy
 
