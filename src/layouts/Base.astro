@@ -1,0 +1,202 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Path under `public/`, e.g. `/og.png`. Omit until you have a dedicated OG image (~1200×630). */
+  ogImage?: string;
+  canonical?: string;
+  /** Open Graph type; use `article` for blog posts. */
+  ogType?: 'website' | 'article';
+  articlePublishedTime?: string;
+  articleModifiedTime?: string;
+  /** Schema.org nodes (merged into a single JSON-LD `@graph`). */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title = 'Derek Castelli — Agentic Design Engineer',
+  description =
+    'Agentic design engineer, still making websites full-time. Writing on faith and technology.',
+  ogImage,
+  canonical,
+  ogType = 'website',
+  articlePublishedTime,
+  articleModifiedTime,
+  jsonLd,
+} = Astro.props;
+
+const siteUrl = Astro.site?.toString() ?? 'https://heyderekj.com';
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteUrl).toString();
+const ogImageUrl = ogImage ? new URL(ogImage, siteUrl).toString() : null;
+
+const ldExtra = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const ldGraph = ldExtra.length > 0 ? { '@context': 'https://schema.org', '@graph': ldExtra } : null;
+const ldJson = ldGraph ? JSON.stringify(ldGraph).replace(/</g, '\\u003c') : '';
+
+const mainNav = [
+  { href: '/',          label: 'Home',     icon: 'ph-house' },
+  { href: '/posts/',    label: 'Posts',    icon: 'ph-read-cv-logo' },
+  { href: '/work/',     label: 'Work',     icon: 'ph-briefcase' },
+  { href: '/projects/', label: 'Projects', icon: 'ph-folder-open' },
+];
+const extraNav = [
+  { href: '/about/', label: 'About', icon: 'ph-user' },
+  { href: '/tools/', label: 'Tools', icon: 'ph-wrench' },
+];
+
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => {
+  const n = href.replace(/\/$/, '') || '/';
+  return current === n || (n !== '/' && current.startsWith(n));
+};
+
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Derek Castelli" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Derek Castelli" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    {articlePublishedTime && (
+      <meta property="article:published_time" content={articlePublishedTime} />
+    )}
+    {articleModifiedTime && (
+      <meta property="article:modified_time" content={articleModifiedTime} />
+    )}
+
+    <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:site" content="@heyderekj" />
+    <meta name="twitter:creator" content="@heyderekj" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/derekagon-fav.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/derekagon-web.png" />
+    <link rel="alternate" type="application/rss+xml" title="Derek Castelli" href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
+
+    {ldJson && (
+      <script type="application/ld+json" set:html={ldJson} />
+    )}
+
+    <!-- Phosphor Icons — bold default; fill on active nav -->
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
+
+    <!-- Plus Jakarta Sans — humanist warmth -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+
+    <!-- Fathom Analytics: replace FATHOM_SITE_ID with your site ID from heyderekj.com -->
+    <script src="https://cdn.usefathom.com/script.js" data-site="FATHOM_SITE_ID" defer is:inline></script>
+  </head>
+  <body>
+    <div class="app-window">
+      <div class="layout">
+        <aside class="sidebar">
+          <nav class="sidebar-nav" aria-label="Primary">
+            {mainNav.map(({ href, label, icon }) => (
+              <a
+                href={href}
+                class={isActive(href) ? 'active' : ''}
+                aria-current={isActive(href) ? 'page' : undefined}
+                aria-label={label}
+              >
+                <i class={`${isActive(href) ? 'ph-fill' : 'ph-bold'} ${icon}`} aria-hidden="true"></i>
+                <span aria-hidden="true">{label}</span>
+              </a>
+            ))}
+            {extraNav.map(({ href, label, icon }) => (
+              <a
+                href={href}
+                class={isActive(href) ? 'active' : ''}
+                aria-current={isActive(href) ? 'page' : undefined}
+                aria-label={label}
+              >
+                <i class={`${isActive(href) ? 'ph-fill' : 'ph-bold'} ${icon}`} aria-hidden="true"></i>
+                <span aria-hidden="true">{label}</span>
+              </a>
+            ))}
+          </nav>
+        </aside>
+
+        <main class="main">
+          <header class="site-masthead">
+            <a href="/" aria-label="Derek Castelli — Home" data-url-chip="Derek Castelli">
+              <img src="/assets/brand/signature.svg" alt="Derek Castelli" class="masthead-sig" />
+            </a>
+          </header>
+
+          <slot />
+
+          <div class="main-prefooter-grow" aria-hidden="true"></div>
+          <footer class="main-footer">
+            <div class="footer-links">
+              <a href="mailto:derekj@hey.com">Email</a>
+              <a href="https://x.com/heyderekj" target="_blank" rel="noopener">X.com</a>
+              <a href="https://github.com/heyderekj" target="_blank" rel="noopener">GitHub</a>
+              <a href="/rss.xml">RSS</a>
+            </div>
+            <div class="footer-version">&copy; {year}</div>
+          </footer>
+        </main>
+      </div>
+    </div>
+  <script src="../client/url-chip.ts"></script>
+  <script>
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let ac: AudioContext | null = null;
+      let lastPopMs = 0;
+      /** Keeps rapid taps from stacking oscillators (muddy / “weird” overlap). */
+      const POP_MIN_INTERVAL_MS = 72;
+
+      function pop() {
+        const wall = performance.now();
+        if (wall - lastPopMs < POP_MIN_INTERVAL_MS) return;
+        lastPopMs = wall;
+
+        if (!ac) ac = new AudioContext();
+        if (ac.state === 'suspended') void ac.resume();
+        const now = ac.currentTime;
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(370, now);
+        osc.frequency.exponentialRampToValueAtTime(110, now + 0.055);
+        gain.gain.setValueAtTime(0.27, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      }
+
+      document
+        .querySelectorAll('.sidebar-nav a, .entries a, .cta, .back-link a')
+        .forEach((el) => {
+          el.addEventListener('click', () => pop());
+        });
+    }
+  </script>
+  </body>
+</html>

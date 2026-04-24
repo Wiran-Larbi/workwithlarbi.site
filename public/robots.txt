@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Site context for LLM / agent crawlers (see https://llmstxt.org/)
+# https://heyderekj.com/llms.txt
+
+Sitemap: https://heyderekj.com/sitemap.xml

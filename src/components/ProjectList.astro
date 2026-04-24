@@ -1,0 +1,198 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatProjectStartLabel, projectStartTime } from '../lib/projectStart';
+import { displayProjectStatus } from '../lib/projectStatus';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+  /** Hides tagline and stack; keeps title + status/date row. */
+  variant?: 'default' | 'compact';
+  /** `desc` = newest first (default); `asc` = oldest first. */
+  startedOrder?: 'asc' | 'desc';
+}
+
+const { projects, variant = 'default', startedOrder = 'desc' } = Astro.props;
+const compact = variant === 'compact';
+
+const sorted = [...projects].sort((a, b) => {
+  const ta = projectStartTime(a);
+  const tb = projectStartTime(b);
+  return startedOrder === 'asc' ? ta - tb : tb - ta;
+});
+---
+<ul class="project-cards">
+  {sorted.map((project) => {
+    const startStr = formatProjectStartLabel(project);
+    const stackStr =
+      project.data.stack && project.data.stack.length > 0 ? project.data.stack.join(', ') : '';
+    const showFoot = compact
+      ? Boolean(startStr || project.data.status)
+      : Boolean(startStr || project.data.status || stackStr);
+    return (
+      <li class="project-card">
+        <a href={`/projects/${project.slug}/`} class="project-card-link">
+          <span class="card-name">{project.data.name}</span>
+          {!compact && <p class="card-tagline">{project.data.tagline}</p>}
+          {showFoot && (
+            <p class="card-foot">
+              {(startStr || project.data.status) && (
+                <span class="card-foot-lead">
+                  {project.data.status && (
+                    <span class={`card-status card-status--${project.data.status}`}>
+                      {displayProjectStatus(project.data.status)}
+                    </span>
+                  )}
+                  {startStr && <span class="card-foot-date">{startStr}</span>}
+                </span>
+              )}
+              {!compact && stackStr && (startStr || project.data.status) && (
+                <span class="card-foot-gap">·</span>
+              )}
+              {!compact && stackStr && <span class="card-foot-stack">{stackStr}</span>}
+            </p>
+          )}
+        </a>
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+.project-cards {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.project-card {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+/* :global(main) beats `main.main a` hairline so full card border (incl. bottom) wins. */
+:global(main.main) .project-card-link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  text-decoration: none;
+  color: inherit;
+  min-height: 100%;
+  box-sizing: border-box;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+:global(main.main) .project-card-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Match .entries li:hover (post list above) */
+:global(main.main) .project-card-link:hover {
+  background: var(--glass-active-bg);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-color: var(--glass-border);
+  box-shadow: var(--glass-inset), 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+.card-name {
+  font-size: var(--size-body);
+  font-weight: 600;
+  color: var(--fg);
+  transition: color 0.15s ease;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+:global(main.main) .project-card-link:hover .card-name {
+  color: var(--accent);
+}
+
+.card-status {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  line-height: 1.2;
+}
+
+.card-status--active {
+  color: #9a3412;
+  background: rgba(249, 115, 22, 0.14);
+  border: 1px solid rgba(249, 115, 22, 0.38);
+}
+
+.card-status--paused {
+  color: var(--muted-strong);
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.4);
+}
+
+.card-status--retired {
+  color: var(--muted);
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border);
+}
+
+@media (prefers-color-scheme: dark) {
+  .card-status--retired {
+    background: rgba(255, 255, 255, 0.04);
+  }
+}
+
+.card-tagline {
+  margin: 0;
+  font-size: var(--size-meta);
+  color: var(--fg-soft);
+  line-height: 1.45;
+  max-width: 42em;
+}
+
+.card-foot {
+  margin: 0;
+  margin-top: 2px;
+  font-size: var(--size-meta);
+  color: var(--muted-strong);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.35;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.4rem;
+  row-gap: 0.2rem;
+}
+
+.card-foot-lead {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.card-foot-date {
+  font-variant-numeric: tabular-nums;
+}
+
+.card-foot-gap {
+  color: var(--muted);
+  user-select: none;
+}
+
+.card-foot-stack {
+  min-width: 0;
+}
+</style>

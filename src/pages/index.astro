@@ -1,0 +1,206 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PostList from '../components/PostList.astro';
+import ProjectList from '../components/ProjectList.astro';
+import { projectStartTime } from '../lib/projectStart';
+import NowHomeTicker from '../components/NowHomeTicker.astro';
+import { schemaPersonId, schemaWebsiteId } from '../lib/schemaIds';
+import { postHasWorkTag } from '../lib/postTags';
+
+const siteOrigin = (Astro.site?.toString() ?? 'https://heyderekj.com/').replace(/\/$/, '');
+const defaultDesc =
+  'Agentic design engineer, still making websites full-time. Writing on faith and technology.';
+const homeJsonLd = [
+  {
+    '@type': 'WebSite',
+    '@id': schemaWebsiteId(siteOrigin),
+    url: `${siteOrigin}/`,
+    name: 'Derek Castelli',
+    description: defaultDesc,
+    inLanguage: 'en-US',
+    publisher: { '@id': schemaPersonId(siteOrigin) },
+  },
+  {
+    '@type': 'Person',
+    '@id': schemaPersonId(siteOrigin),
+    name: 'Derek Castelli',
+    url: siteOrigin,
+    jobTitle: 'Agentic design engineer',
+    sameAs: ['https://github.com/heyderekj', 'https://twitter.com/heyderekj'],
+  },
+];
+
+const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const recentPosts = allPosts.filter((p) => !postHasWorkTag(p.data)).slice(0, 5);
+
+const recentWork = allPosts.filter((p) => postHasWorkTag(p.data)).slice(0, 3);
+
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+  .filter(({ data }) => data.featured)
+  .sort((a, b) => projectStartTime(b) - projectStartTime(a));
+const pausedProjects = allProjects.filter((p) => p.data.status === 'paused');
+const retiredProjects = allProjects.filter((p) => p.data.status === 'retired');
+const pausedCount = pausedProjects.length;
+const retiredCount = retiredProjects.length;
+---
+<Base jsonLd={homeJsonLd}>
+  <section class="intro">
+    <p>
+      An agentic design engineer and Christian making websites full-time, but building thoughtful apps on the side. I write about my life, faith, and tech, drawing on work in Apple Retail, design work for a
+      church, and freelance work since 2020.
+    </p>
+    <p class="now-line">
+      <NowHomeTicker />
+    </p>
+  </section>
+
+  <h2 class="section-title"><a href="/posts/">/ posts</a></h2>
+  {recentPosts.length > 0 ? (
+    <PostList posts={recentPosts} />
+  ) : (
+    <p style="color: var(--muted);">No posts yet — adding soon.</p>
+  )}
+
+  <h2 class="section-title"><a href="/work/">/ work</a></h2>
+  {recentWork.length > 0 ? (
+    <PostList posts={recentWork} />
+  ) : (
+    <p style="color: var(--muted);">No work posts yet.</p>
+  )}
+
+  <h2 class="section-title"><a href="/projects/">/ projects</a></h2>
+  <ProjectList projects={featuredProjects} />
+  {(pausedCount > 0 || retiredCount > 0) && (
+    <ul class="project-cards home-status-summaries">
+      {pausedCount > 0 && (
+        <li class="project-card">
+          <a href="/projects/#inactive" class="project-card-link home-status-summary-link">
+            <p class="card-foot home-status-summary-foot">
+              <span class="card-foot-lead">
+                <span class="card-status card-status--paused">inactive</span>
+                <span class="card-foot-date home-status-summary-date">
+                  {pausedCount} inactive {pausedCount === 1 ? 'project' : 'projects'}
+                </span>
+              </span>
+            </p>
+          </a>
+        </li>
+      )}
+      {retiredCount > 0 && (
+        <li class="project-card">
+          <a href="/projects/#retired" class="project-card-link home-status-summary-link">
+            <p class="card-foot home-status-summary-foot">
+              <span class="card-foot-lead">
+                <span class="card-status card-status--retired">retired</span>
+                <span class="card-foot-date home-status-summary-date">
+                  {retiredCount} retired {retiredCount === 1 ? 'project' : 'projects'}
+                </span>
+              </span>
+            </p>
+          </a>
+        </li>
+      )}
+    </ul>
+  )}
+</Base>
+
+<style>
+  .home-status-summaries {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-2) 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  :global(main.main) .home-status-summary-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: auto;
+    padding: var(--space-3) var(--space-3);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--bg);
+    text-decoration: none;
+    color: inherit;
+    min-height: 100%;
+    box-sizing: border-box;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  :global(main.main) .home-status-summary-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  :global(main.main) .home-status-summary-link:hover {
+    background: var(--glass-active-bg);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-color: var(--glass-border);
+    box-shadow: var(--glass-inset), 0 1px 6px rgba(0, 0, 0, 0.06);
+  }
+
+  :global(main.main) .home-status-summary-link:hover .home-status-summary-date {
+    color: var(--accent);
+  }
+
+  .home-status-summary-foot {
+    margin: 0;
+    font-size: var(--size-meta);
+    color: var(--muted-strong);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.35;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .card-foot-lead {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .home-status-summary-date {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .card-status {
+    flex-shrink: 0;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: var(--radius-pill);
+    line-height: 1.2;
+  }
+
+  .card-status--paused {
+    color: var(--muted-strong);
+    background: rgba(234, 179, 8, 0.12);
+    border: 1px solid rgba(234, 179, 8, 0.4);
+  }
+
+  .card-status--retired {
+    color: var(--muted);
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .card-status--retired {
+      background: rgba(255, 255, 255, 0.04);
+    }
+  }
+</style>

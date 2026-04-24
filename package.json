@@ -1,0 +1,18 @@
+{
+  "name": "heyderekj-site",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Personal site for Derek Castelli",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "import:posts": "node scripts/import-posts.mjs"
+  },
+  "devDependencies": {
+    "@astrojs/rss": "^4.0.18",
+    "astro": "^4.16.19"
+  }
+}

@@ -1,0 +1,60 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const sections = [
+  {
+    title: 'Design & web',
+    items: [['Framer', 'Motion one-offs.']],
+  },
+  {
+    title: 'Agentic coding',
+    items: [
+      ['Claude Code', 'Daily driver.'],
+      ['Cursor', 'Focused editing.'],
+      ['Anthropic SDK', 'Custom agents.'],
+    ],
+  },
+  {
+    title: 'Writing',
+    items: [
+      ['iA Writer', 'Drafts.'],
+      ['Obsidian', 'Notes.'],
+      ['HEY', 'Email.'],
+    ],
+  },
+  {
+    title: 'Infra',
+    items: [
+      ['GitHub', 'Code.'],
+      ['Fathom', 'Analytics.'],
+    ],
+  },
+  {
+    title: 'Hardware',
+    items: [
+      ['MacBook Pro', 'M-series.'],
+      ['Studio Display', 'Desk setup.'],
+    ],
+  },
+];
+---
+<Base title="Tools — Derek Castelli" description="Tools Derek reaches for daily.">
+  <article class="prose">
+    <h1>Tools</h1>
+    <p style="color: var(--fg-soft);">What I use to design, build, write, and ship.</p>
+
+    {sections.map((section) => (
+      <>
+        <h2 class="section-title">/ {section.title.toLowerCase().replace(/\s+/g, '-')}</h2>
+        <ul class="entries">
+          {section.items.map(([name, note]) => (
+            <li style="grid-template-columns: 160px 1fr;">
+              <span class="entry-title" style="font-weight: 500;">{name}</span>
+              <span class="entry-meta" style="align-self: center;">{note}</span>
+            </li>
+          ))}
+        </ul>
+      </>
+    ))}
+  </article>
+</Base>

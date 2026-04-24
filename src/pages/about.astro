@@ -1,0 +1,111 @@
+---
+import Base from '../layouts/Base.astro';
+import {
+  aboutMeta,
+  aboutHero,
+  aboutSections,
+  aboutExperienceGroups,
+} from '../data/about';
+---
+<Base title={aboutMeta.title} description={aboutMeta.description} ogImage={aboutMeta.ogImage}>
+  <article class="prose about-page">
+    <header class="about-hero">
+      <div
+        class="about-hero__visual-wrap"
+        tabindex="0"
+        aria-label="Photo portrait — hover or focus to show illustrated avatar and illustration credit"
+      >
+        <div class="about-hero__visual">
+          <img
+            class="about-hero__photo"
+            src={aboutHero.photoSrc}
+            alt={aboutHero.photoAlt}
+            width={560}
+            height={560}
+            decoding="async"
+          />
+          <img
+            class="about-hero__avatar"
+            src={aboutHero.avatarSrc}
+            alt={aboutHero.avatarAlt}
+            width={280}
+            height={280}
+            decoding="async"
+          />
+        </div>
+        <p class="about-hero__credit">
+          <span class="about-hero__credit-line">{aboutHero.avatarCredit.line}</span>{' '}
+          <a
+            class="about-hero__credit-link"
+            href={aboutHero.avatarCredit.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {aboutHero.avatarCredit.artist}
+          </a>
+        </p>
+      </div>
+      <h1>{aboutHero.headline}</h1>
+      <div class="about-intro">
+        {aboutHero.introParagraphs.map((p) => (
+          <p>{p}</p>
+        ))}
+      </div>
+      <p class="about-journey-kicker">{aboutHero.designJourneyKicker}</p>
+    </header>
+
+    {aboutSections.map((section) => (
+      <section class="about-section">
+        <h2>{section.heading}</h2>
+        {section.paragraphs.map((p) => (
+          <p>{p}</p>
+        ))}
+        {section.bulletsTitle && section.bullets && section.bullets.length > 0 && (
+          <p class="about-bullets-title">{section.bulletsTitle}</p>
+        )}
+        {section.bullets && section.bullets.length > 0 && (
+          <ul class="about-bullets">
+            {section.bullets.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        )}
+      </section>
+    ))}
+
+    <section class="about-experience" aria-labelledby="about-exp-heading">
+      <h2 id="about-exp-heading">Experience</h2>
+      <div class="about-exp-stack">
+        {aboutExperienceGroups.map((group) => (
+          <div class="about-exp-group">
+            <h3 class="about-exp-group__title">{group.title}</h3>
+            <ul class="about-exp-group__list">
+              {group.items.map((item) => (
+                <li class="about-exp-item">
+                  <p class="about-exp-item__range">{item.range}</p>
+                  <p class="about-exp-item__name">{item.name}</p>
+                  <p class="about-exp-item__desc">{item.description}</p>
+                  {item.link && (
+                    <a
+                      class="about-exp-pill about-exp-pill--link"
+                      href={item.link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {item.link.icon === 'newspaper' ? (
+                        <i class="ph-bold ph-newspaper" aria-hidden="true" />
+                      ) : (
+                        <i class="ph-bold ph-arrow-right" aria-hidden="true" />
+                      )}
+                      {item.link.label}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  </article>
+</Base>

@@ -1,0 +1,14 @@
+---
+name: Copact
+tagline: Past portfolio entry — App.
+started: 2024-03-04
+status: retired
+featured: false
+order: 0
+category: App
+burnerLevel: Burnt (Tossed Out)
+---
+
+## About
+
+A past idea from the portfolio archive; not actively developed.

@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { postHasWorkTag } from '../../lib/postTags';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft && !postHasWorkTag(data)))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<Base title="Posts — Derek Castelli" description="Writing on faith, technology, and agentic design by Derek Castelli.">
+  <h1>Posts</h1>
+  <p style="color: var(--fg-soft); max-width: var(--max-prose);">
+    Notes and essays on faith, tech, and agentic design. For client sites and shipped work, see{' '}
+    <a href="/work/">Work</a>.
+  </p>
+
+  {posts.length > 0 ? (
+    <PostList posts={posts} showYearHeaders={true} />
+  ) : (
+    <p style="color: var(--muted);">No posts yet.</p>
+  )}
+</Base>

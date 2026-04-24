@@ -1,0 +1,148 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { formatProjectStartLabel } from '../../lib/projectStart';
+import { displayProjectStatus } from '../../lib/projectStatus';
+import { schemaPersonId } from '../../lib/schemaIds';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+
+const startLabel = formatProjectStartLabel(project);
+const status = project.data.status;
+const showMeta = Boolean(startLabel || status);
+
+const siteOrigin = (Astro.site?.toString() ?? 'https://heyderekj.com/').replace(/\/$/, '');
+const pageUrl = new URL(`/projects/${project.slug}/`, `${siteOrigin}/`).toString();
+const projectJsonLd: Record<string, unknown> = {
+  '@type': 'SoftwareApplication',
+  name: project.data.name,
+  description: project.data.tagline,
+  url: project.data.url ?? pageUrl,
+  author: { '@type': 'Person', '@id': schemaPersonId(siteOrigin), name: 'Derek Castelli' },
+};
+if (project.data.url) {
+  projectJsonLd.sameAs = [project.data.url];
+}
+---
+<Base title={`${project.data.name} — Derek Castelli`} description={project.data.tagline} jsonLd={projectJsonLd}>
+  <article class="prose">
+    <header class="post-header project-detail-header">
+      {project.data.url ? (
+        <div class="project-header-title-row">
+          <h1>{project.data.name}</h1>
+          <a href={project.data.url} target="_blank" rel="noopener" class="cta project-header-cta">
+            {project.data.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+            <span class="arrow">&rarr;</span>
+          </a>
+        </div>
+      ) : (
+        <h1>{project.data.name}</h1>
+      )}
+      {showMeta && (
+        <div class="meta project-meta">
+          {(startLabel || status) && (
+            <span class="project-meta-lead">
+              {status && (
+                <span class={`detail-status detail-status--${status}`}>
+                  {displayProjectStatus(status)}
+                </span>
+              )}
+              {startLabel && <span class="project-meta-start">Started {startLabel}</span>}
+            </span>
+          )}
+        </div>
+      )}
+    </header>
+
+    <div class="post-content">
+      <Content />
+    </div>
+
+    <p class="back-link"><a href="/projects/"><span class="arrow">&larr;</span> all projects</a></p>
+  </article>
+</Base>
+
+<style>
+  .project-header-title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .project-header-title-row h1 {
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    line-height: 1.15;
+  }
+
+  .project-header-cta {
+    flex-shrink: 0;
+  }
+
+  .project-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 0.4rem;
+    row-gap: 0.2rem;
+  }
+
+  .project-meta-lead {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .detail-status {
+    flex-shrink: 0;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: var(--radius-pill);
+    line-height: 1.2;
+  }
+
+  .detail-status--active {
+    color: #9a3412;
+    background: rgba(249, 115, 22, 0.14);
+    border: 1px solid rgba(249, 115, 22, 0.38);
+  }
+
+  .detail-status--paused {
+    color: var(--muted-strong);
+    background: rgba(234, 179, 8, 0.12);
+    border: 1px solid rgba(234, 179, 8, 0.4);
+  }
+
+  .detail-status--retired {
+    color: var(--muted);
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .detail-status--retired {
+      background: rgba(255, 255, 255, 0.04);
+    }
+  }
+</style>

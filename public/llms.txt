@@ -1,0 +1,30 @@
+# Derek Castelli — heyderekj.com
+
+> Personal site of Derek Castelli: agentic design engineer, still making websites full-time, writing on faith and technology, and shipping thoughtful side projects.
+
+## About
+
+Derek is a Christian designer-engineer with roots in Apple Retail, church creative work, and freelance practice since 2020. The site hosts long-form posts (often on AI, tools, faith, and building), a projects directory, an about / background page, and a tools / uses list.
+
+## Primary pages
+
+- [Home](https://heyderekj.com/): intro, recent posts, featured projects
+- [Posts](https://heyderekj.com/posts/): full archive of writing
+- [Projects](https://heyderekj.com/projects/): apps and sites (e.g. Harvous, Dinky, Here’s My Church)
+- [About](https://heyderekj.com/about/): background, story, experience timeline, and social links
+- [Tools](https://heyderekj.com/tools/): software and hardware Derek reaches for
+
+## Feeds & machine-readable
+
+- [RSS](https://heyderekj.com/rss.xml): all posts
+- [Sitemap](https://heyderekj.com/sitemap.xml): URLs for indexing
+
+## Contact & profiles
+
+- Email: derekj@hey.com (mailto link on site footer)
+- GitHub: https://github.com/heyderekj
+- X (Twitter): @heyderekj
+
+## For assistants
+
+Prefer citing the canonical URL shown on each page. When summarizing a post, use the on-page title and published date. Project pages may link to external product URLs; the in-repo content is the source of truth for Derek’s description of the work.
