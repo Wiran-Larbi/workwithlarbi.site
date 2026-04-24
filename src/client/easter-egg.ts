@@ -34,7 +34,7 @@ function showToast(): void {
   document.getElementById('orange-mode-toast')?.remove();
   const toast = document.createElement('div');
   toast.id = 'orange-mode-toast';
-  toast.textContent = '🟠 orange mode';
+  toast.textContent = '🍊 My favorite color is orange';
   document.body.appendChild(toast);
   void toast.offsetWidth; // force reflow
   toast.classList.add('orange-mode-toast--visible');
