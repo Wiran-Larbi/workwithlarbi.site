@@ -14,30 +14,106 @@ function contributionLevel(count: number): number {
   if (count <= 9) return 3;
   return 4;
 }
+
+function relativeFromPush(iso: string | undefined): string {
+  if (!iso) return 'UNKNOWN';
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return 'UNKNOWN';
+  const sec = Math.round((Date.now() - then) / 1000);
+  if (sec < 45) return 'just now';
+  const min = Math.floor(sec / 60);
+  if (min < 60) return `${min} minute${min === 1 ? '' : 's'} ago`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return `${hr} hour${hr === 1 ? '' : 's'} ago`;
+  const day = Math.floor(hr / 24);
+  if (day < 30) return `${day} day${day === 1 ? '' : 's'} ago`;
+  const mo = Math.floor(day / 30);
+  if (mo < 12) return `${mo} month${mo === 1 ? '' : 's'} ago`;
+  const yr = Math.floor(day / 365);
+  return `${yr} year${yr === 1 ? '' : 's'} ago`;
+}
+
+const mostRecentPush = data.recentRepos.reduce<string | undefined>((latest, r) => {
+  if (!latest) return r.pushedAt;
+  return new Date(r.pushedAt) > new Date(latest) ? r.pushedAt : latest;
+}, data.recentRepos[0]?.pushedAt);
+
+const lastLoginRel = relativeFromPush(mostRecentPush);
+
+const line1 = '> LOGON: JOSHUA';
+const line2 = `> LAST LOGIN: ${lastLoginRel}`;
+const line3 = `> ${data.totalContributions} COMMITS — PAST YEAR`;
+
+function logLine(repo: GitHubData['recentRepos'][number]): string {
+  const lang = repo.primaryLanguage?.name ?? '—';
+  const desc = repo.description ? repo.description.replace(/\s+/g, ' ').slice(0, 48) : '';
+  const tail = desc ? ` — ${desc}${repo.description && repo.description.length > 48 ? '…' : ''}` : '';
+  return `> ${repo.name} [${lang}]${tail}`;
+}
 ---
 
-<h2 class="section-title">/ activity</h2>
+<section class="wopr-section">
+  <h2 class="section-title">/ activity</h2>
 
-<div class="wopr-terminal" data-wopr>
-  <div
-    class="wopr-heatmap"
-    data-wopr-heatmap
-    role="img"
-    aria-label={`GitHub contributions: ${data.totalContributions} in the past year`}
-  >
-    {data.weeks.map((week, wi) =>
-      week.contributionDays.map((day) => (
-        <div
-          class="wopr-cell"
-          data-real={contributionLevel(day.contributionCount)}
-          data-week={wi}
-          style="--wopr-level: 0"
-          title={`${day.contributionCount} commit${day.contributionCount !== 1 ? 's' : ''} on ${day.date}`}
-          aria-hidden="true"
-        ></div>
-      ))
-    )}
+  <div class="wopr-terminal" data-wopr>
+    <div class="wopr-lines">
+      <div data-wopr-line={line1} data-wopr-delay="0"></div>
+      <div data-wopr-line={line2} data-wopr-delay="0"></div>
+      <div data-wopr-line={line3} data-wopr-delay="0"></div>
+    </div>
+
+    <div
+      class="wopr-heatmap"
+      data-wopr-heatmap
+      style={`grid-template-columns: repeat(${Math.max(data.weeks.length, 1)}, 9px);`}
+      role="img"
+      aria-label={`GitHub contributions: ${data.totalContributions} in the past year`}
+    >
+      {
+        data.weeks.map((week) =>
+          week.contributionDays.map((day) => (
+            <div
+              class="wopr-cell"
+              style={`--wopr-level: ${contributionLevel(day.contributionCount)}`}
+              data-count={day.contributionCount}
+              data-date={day.date}
+              title={`${day.contributionCount} commit${day.contributionCount !== 1 ? 's' : ''} on ${day.date}`}
+              aria-hidden="true"
+            ></div>
+          ))
+        )
+      }
+    </div>
+
+    <div class="wopr-log" data-wopr-log>
+      {
+        data.recentRepos.map((repo) => (
+          <div class="wopr-log-entry" data-wopr-line={logLine(repo)} data-wopr-delay="0" />
+        ))
+      }
+    </div>
+
+    <div class="wopr-prompt" data-wopr-prompt hidden>
+      <span class="wopr-prompt-text" data-wopr-prompt-text></span>
+      <button type="button" class="wopr-yn" data-yn="Y" hidden aria-label="Yes, play a game">Y</button>
+      <span> / </span>
+      <button type="button" class="wopr-yn" data-yn="N" hidden aria-label="No">N</button>
+      <span class="wopr-cursor" data-wopr-cursor hidden aria-hidden="true"></span>
+    </div>
   </div>
-</div>
+
+  <div class="wopr-game" data-wopr-game hidden>
+    <div class="wopr-game-lines" data-wopr-game-lines></div>
+    <div class="wopr-board" data-wopr-board>
+      {
+        Array.from({ length: 9 }, (_, i) => (
+          <button type="button" class="wopr-square" data-idx={i} aria-label={`Cell ${i + 1}`} />
+        ))
+      }
+    </div>
+    <div class="wopr-game-status" data-wopr-status></div>
+    <button type="button" class="wopr-reset" data-wopr-reset hidden>PLAY AGAIN</button>
+  </div>
+</section>
 
 <script src="../client/wopr.ts"></script>

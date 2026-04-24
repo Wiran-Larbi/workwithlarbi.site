@@ -13,9 +13,9 @@ export interface GitHubData {
 const EMPTY: GitHubData = { totalContributions: 0, weeks: [], recentRepos: [] };
 
 const QUERY = `
-  query GitHubActivity($login: String!) {
+  query GitHubActivity($login: String!, $from: DateTime!, $to: DateTime!) {
     user(login: $login) {
-      contributionsCollection {
+      contributionsCollection(from: $from, to: $to) {
         contributionCalendar {
           totalContributions
           weeks {
@@ -37,7 +37,9 @@ const QUERY = `
           description
           pushedAt
           url
-          primaryLanguage { name }
+          primaryLanguage {
+            name
+          }
         }
       }
     }
@@ -49,26 +51,57 @@ export async function fetchGitHubActivity(): Promise<GitHubData> {
   if (!token) return EMPTY;
 
   try {
+    const to = new Date();
+    const from = new Date(to);
+    from.setUTCFullYear(from.getUTCFullYear() - 1);
+
     const res = await fetch('https://api.github.com/graphql', {
       method: 'POST',
       headers: {
         Authorization: `bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query: QUERY, variables: { login: 'heyderekj' } }),
+      body: JSON.stringify({
+        query: QUERY,
+        variables: {
+          login: 'heyderekj',
+          from: from.toISOString(),
+          to: to.toISOString(),
+        },
+      }),
     });
 
     if (!res.ok) return EMPTY;
 
-    const json = await res.json();
-    const user = json?.data?.user;
+    const json = (await res.json()) as {
+      data?: {
+        user?: {
+          contributionsCollection?: {
+            contributionCalendar?: {
+              totalContributions?: number;
+              weeks?: GitHubData['weeks'];
+            };
+          };
+          repositories?: { nodes?: GitHubData['recentRepos'] };
+        };
+      };
+      errors?: unknown;
+    };
+
+    if (json.errors?.length) return EMPTY;
+
+    const user = json.data?.user;
     if (!user) return EMPTY;
 
+    const cal = user.contributionsCollection?.contributionCalendar;
+    const total = cal?.totalContributions ?? 0;
+    const weeks = cal?.weeks ?? [];
+    const recentRepos = user.repositories?.nodes ?? [];
+
     return {
-      totalContributions:
-        user.contributionsCollection.contributionCalendar.totalContributions,
-      weeks: user.contributionsCollection.contributionCalendar.weeks,
-      recentRepos: user.repositories.nodes,
+      totalContributions: total,
+      weeks,
+      recentRepos,
     };
   } catch {
     return EMPTY;

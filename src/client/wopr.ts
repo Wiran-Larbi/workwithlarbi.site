@@ -1,91 +1,378 @@
-// WOPR grid animation — randomize → scan → idle flicker
+type Cell = 'X' | 'O' | null;
 
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const WIN_LINES = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+] as const;
 
-function rndLevel() {
-  return Math.floor(Math.random() * 5);
+function winner(board: Cell[]): 'X' | 'O' | null {
+  for (const [a, b, c] of WIN_LINES) {
+    if (board[a] && board[a] === board[b] && board[b] === board[c]) return board[a];
+  }
+  return null;
 }
 
-function setLevel(cell: HTMLElement, level: number) {
-  cell.style.setProperty('--wopr-level', String(level));
+function boardFull(board: Cell[]): boolean {
+  return board.every((c) => c !== null);
 }
 
-function animateGrid(heatmap: HTMLElement) {
-  const cells = Array.from(heatmap.querySelectorAll<HTMLElement>('.wopr-cell'));
-  if (!cells.length) return;
+function minimax(board: Cell[], depth: number, isMax: boolean): number {
+  const w = winner(board);
+  if (w === 'O') return 10 - depth;
+  if (w === 'X') return depth - 10;
+  if (boardFull(board)) return 0;
 
-  if (reducedMotion) {
-    cells.forEach((c) => setLevel(c, Number(c.dataset.real ?? 0)));
+  if (isMax) {
+    let best = -Infinity;
+    for (let i = 0; i < 9; i++) {
+      if (board[i] !== null) continue;
+      board[i] = 'O';
+      const score = minimax(board, depth + 1, false);
+      board[i] = null;
+      best = Math.max(best, score);
+    }
+    return best;
+  }
+  let best = Infinity;
+  for (let i = 0; i < 9; i++) {
+    if (board[i] !== null) continue;
+    board[i] = 'X';
+    const score = minimax(board, depth + 1, true);
+    board[i] = null;
+    best = Math.min(best, score);
+  }
+  return best;
+}
+
+function getBestMove(board: Cell[]): number {
+  let bestScore = -Infinity;
+  let bestMove = -1;
+  for (let i = 0; i < 9; i++) {
+    if (board[i] !== null) continue;
+    board[i] = 'O';
+    const score = minimax(board, 0, false);
+    board[i] = null;
+    if (score > bestScore) {
+      bestScore = score;
+      bestMove = i;
+    }
+  }
+  return bestMove;
+}
+
+async function typeText(el: HTMLElement, text: string, speed = 28, instant: boolean): Promise<void> {
+  el.textContent = '';
+  if (instant) {
+    el.textContent = text;
+    return;
+  }
+  for (let i = 0; i < text.length; i++) {
+    el.textContent += text[i];
+    await new Promise((r) => setTimeout(r, speed));
+  }
+}
+
+async function shortPause(ms: number, instant: boolean) {
+  if (instant) return;
+  await new Promise((r) => setTimeout(r, ms));
+}
+
+function qs<T extends HTMLElement>(sel: string, root: ParentNode = document): T | null {
+  return root.querySelector(sel) as T | null;
+}
+
+function isTypingContext(target: EventTarget | null): boolean {
+  if (!target || !(target instanceof Element)) return false;
+  return !!target.closest('input, textarea, select, [contenteditable="true"]');
+}
+
+function initWopr() {
+  const root = document.querySelector<HTMLElement>('[data-wopr]');
+  const section = root?.closest('.wopr-section');
+  const terminal = root;
+  const gamePanel = section?.querySelector<HTMLElement>('[data-wopr-game]');
+  if (!terminal || !gamePanel || !section) return;
+
+  const heatmap = qs<HTMLElement>('[data-wopr-heatmap]', terminal);
+  const log = qs<HTMLElement>('[data-wopr-log]', terminal);
+  const promptEl = qs<HTMLElement>('[data-wopr-prompt]', terminal);
+  const promptTextEl = qs<HTMLElement>('[data-wopr-prompt-text]', terminal);
+  const promptCursor = qs<HTMLElement>('[data-wopr-cursor]', terminal);
+  const ynButtons = terminal.querySelectorAll<HTMLButtonElement>('.wopr-yn');
+
+  const gameLines = qs<HTMLElement>('[data-wopr-game-lines]', gamePanel);
+  const boardEl = qs<HTMLElement>('[data-wopr-board]', gamePanel);
+  const statusEl = qs<HTMLElement>('[data-wopr-status]', gamePanel);
+  const resetBtn = qs<HTMLButtonElement>('[data-wopr-reset]', gamePanel);
+  const squares = boardEl?.querySelectorAll<HTMLButtonElement>('.wopr-square') ?? [];
+
+  if (!heatmap || !log || !promptEl || !promptTextEl || !promptCursor || !gameLines || !statusEl || !resetBtn) {
     return;
   }
 
-  // Build week → cells map (order matches data-week attrs)
-  const weekMap = new Map<number, HTMLElement[]>();
-  cells.forEach((c) => {
-    const w = Number(c.dataset.week);
-    if (!weekMap.has(w)) weekMap.set(w, []);
-    weekMap.get(w)!.push(c);
-  });
-  const weeks = [...weekMap.keys()].sort((a, b) => a - b);
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const instant = reducedMotion;
 
-  const locked = new Set<number>();
+  let sequenceStarted = false;
+  let promptReady = false;
+  let gameActive = false;
+  let startingGame = false;
+  let board: Cell[] = Array(9).fill(null);
+  let humanLocked = false;
 
-  // Phase 1: rapid random flicker across all cells
-  cells.forEach((c) => setLevel(c, rndLevel()));
+  function setHeatmapVisible(on: boolean) {
+    heatmap.classList.toggle('wopr-heatmap--visible', on);
+    if (instant) heatmap.style.opacity = on ? '1' : '0';
+  }
 
-  const flickerTimer = setInterval(() => {
-    cells.forEach((c) => {
-      if (!locked.has(Number(c.dataset.week))) setLevel(c, rndLevel());
+  function showPromptChrome(show: boolean) {
+    ynButtons.forEach((b) => {
+      b.hidden = !show;
     });
-  }, 50);
+    promptCursor.hidden = !show;
+  }
 
-  // Phase 2: scan left→right after 700ms, locking each column to real data
-  setTimeout(() => {
-    let i = 0;
-    const scanTimer = setInterval(() => {
-      if (i >= weeks.length) {
-        clearInterval(scanTimer);
-        clearInterval(flickerTimer);
-        startIdleFlicker(cells);
-        return;
+  async function runIntroSequence() {
+    const lineEls = terminal.querySelectorAll<HTMLElement>('.wopr-lines [data-wopr-line]');
+    for (const lineEl of lineEls) {
+      const text = lineEl.dataset.woprLine ?? '';
+      const delayAfter = Number(lineEl.dataset.woprDelay ?? 0);
+      await typeText(lineEl, text, 28, instant);
+      await shortPause(delayAfter, instant);
+    }
+
+    setHeatmapVisible(true);
+    if (!instant) await shortPause(320, false);
+    else await shortPause(0, true);
+
+    const entries = log.querySelectorAll<HTMLElement>('.wopr-log-entry');
+    for (const entry of entries) {
+      const text = entry.dataset.woprLine ?? '';
+      const delayAfter = Number(entry.dataset.woprDelay ?? 0);
+      await typeText(entry, text, 28, instant);
+      await shortPause(delayAfter, instant);
+    }
+
+    await shortPause(1500, instant);
+
+    promptEl.hidden = false;
+    showPromptChrome(false);
+    promptCursor.hidden = true;
+    await typeText(promptTextEl, '> SHALL WE PLAY A GAME? ', 28, instant);
+    showPromptChrome(true);
+    terminal.tabIndex = 0;
+    promptReady = true;
+  }
+
+  function renderBoard() {
+    squares.forEach((sq, i) => {
+      const v = board[i];
+      sq.textContent = v ?? '';
+      sq.disabled = v !== null || humanLocked || gameActive === false;
+    });
+  }
+
+  function setTerminalVisible(on: boolean) {
+    terminal.hidden = !on;
+    if (on) terminal.removeAttribute('hidden');
+    else terminal.setAttribute('hidden', '');
+  }
+
+  function setGameVisible(on: boolean) {
+    gamePanel.hidden = !on;
+    if (on) gamePanel.removeAttribute('hidden');
+    else gamePanel.setAttribute('hidden', '');
+    gameActive = on;
+  }
+
+  async function appendGameLine(text: string) {
+    const row = document.createElement('div');
+    row.className = 'wopr-game-line';
+    gameLines.appendChild(row);
+    await typeText(row, text, 28, instant);
+  }
+
+  async function startGame() {
+    if (startingGame || !promptReady || gameActive) return;
+    startingGame = true;
+    promptReady = false;
+    try {
+      setTerminalVisible(false);
+      setGameVisible(true);
+      gameLines.textContent = '';
+      statusEl.textContent = '';
+      resetBtn.hidden = true;
+      board = Array(9).fill(null);
+      humanLocked = false;
+
+      await appendGameLine('> GREETINGS, PROFESSOR FALKEN.');
+      await appendGameLine('> LET US PLAY GLOBAL THERMONUCLEAR TIC-TAC-TOE.');
+      await appendGameLine('> YOU ARE X. I AM O. YOUR MOVE.');
+      renderBoard();
+      gamePanel.focus();
+    } finally {
+      startingGame = false;
+    }
+  }
+
+  function endGame() {
+    humanLocked = true;
+    resetBtn.hidden = false;
+    squares.forEach((sq) => {
+      sq.disabled = true;
+    });
+  }
+
+  async function woprThinkingLine(show: boolean) {
+    const row = qs<HTMLElement>('[data-wopr-calc-line]', gameLines);
+    if (!show) {
+      row?.remove();
+      return;
+    }
+    const line = document.createElement('div');
+    line.className = 'wopr-game-line';
+    line.setAttribute('data-wopr-calc-line', '');
+    gameLines.appendChild(line);
+    await typeText(line, '> CALCULATING...', 28, instant);
+  }
+
+  async function onHumanMove(idx: number) {
+    if (board[idx] !== null || humanLocked || !gameActive) return;
+    board[idx] = 'X';
+    renderBoard();
+
+    if (winner(board) === 'X') {
+      await appendGameLine('> ERROR: UNEXPECTED OUTCOME.');
+      endGame();
+      return;
+    }
+    if (boardFull(board)) {
+      await appendGameLine('> A STRANGE GAME. THE ONLY WINNING MOVE IS NOT TO PLAY.');
+      endGame();
+      return;
+    }
+
+    humanLocked = true;
+    squares.forEach((sq) => {
+      sq.disabled = true;
+    });
+
+    await woprThinkingLine(true);
+    if (!instant) await new Promise((r) => setTimeout(r, 400));
+    await woprThinkingLine(false);
+
+    const move = getBestMove(board);
+    if (move >= 0) board[move] = 'O';
+    renderBoard();
+
+    const w = winner(board);
+    if (w === 'O') {
+      await appendGameLine('> WINNER: JOSHUA. GLOBAL THERMONUCLEAR WAR AVERTED.');
+      endGame();
+      return;
+    }
+    if (boardFull(board)) {
+      await appendGameLine('> A STRANGE GAME. THE ONLY WINNING MOVE IS NOT TO PLAY.');
+      endGame();
+      return;
+    }
+
+    humanLocked = false;
+    renderBoard();
+  }
+
+  function declineOrExitGame() {
+    setGameVisible(false);
+    gameLines.textContent = '';
+    statusEl.textContent = '';
+    resetBtn.hidden = true;
+    board = Array(9).fill(null);
+    humanLocked = false;
+    setTerminalVisible(true);
+    promptReady = true;
+    terminal.tabIndex = 0;
+    terminal.focus();
+  }
+
+  gamePanel.tabIndex = 0;
+
+  /** Y / N work without focusing the terminal; ignores keys while typing in form fields. */
+  function onGlobalKeydown(e: KeyboardEvent) {
+    if (e.defaultPrevented) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (isTypingContext(e.target)) return;
+
+    if (gameActive && (e.key === 'n' || e.key === 'N' || e.key === 'Escape')) {
+      e.preventDefault();
+      declineOrExitGame();
+      return;
+    }
+
+    if (!promptReady || gameActive) return;
+
+    if (e.key === 'y' || e.key === 'Y') {
+      e.preventDefault();
+      void startGame();
+      return;
+    }
+    if (e.key === 'n' || e.key === 'N') {
+      e.preventDefault();
+    }
+  }
+
+  document.addEventListener('keydown', onGlobalKeydown);
+
+  ynButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!promptReady) return;
+      const yn = btn.dataset.yn;
+      if (yn === 'Y') void startGame();
+      if (yn === 'N') {
+        /* stay on terminal — no-op beyond aesthetic */
       }
-      const wk = weeks[i++];
-      locked.add(wk);
-      weekMap.get(wk)!.forEach((c) => setLevel(c, Number(c.dataset.real ?? 0)));
-    }, 16);
-  }, 700);
-}
+    });
+  });
 
-function startIdleFlicker(cells: HTMLElement[]) {
-  // Occasionally spike a random populated cell for a brief moment
-  setInterval(() => {
-    if (Math.random() > 0.25) return;
-    const c = cells[Math.floor(Math.random() * cells.length)];
-    const real = Number(c.dataset.real ?? 0);
-    if (real === 0) return;
-    setLevel(c, Math.min(4, real + 1 + Math.floor(Math.random() * 2)));
-    setTimeout(() => setLevel(c, real), 80 + Math.random() * 100);
-  }, 250);
-}
+  squares.forEach((sq) => {
+    sq.addEventListener('click', () => {
+      const idx = Number(sq.dataset.idx);
+      if (Number.isNaN(idx)) return;
+      void onHumanMove(idx);
+    });
+  });
 
-function init() {
-  const heatmap = document.querySelector<HTMLElement>('[data-wopr-heatmap]');
-  if (!heatmap) return;
+  resetBtn.addEventListener('click', () => {
+    void (async () => {
+      gameLines.textContent = '';
+      statusEl.textContent = '';
+      resetBtn.hidden = true;
+      board = Array(9).fill(null);
+      humanLocked = false;
+      await appendGameLine('> NEW GAME. YOUR MOVE.');
+      renderBoard();
+    })();
+  });
 
-  const observer = new IntersectionObserver(
+  const io = new IntersectionObserver(
     (entries) => {
-      if (entries[0].isIntersecting) {
-        observer.disconnect();
-        animateGrid(heatmap);
-      }
+      if (!entries[0]?.isIntersecting || sequenceStarted) return;
+      sequenceStarted = true;
+      io.disconnect();
+      void runIntroSequence();
     },
-    { threshold: 0.15 }
+    { threshold: 0.12 }
   );
-  observer.observe(heatmap);
+  io.observe(terminal);
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('DOMContentLoaded', initWopr);
 } else {
-  init();
+  initWopr();
 }

@@ -1260,21 +1260,117 @@ html.orange-mode {
 
 /* ── WOPR Terminal ───────────────────────────────────────────────────────── */
 
+.wopr-section {
+  margin-top: var(--space-5);
+  /* Light theme (default) */
+  --wopr-bg: #f3efe8;
+  --wopr-border: color-mix(in srgb, var(--accent) 22%, var(--border-strong));
+  --wopr-heatmap-base: #e5dfd4;
+}
+
+@media (prefers-color-scheme: dark) {
+  .wopr-section {
+    /* Dark theme — phosphor-style panel */
+    --wopr-bg: #0c0800;
+    --wopr-border: color-mix(in srgb, var(--accent) 18%, transparent);
+    --wopr-heatmap-base: #0c0800;
+  }
+}
+
 .wopr-terminal {
-  background: #0c0800;
-  border: 1px solid rgba(251, 146, 60, 0.15);
+  background: var(--wopr-bg);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--size-meta);
+  line-height: 1.5;
+  border: 1px solid var(--wopr-border);
   border-radius: var(--radius-md);
   padding: var(--space-4);
   overflow-x: auto;
   margin-top: var(--space-3);
 }
 
+.wopr-lines > [data-wopr-line] {
+  min-height: 1.5em;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 .wopr-heatmap {
   display: grid;
-  grid-template-columns: repeat(53, 9px);
   grid-template-rows: repeat(7, 9px);
   grid-auto-flow: column;
   gap: 3px;
+  margin-top: var(--space-3);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.wopr-heatmap--visible {
+  opacity: 1;
+}
+
+.wopr-log {
+  margin-top: var(--space-3);
+}
+
+.wopr-log-entry {
+  min-height: 1.5em;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.wopr-prompt {
+  margin-top: var(--space-3);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem;
+}
+
+.wopr-yn {
+  font: inherit;
+  color: var(--accent);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.wopr-yn:hover {
+  color: var(--accent-hover);
+}
+
+.wopr-yn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.wopr-cursor::after {
+  content: '█';
+  animation: wopr-blink 1s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wopr-cursor::after {
+    animation: none;
+  }
+
+  .wopr-heatmap {
+    transition: none;
+  }
+}
+
+@keyframes wopr-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 .wopr-cell {
@@ -1284,12 +1380,91 @@ html.orange-mode {
   background: color-mix(
     in srgb,
     var(--accent) calc(var(--wopr-level, 0) * 22%),
-    #0c0800
+    var(--wopr-heatmap-base)
   );
-  transition: background 0.04s ease;
 }
 
 .wopr-cell:hover {
-  outline: 1px solid rgba(251, 146, 60, 0.5);
+  outline: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
   outline-offset: 1px;
+}
+
+/* Game */
+.wopr-game {
+  background: var(--wopr-bg);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--size-meta);
+  line-height: 1.5;
+  border: 1px solid var(--wopr-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-top: var(--space-3);
+}
+
+.wopr-game-lines {
+  margin-bottom: var(--space-3);
+}
+
+.wopr-game-line {
+  min-height: 1.5em;
+  white-space: pre-wrap;
+}
+
+.wopr-board {
+  display: grid;
+  grid-template-columns: repeat(3, 2.5rem);
+  grid-template-rows: repeat(3, 2.5rem);
+  gap: 0;
+  width: fit-content;
+  margin-bottom: var(--space-3);
+}
+
+.wopr-square {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+.wopr-square:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+
+.wopr-square:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.wopr-game-status {
+  min-height: 1.5em;
+  margin-bottom: var(--space-2);
+}
+
+.wopr-reset {
+  font: inherit;
+  font-size: var(--size-meta);
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+}
+
+.wopr-reset:hover {
+  background: var(--accent-soft);
+}
+
+.wopr-reset:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
