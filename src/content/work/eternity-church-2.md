@@ -1,7 +1,6 @@
 ---
-title: "Claimable"
-date: 2025-11-03
-tags: [work]
+title: "Eternity Church"
+date: 2025-10-02
 draft: false
 ---
 

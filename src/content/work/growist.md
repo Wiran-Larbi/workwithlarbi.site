@@ -1,7 +1,6 @@
 ---
-title: "Christ Community Church"
-date: 2025-05-21
-tags: [work]
+title: "Growist"
+date: 2024-08-22
 draft: false
 ---
 

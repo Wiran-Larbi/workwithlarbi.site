@@ -1,7 +1,6 @@
 ---
-title: "Exodus51"
-date: 2024-04-03
-tags: [work]
+title: "Geo-Loop"
+date: 2022-02-28
 draft: false
 ---
 

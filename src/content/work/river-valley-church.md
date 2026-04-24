@@ -1,7 +1,6 @@
 ---
-title: "David Energy"
-date: 2024-10-31
-tags: [work]
+title: "River Valley Church"
+date: 2024-12-04
 draft: false
 ---
 

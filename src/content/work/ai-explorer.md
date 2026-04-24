@@ -1,7 +1,6 @@
 ---
-title: "Eternity Church"
-date: 2025-10-02
-tags: [work]
+title: "AI Explorer"
+date: 2025-04-15
 draft: false
 ---
 

@@ -1,7 +1,6 @@
 ---
-title: "@bitcoin"
-date: 2025-05-06
-tags: [work]
+title: "Gazel AI"
+date: 2025-04-23
 draft: false
 ---
 

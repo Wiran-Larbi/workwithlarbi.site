@@ -1,10 +1,10 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
-import { postHasWorkTag } from '../lib/postTags';
 
 export async function GET(context) {
-  const posts = (await getCollection('posts', ({ data }) => !data.draft && !postHasWorkTag(data)))
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  );
 
   return rss({
     title: 'Derek Castelli',

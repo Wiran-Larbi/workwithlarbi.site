@@ -4,7 +4,7 @@ Personal site for Derek Castelli. Built with [Astro](https://astro.build), hoste
 
 ## Stack
 
-- Astro 4 with content collections (posts + projects)
+- Astro 4 with content collections (posts, work, projects)
 - Plain system-sans typography, light/dark via `prefers-color-scheme`
 - RSS, sitemap, Fathom Analytics
 
@@ -20,6 +20,7 @@ npm run preview   # preview the production build
 ## Write
 
 - **Posts:** add a markdown file under `src/content/posts/`. Filename: `YYYY-MM-DD-slug.md`. See frontmatter schema in `src/content/config.ts`. Set `draft: false` to publish.
+- **Work:** add a markdown file under `src/content/work/`. Filename: `slug.md` (no date prefix). Published at `/work/slug/`. Same frontmatter shape as posts.
 - **Projects:** add a markdown file under `src/content/projects/`. Set `featured: true` to surface on the homepage.
 - **About:** edit `src/data/about.ts` and rebuild. Home page Bible verse marquee copy stays in `src/data/now.ts`.
 - **Tools:** edit `src/pages/tools/index.astro`.

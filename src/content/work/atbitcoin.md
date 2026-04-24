@@ -1,7 +1,6 @@
 ---
-title: "ManchestorStory"
-date: 2023-05-03
-tags: [work]
+title: "@bitcoin"
+date: 2025-05-06
 draft: false
 ---
 

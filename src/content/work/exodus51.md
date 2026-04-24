@@ -1,7 +1,6 @@
 ---
-title: "Franklin International"
-date: 2024-03-18
-tags: [work]
+title: "Exodus51"
+date: 2024-04-03
 draft: false
 ---
 

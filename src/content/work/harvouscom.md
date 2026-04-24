@@ -1,7 +1,6 @@
 ---
 title: "Harvous.com"
 date: 2026-01-08
-tags: [work]
 draft: false
 ---
 

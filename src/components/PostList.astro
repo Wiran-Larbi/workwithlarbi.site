@@ -1,13 +1,13 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { postEntryHref } from '../lib/postPaths';
+import type { ListableEntry } from '../lib/postPaths';
+import { entryHref } from '../lib/postPaths';
 
 interface Props {
-  posts: CollectionEntry<'posts'>[];
+  entries: ListableEntry[];
   showYearHeaders?: boolean;
 }
 
-const { posts, showYearHeaders = false } = Astro.props;
+const { entries, showYearHeaders = false } = Astro.props;
 
 const fmtDate = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
@@ -16,7 +16,7 @@ const fmtDateWithYear = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
 
 const groupedByYear = showYearHeaders
-  ? posts.reduce<Record<string, CollectionEntry<'posts'>[]>>((acc, post) => {
+  ? entries.reduce<Record<string, ListableEntry[]>>((acc, post) => {
       const y = post.data.date.getFullYear().toString();
       (acc[y] ||= []).push(post);
       return acc;
@@ -34,7 +34,7 @@ const years = groupedByYear
       <ul class="entries">
         {groupedByYear[year].map((post) => (
           <li>
-            <a href={postEntryHref(post)} class="entry-link">
+            <a href={entryHref(post)} class="entry-link">
               <time datetime={post.data.date.toISOString()} class="entry-date">{fmtDate(post.data.date)}</time>
               <span class="entry-title">{post.data.title}</span>
             </a>
@@ -45,9 +45,9 @@ const years = groupedByYear
   ))
 ) : (
   <ul class="entries">
-    {posts.map((post) => (
+    {entries.map((post) => (
       <li>
-        <a href={postEntryHref(post)} class="entry-link">
+        <a href={entryHref(post)} class="entry-link">
           <time datetime={post.data.date.toISOString()} class="entry-date">{fmtDateWithYear(post.data.date)}</time>
           <span class="entry-title">{post.data.title}</span>
         </a>

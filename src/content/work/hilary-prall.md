@@ -1,7 +1,6 @@
 ---
-title: "Seacoast Church"
-date: 2024-11-28
-tags: [work]
+title: "Hilary Prall"
+date: 2024-05-14
 draft: false
 ---
 

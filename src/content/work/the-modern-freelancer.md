@@ -1,7 +1,6 @@
 ---
-title: "Hilary Prall"
-date: 2024-05-14
-tags: [work]
+title: "The Modern Freelancer"
+date: 2025-02-27
 draft: false
 ---
 

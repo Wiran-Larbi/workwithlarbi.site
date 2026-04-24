@@ -1,7 +1,6 @@
 ---
 title: "TutorMe"
 date: 2022-11-22
-tags: [work]
 legacyUrl: "https://tutorme-onebranding.webflow.io/"
 draft: false
 ---

@@ -1,7 +1,8 @@
 import type { CollectionEntry } from 'astro:content';
-import { postHasWorkTag } from './postTags';
 
-/** Canonical URL path for a published post (work-tagged → `/work/…`, else `/posts/…`). */
-export function postEntryHref(post: CollectionEntry<'posts'>): string {
-  return postHasWorkTag(post.data) ? `/work/${post.slug}/` : `/posts/${post.slug}/`;
+/** Entries shown in `PostList` (posts archive or work index / home previews). */
+export type ListableEntry = CollectionEntry<'posts'> | CollectionEntry<'work'>;
+
+export function entryHref(entry: ListableEntry): string {
+  return entry.collection === 'work' ? `/work/${entry.slug}/` : `/posts/${entry.slug}/`;
 }

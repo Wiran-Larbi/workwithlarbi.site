@@ -1,7 +1,6 @@
 ---
-title: "Community Circle"
-date: 2024-05-27
-tags: [work]
+title: "Christ Community Church"
+date: 2025-05-21
 draft: false
 ---
 

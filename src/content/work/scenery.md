@@ -1,7 +1,6 @@
 ---
 title: "Scenery"
 date: 2023-11-14
-tags: [work]
 legacyUrl: "https://web.archive.org/web/20240712095004/https://scenery.video/"
 draft: false
 ---

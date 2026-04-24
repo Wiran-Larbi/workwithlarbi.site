@@ -1,7 +1,6 @@
 ---
-title: "Geo-Loop"
-date: 2022-02-28
-tags: [work]
+title: "Franklin International"
+date: 2024-03-18
 draft: false
 ---
 

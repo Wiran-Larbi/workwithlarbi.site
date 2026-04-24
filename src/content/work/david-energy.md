@@ -1,7 +1,6 @@
 ---
-title: "NameSnag"
-date: 2025-07-20
-tags: [work]
+title: "David Energy"
+date: 2024-10-31
 draft: false
 ---
 

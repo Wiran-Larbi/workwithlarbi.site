@@ -12,6 +12,19 @@ const posts = defineCollection({
   }),
 });
 
+/** Case studies / client work — same shape as posts; lives under `/work/`. */
+const work = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    description: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    draft: z.boolean().default(false),
+    legacyUrl: z.string().url().optional(),
+  }),
+});
+
 const projects = defineCollection({
   type: 'content',
   schema: z.object({
@@ -33,4 +46,4 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { posts, projects };
+export const collections = { posts, work, projects };

@@ -1,7 +1,6 @@
 ---
-title: "The Modern Freelancer"
-date: 2025-02-27
-tags: [work]
+title: "Seacoast Church"
+date: 2024-11-28
 draft: false
 ---
 

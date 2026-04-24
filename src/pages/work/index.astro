@@ -2,10 +2,10 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PostList from '../../components/PostList.astro';
-import { postHasWorkTag } from '../../lib/postTags';
 
-const posts = (await getCollection('posts', ({ data }) => !data.draft && postHasWorkTag(data)))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const entries = (await getCollection('work', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
 ---
 <Base
   title="Work — Derek Castelli"
@@ -17,9 +17,9 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft && postHas
     <a href="/projects/">projects</a>.
   </p>
 
-  {posts.length > 0 ? (
-    <PostList posts={posts} showYearHeaders={true} />
+  {entries.length > 0 ? (
+    <PostList entries={entries} showYearHeaders={true} />
   ) : (
-    <p style="color: var(--muted);">No work-tagged posts yet.</p>
+    <p style="color: var(--muted);">No work entries yet.</p>
   )}
 </Base>

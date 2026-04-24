@@ -1,5 +1,4 @@
 import { getCollection } from 'astro:content';
-import { postHasWorkTag } from '../lib/postTags';
 
 export async function GET(context) {
   const site = context.site?.toString().replace(/\/$/, '') ?? 'https://heyderekj.com';
@@ -7,12 +6,17 @@ export async function GET(context) {
   const staticPaths = ['/', '/posts/', '/work/', '/projects/', '/about/', '/tools/'];
 
   const posts = await getCollection('posts', ({ data }) => !data.draft);
+  const work = await getCollection('work', ({ data }) => !data.draft);
   const projects = await getCollection('projects');
 
   const urls = [
     ...staticPaths.map((p) => ({ loc: `${site}${p}`, lastmod: null })),
     ...posts.map((p) => ({
-      loc: postHasWorkTag(p.data) ? `${site}/work/${p.slug}/` : `${site}/posts/${p.slug}/`,
+      loc: `${site}/posts/${p.slug}/`,
+      lastmod: p.data.date.toISOString().slice(0, 10),
+    })),
+    ...work.map((p) => ({
+      loc: `${site}/work/${p.slug}/`,
       lastmod: p.data.date.toISOString().slice(0, 10),
     })),
     ...projects.map((p) => ({
