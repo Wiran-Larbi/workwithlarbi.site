@@ -15,7 +15,7 @@ status: active
 
 ## About
 
-Harvous is a web-based notes app for Bible study. It is meant to be the place you save, organize, and find again what mattered from reading, sermons, or small group—without replacing your favorite Bible reader. Notes live in threads (flexible groupings) and spaces for focused study; type a reference like `John 3:16` and the text can surface inline; highlights, cross-references, and keyword-aware tags help you reconnect ideas later.
+Harvous is a web-based notes app for Bible study. It is meant to be the place you save, organize, and find again what mattered from reading, sermons, or small group—without replacing your favorite Bible reader. Notes live in threads (flexible groupings) and spaces for focused study; type a reference like `Romans 8:28` and the text can surface inline; highlights, cross-references, and keyword-aware tags help you reconnect ideas later.
 
 Keep your Bible app; add Harvous. The product is deliberately notes-first: capture from your physical Bible, a reader app, or conversation, then search across scripture, threads, and tags when you need that thought again. Supported translations today include BSB, ESV, KJV, NKJV, NIV, NLT, and NET (more planned).
 
