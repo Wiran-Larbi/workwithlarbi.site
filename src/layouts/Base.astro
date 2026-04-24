@@ -87,8 +87,9 @@ const year = new Date().getFullYear();
     <meta name="twitter:description" content={description} />
     {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- PNG first: many browsers prefer it for the tab icon over the SVG. -->
     <link rel="icon" href="/derekagon-fav.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
     <link rel="apple-touch-icon" href="/derekagon-web.png" />
     <link rel="alternate" type="application/rss+xml" title="Derek Castelli" href="/rss.xml" />
     <link rel="sitemap" href="/sitemap.xml" />
