@@ -4,7 +4,7 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
-  /** Path under `public/`, e.g. `/og.png`. Omit until you have a dedicated OG image (~1200×630). */
+  /** Path under `public/` (~1200×630). Defaults to `/derekj-og.png`; override per page if needed. */
   ogImage?: string;
   canonical?: string;
   /** Open Graph type; use `article` for blog posts. */
@@ -19,7 +19,7 @@ const {
   title = 'Derek Castelli',
   description =
     'Agentic design engineer, still making websites full-time. Writing on faith and technology.',
-  ogImage,
+  ogImage = '/derekj-og.png',
   canonical,
   ogType = 'website',
   articlePublishedTime,
@@ -29,7 +29,7 @@ const {
 
 const siteUrl = Astro.site?.toString() ?? 'https://heyderekj.com';
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteUrl).toString();
-const ogImageUrl = ogImage ? new URL(ogImage, siteUrl).toString() : null;
+const ogImageUrl = new URL(ogImage, siteUrl).toString();
 
 const ldExtra = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const ldGraph = ldExtra.length > 0 ? { '@context': 'https://schema.org', '@graph': ldExtra } : null;
@@ -72,7 +72,7 @@ const year = new Date().getFullYear();
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
-    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    <meta property="og:image" content={ogImageUrl} />
     {articlePublishedTime && (
       <meta property="article:published_time" content={articlePublishedTime} />
     )}
@@ -80,12 +80,12 @@ const year = new Date().getFullYear();
       <meta property="article:modified_time" content={articleModifiedTime} />
     )}
 
-    <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@heyderekj" />
     <meta name="twitter:creator" content="@heyderekj" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+    <meta name="twitter:image" content={ogImageUrl} />
 
     <link rel="icon" href="/derekagon-fav.png" type="image/png" />
     <link rel="apple-touch-icon" href="/derekagon-web.png" />

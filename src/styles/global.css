@@ -965,11 +965,11 @@ main.main .footer-links a:hover { color: var(--accent); }
   transform-origin: left center;
   /* Shorter tuck than full −100% so hover in/out travels less (still under portrait via z-index) */
   transform: translateX(calc(-58% - var(--space-2))) translateY(-50%) rotate(-90deg);
-  /* Fade out fast on hover-out; transform keeps the longer tuck slide */
+  /* Hover-out: short total time — ink drops away quickly, tuck matches so nothing lingers */
   transition:
-    transform 0.36s var(--easing),
-    opacity 0.1s ease,
-    visibility 0s linear 0.1s;
+    transform 0.16s ease-in,
+    opacity 0.07s ease-in,
+    visibility 0s linear 0.07s;
 }
 .about-page .about-hero__visual-wrap:is(:hover, :focus-within) .about-hero__credit {
   opacity: 1;
@@ -978,7 +978,7 @@ main.main .footer-links a:hover { color: var(--accent); }
   transform: translateX(0) translateY(-50%) rotate(-90deg);
   transition:
     transform 0.36s var(--easing),
-    opacity 0.24s ease,
+    opacity 0.22s ease-out,
     visibility 0s linear 0s;
 }
 .about-page .about-hero__credit-line {
