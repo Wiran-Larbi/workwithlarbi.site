@@ -16,7 +16,7 @@ interface Props {
 }
 
 const {
-  title = 'Derek Castelli — Agentic Design Engineer',
+  title = 'Derek Castelli',
   description =
     'Agentic design engineer, still making websites full-time. Writing on faith and technology.',
   ogImage,
@@ -87,9 +87,7 @@ const year = new Date().getFullYear();
     <meta name="twitter:description" content={description} />
     {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
 
-    <!-- PNG first: many browsers prefer it for the tab icon over the SVG. -->
-    <link rel="icon" href="/derekagon-fav.png" sizes="32x32" type="image/png" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
+    <link rel="icon" href="/derekagon-fav.png" type="image/png" />
     <link rel="apple-touch-icon" href="/derekagon-web.png" />
     <link rel="alternate" type="application/rss+xml" title="Derek Castelli" href="/rss.xml" />
     <link rel="sitemap" href="/sitemap.xml" />
