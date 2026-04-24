@@ -1162,3 +1162,44 @@ main.main .about-page .about-exp-pill--link:hover {
     background: var(--bg-elevated);
   }
 }
+
+/* ============================================================
+   Easter eggs
+   ============================================================ */
+html.orange-mode {
+  --bg: #fff3e8;
+  --bg-elevated: #ffe8d0;
+  --bg-hover: rgba(234, 88, 12, 0.12);
+  --accent: #f97316;
+  --accent-hover: #fb923c;
+  --accent-soft: rgba(249, 115, 22, 0.15);
+}
+@media (prefers-color-scheme: dark) {
+  html.orange-mode {
+    --bg: #180b00;
+    --bg-elevated: #271200;
+    --bg-hover: rgba(251, 146, 60, 0.15);
+  }
+}
+
+#orange-mode-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  background: var(--accent);
+  color: #fff;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: var(--size-meta);
+  font-weight: 600;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s var(--spring);
+  pointer-events: none;
+}
+#orange-mode-toast.orange-mode-toast--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
