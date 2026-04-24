@@ -890,7 +890,7 @@ main.main .footer-links a:hover { color: var(--accent); }
     border-width 0.25s ease,
     box-shadow 0.25s ease;
 }
-.about-page .about-hero__visual-wrap:is(:hover, :focus-within) .about-hero__avatar {
+.about-page .about-hero__visual-wrap:is(:hover, :focus-within, .is-flipped) .about-hero__avatar {
   z-index: 1;
   left: 0;
   right: 0;
@@ -904,7 +904,7 @@ main.main .footer-links a:hover { color: var(--accent); }
   object-fit: contain;
   background: var(--bg-elevated);
 }
-.about-page .about-hero__visual-wrap:is(:hover, :focus-within) .about-hero__photo {
+.about-page .about-hero__visual-wrap:is(:hover, :focus-within, .is-flipped) .about-hero__photo {
   z-index: 3;
   left: 10px;
   right: auto;
@@ -924,10 +924,10 @@ main.main .footer-links a:hover { color: var(--accent); }
   .about-page .about-hero__avatar {
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
   }
-  .about-page .about-hero__visual-wrap:is(:hover, :focus-within) .about-hero__avatar {
+  .about-page .about-hero__visual-wrap:is(:hover, :focus-within, .is-flipped) .about-hero__avatar {
     box-shadow: none;
   }
-  .about-page .about-hero__visual-wrap:is(:hover, :focus-within) .about-hero__photo {
+  .about-page .about-hero__visual-wrap:is(:hover, :focus-within, .is-flipped) .about-hero__photo {
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
   }
 }
@@ -971,7 +971,7 @@ main.main .footer-links a:hover { color: var(--accent); }
     opacity 0.07s ease-in,
     visibility 0s linear 0.07s;
 }
-.about-page .about-hero__visual-wrap:is(:hover, :focus-within) .about-hero__credit {
+.about-page .about-hero__visual-wrap:is(:hover, :focus-within, .is-flipped) .about-hero__credit {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -1158,6 +1158,65 @@ main.main .about-page .about-exp-pill--link:hover {
 }
 
 /* ============================================================
+   Work page — testimonials
+   ============================================================ */
+.work-testimonials { margin-top: var(--space-6); }
+.work-testimonials .section-title { margin-bottom: var(--space-3); }
+.work-testimonial-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.work-testimonial-card {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  padding: var(--space-3);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.work-testimonial-card:hover {
+  background: var(--glass-active-bg);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-color: var(--glass-border);
+  box-shadow: var(--glass-inset), 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+.work-testimonial-quote {
+  font-size: var(--size-meta);
+  color: var(--fg-soft);
+  line-height: 1.6;
+  margin: 0 0 var(--space-3);
+}
+.work-testimonial-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.work-testimonial-name {
+  font-size: var(--size-body);
+  font-weight: 600;
+  color: var(--fg);
+  margin: 0;
+}
+.work-testimonial-role {
+  font-size: var(--size-meta);
+  color: var(--fg-soft);
+  margin: 0;
+}
+.work-testimonial-context {
+  font-family: var(--font-mono);
+  font-size: var(--size-micro);
+  color: var(--muted);
+  margin: var(--space-1) 0 0;
+}
+
+/* ============================================================
    Easter eggs
    ============================================================ */
 html.orange-mode {
@@ -1197,4 +1256,40 @@ html.orange-mode {
 #orange-mode-toast.orange-mode-toast--visible {
   opacity: 1;
   transform: translate(-50%, -50%);
+}
+
+/* ── WOPR Terminal ───────────────────────────────────────────────────────── */
+
+.wopr-terminal {
+  background: #0c0800;
+  border: 1px solid rgba(251, 146, 60, 0.15);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  overflow-x: auto;
+  margin-top: var(--space-3);
+}
+
+.wopr-heatmap {
+  display: grid;
+  grid-template-columns: repeat(53, 9px);
+  grid-template-rows: repeat(7, 9px);
+  grid-auto-flow: column;
+  gap: 3px;
+}
+
+.wopr-cell {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: color-mix(
+    in srgb,
+    var(--accent) calc(var(--wopr-level, 0) * 22%),
+    #0c0800
+  );
+  transition: background 0.04s ease;
+}
+
+.wopr-cell:hover {
+  outline: 1px solid rgba(251, 146, 60, 0.5);
+  outline-offset: 1px;
 }

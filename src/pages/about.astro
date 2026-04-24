@@ -109,3 +109,17 @@ import {
     </section>
   </article>
 </Base>
+
+<script>
+  const wrap = document.querySelector<HTMLElement>('.about-hero__visual-wrap');
+  if (wrap) {
+    wrap.addEventListener('click', () => {
+      wrap.classList.toggle('is-flipped');
+    });
+    document.addEventListener('click', (e) => {
+      if (!wrap.contains(e.target as Node)) {
+        wrap.classList.remove('is-flipped');
+      }
+    }, true);
+  }
+</script>

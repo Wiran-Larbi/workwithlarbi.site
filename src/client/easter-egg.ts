@@ -8,10 +8,10 @@ const KONAMI: string[] = [
 let konamiIndex = 0;
 let orangeModeTimer = 0;
 
-function playFanfare(): void {
+async function playFanfare(): Promise<void> {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const ac = new AudioContext();
-  void ac.resume();
+  await ac.resume();
   const notes = [523, 659, 784, 1047]; // C5, E5, G5, C6
   const now = ac.currentTime;
   notes.forEach((freq, i) => {

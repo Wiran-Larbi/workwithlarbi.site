@@ -27,7 +27,7 @@ const retiredProjects = projects
     <>
       <h2 class="projects-section-title" id="inactive">Inactive</h2>
       <p class="projects-section-lede">
-        {pausedProjects.length} on hold — not shipping right now.
+        {`${pausedProjects.length} ${pausedProjects.length === 1 ? 'project' : 'projects'} that may continue.`}
       </p>
       <ProjectList projects={pausedProjects} variant="compact" startedOrder="desc" />
     </>

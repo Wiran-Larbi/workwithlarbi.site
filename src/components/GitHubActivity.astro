@@ -1,0 +1,43 @@
+---
+import type { GitHubData } from '../lib/github';
+
+interface Props {
+  data: GitHubData;
+}
+
+const { data } = Astro.props;
+
+function contributionLevel(count: number): number {
+  if (count === 0) return 0;
+  if (count <= 3) return 1;
+  if (count <= 6) return 2;
+  if (count <= 9) return 3;
+  return 4;
+}
+---
+
+<h2 class="section-title">/ activity</h2>
+
+<div class="wopr-terminal" data-wopr>
+  <div
+    class="wopr-heatmap"
+    data-wopr-heatmap
+    role="img"
+    aria-label={`GitHub contributions: ${data.totalContributions} in the past year`}
+  >
+    {data.weeks.map((week, wi) =>
+      week.contributionDays.map((day) => (
+        <div
+          class="wopr-cell"
+          data-real={contributionLevel(day.contributionCount)}
+          data-week={wi}
+          style="--wopr-level: 0"
+          title={`${day.contributionCount} commit${day.contributionCount !== 1 ? 's' : ''} on ${day.date}`}
+          aria-hidden="true"
+        ></div>
+      ))
+    )}
+  </div>
+</div>
+
+<script src="../client/wopr.ts"></script>

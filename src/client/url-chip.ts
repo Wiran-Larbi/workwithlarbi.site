@@ -120,10 +120,12 @@ function initUrlChip(): void {
     if (link.matches('.entries a, .project-card-link')) return;
     if (!chipTextForAnchor(link)) return;
 
-    link.addEventListener('pointerenter', () => {
+    link.addEventListener('pointerenter', (e: PointerEvent) => {
+      if (e.pointerType === 'touch') return;
       showFor(link);
     });
-    link.addEventListener('pointerleave', () => {
+    link.addEventListener('pointerleave', (e: PointerEvent) => {
+      if (e.pointerType === 'touch') return;
       if (document.activeElement !== link) scheduleHide();
     });
     link.addEventListener('focusin', () => {

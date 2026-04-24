@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PostList from '../../components/PostList.astro';
+import { testimonials } from '../../data/about';
 
 const entries = (await getCollection('work', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -22,4 +23,20 @@ const entries = (await getCollection('work', ({ data }) => !data.draft)).sort(
   ) : (
     <p style="color: var(--muted);">No work entries yet.</p>
   )}
+
+  <section class="work-testimonials" aria-labelledby="work-testimonials-heading">
+    <h2 id="work-testimonials-heading" class="section-title">Recommendations</h2>
+    <ul class="work-testimonial-list">
+      {testimonials.map((t) => (
+        <li class="work-testimonial-card">
+          <p class="work-testimonial-quote">{t.quote}</p>
+          <footer class="work-testimonial-footer">
+            <p class="work-testimonial-name">{t.author}</p>
+            <p class="work-testimonial-role">{t.role}</p>
+            <p class="work-testimonial-context">{t.context}</p>
+          </footer>
+        </li>
+      ))}
+    </ul>
+  </section>
 </Base>

@@ -106,6 +106,34 @@ export type AboutExpGroup = {
   items: AboutExpItem[];
 };
 
+export type Testimonial = {
+  quote: string;
+  author: string;
+  role: string;
+  context: string;
+};
+
+export const testimonials: Testimonial[] = [
+  {
+    quote: "Derek helped me revamp Scenery's brand, logo, and website in the first two months of my tenure and was a crucial, fun partner to work with throughout the process. Derek had a well defined process, integrated into the team well, and came up with creative approaches when they were most needed — at both the start and finish of the project. Thank you Derek!",
+    author: 'Barrett Johnson',
+    role: 'Product & Marketing at Mercury',
+    context: "Barrett was Derek's client · Nov 2023",
+  },
+  {
+    quote: 'I highly recommend Derek Jensen for his exceptional skills in User Interface (UI) design and Webflow Development. Derek\'s creative approach to UI consistently delivers visually exceptional and user-friendly interfaces that drives results. His proficiency in Webflow empowers him to bring his designs to life with seamless functionality and responsiveness. Derek\'s attention to detail, collaborative nature, and commitment to staying current with design trends makes him a valuable asset to any project.',
+    author: 'Danny Begnoche',
+    role: 'Award winning branding and Webflow sites · webflow.com/@onebranding',
+    context: 'Danny worked with Derek on the same team · Aug 2023',
+  },
+  {
+    quote: 'Derek is an incredibly talented Designer and Webflow Developer with a unique drive to always seek out the best solution and learn new things along the way.',
+    author: 'Corey Moen',
+    role: 'Lead Brand Designer and Web Developer',
+    context: "Corey was Derek's mentor · Apr 2023",
+  },
+];
+
 export const aboutExperienceGroups: AboutExpGroup[] = [
   {
     title: 'Current',
