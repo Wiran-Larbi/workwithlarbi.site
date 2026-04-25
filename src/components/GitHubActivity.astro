@@ -91,27 +91,6 @@ function logLine(repo: GitHubData['recentRepos'][number]): string {
         ))
       }
     </div>
-
-    <div class="wopr-prompt" data-wopr-prompt hidden>
-      <span class="wopr-prompt-text" data-wopr-prompt-text></span>
-      <button type="button" class="wopr-yn" data-yn="Y" hidden aria-label="Yes, play a game">Y</button>
-      <span> / </span>
-      <button type="button" class="wopr-yn" data-yn="N" hidden aria-label="No">N</button>
-      <span class="wopr-cursor" data-wopr-cursor hidden aria-hidden="true"></span>
-    </div>
-  </div>
-
-  <div class="wopr-game" data-wopr-game hidden>
-    <div class="wopr-game-lines" data-wopr-game-lines></div>
-    <div class="wopr-board" data-wopr-board>
-      {
-        Array.from({ length: 9 }, (_, i) => (
-          <button type="button" class="wopr-square" data-idx={i} aria-label={`Cell ${i + 1}`} />
-        ))
-      }
-    </div>
-    <div class="wopr-game-status" data-wopr-status></div>
-    <button type="button" class="wopr-reset" data-wopr-reset hidden>PLAY AGAIN</button>
   </div>
 </section>
 
