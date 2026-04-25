@@ -20,7 +20,7 @@ gallery:
 liveLink: "https://www.carecontinuity.com/"
 partnership: "Kem Design"
 soloOrAgency: "Agency"
-estimatedTimeSpent: "6 weeks"
+estimatedTimeSpent: "4 weeks"
 tags:
   - "healthcare"
   - "saas"

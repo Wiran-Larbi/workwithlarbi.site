@@ -198,7 +198,7 @@ export const aboutExperienceGroups: AboutExpGroup[] = [
           'Obtained a Bachelor of Arts in Communication Studies with supplementary time in Advertising and the College of Design.',
         link: {
           label: 'Articles at Iowa State Daily',
-          href: 'https://www.iowastatedaily.com/',
+          href: 'https://iowastatedaily.com/staff_name/derek-jensen/',
           icon: 'newspaper',
         },
       },
