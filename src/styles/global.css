@@ -1422,7 +1422,7 @@ html.orange-mode {
   isolation: isolate;
 }
 
-/* CRT-style sweep over the grid (WOPR) */
+/* CRT-style sweep: sits behind cells so it shows through transparent square backgrounds */
 .wopr-board::before {
   content: '';
   position: absolute;
@@ -1430,17 +1430,16 @@ html.orange-mode {
   width: 110%;
   height: 42%;
   pointer-events: none;
-  z-index: 5;
+  z-index: 0;
   background: linear-gradient(
     180deg,
     transparent 0%,
-    color-mix(in srgb, var(--accent) 8%, transparent) 35%,
-    color-mix(in srgb, var(--accent) 28%, transparent) 50%,
-    color-mix(in srgb, var(--accent) 8%, transparent) 65%,
+    color-mix(in srgb, var(--accent) 20%, transparent) 38%,
+    color-mix(in srgb, var(--accent) 55%, transparent) 50%,
+    color-mix(in srgb, var(--accent) 20%, transparent) 62%,
     transparent 100%
   );
-  opacity: 0.2;
-  mix-blend-mode: soft-light;
+  opacity: 0.55;
   animation: wopr-board-scan 3.2s ease-in-out infinite;
 }
 
@@ -1456,7 +1455,7 @@ html.orange-mode {
 
 .wopr-square {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   width: 2.5rem;
   height: 2.5rem;
   border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
@@ -1468,6 +1467,7 @@ html.orange-mode {
   margin: 0;
   padding: 0;
   line-height: 1;
+  transform-origin: center;
 }
 
 /* Idle phosphor drift on playable cells */
@@ -1509,7 +1509,7 @@ html.orange-mode {
     box-shadow: inset 0 0 0 0 transparent;
   }
   50% {
-    box-shadow: inset 0 0 10px color-mix(in srgb, var(--accent) 18%, transparent);
+    box-shadow: inset 0 0 12px color-mix(in srgb, var(--accent) 28%, transparent);
   }
 }
 

@@ -112,10 +112,14 @@ function initWopr() {
   const resetBtn = qs<HTMLButtonElement>('[data-wopr-reset]', gamePanel);
   const squares = boardEl?.querySelectorAll<HTMLButtonElement>('.wopr-square') ?? [];
 
-  if (!heatmap || !log || !promptEl || !promptTextEl || !promptCursor || !gameLines || !statusEl || !resetBtn) {
+  if (!heatmap || !log || !promptEl || !promptTextEl || !promptCursor || !gameLines || !statusEl || !resetBtn || !boardEl) {
     return;
   }
 
+  /**
+   * When OS / browser has “Reduce motion” on, typing is instant and board FX are skipped
+   * (CSS @media (prefers-reduced-motion) also disables grid animations).
+   */
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const instant = reducedMotion;
 

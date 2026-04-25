@@ -38,9 +38,10 @@ const mostRecentPush = data.recentRepos.reduce<string | undefined>((latest, r) =
   return new Date(r.pushedAt) > new Date(latest) ? r.pushedAt : latest;
 }, data.recentRepos[0]?.pushedAt);
 
-const lastLoginRel = relativeFromPush(mostRecentPush);
+/* Relative time since latest activity on fetched public repos (pushedAt ≈ last push to default branch). */
+const lastCommitRel = relativeFromPush(mostRecentPush);
 
-const line1 = `> LAST LOGIN: ${lastLoginRel}`;
+const line1 = `> LAST COMMIT: ${lastCommitRel}`;
 const line2 = `> ${data.totalContributions} COMMITS — PAST YEAR`;
 
 function logLine(repo: GitHubData['recentRepos'][number]): string {
