@@ -224,7 +224,7 @@ function initWopr() {
       bootAnimTimer = window.setTimeout(() => {
         boardEl!.classList.remove('wopr-board--boot');
         bootAnimTimer = undefined;
-      }, 980);
+      }, 1020);
     });
   }
 
@@ -235,7 +235,7 @@ function initWopr() {
     sq.classList.remove('wopr-square--flash');
     void sq.offsetWidth;
     sq.classList.add('wopr-square--flash');
-    window.setTimeout(() => sq.classList.remove('wopr-square--flash'), 360);
+    window.setTimeout(() => sq.classList.remove('wopr-square--flash'), 450);
   }
 
   async function startGame() {
@@ -308,7 +308,7 @@ function initWopr() {
     });
 
     await woprThinkingLine(true);
-    if (!instant) await new Promise((r) => setTimeout(r, 400));
+    if (!instant) await new Promise((r) => setTimeout(r, 420));
     await woprThinkingLine(false);
 
     const move = getBestMove(board);
