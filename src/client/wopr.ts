@@ -129,6 +129,8 @@ function initWopr() {
   let startingGame = false;
   let board: Cell[] = Array(9).fill(null);
   let humanLocked = false;
+  /** WarGames-style sequential grid paint; blocks play until finished. */
+  let gridRevealInProgress = false;
   /** Focused cell for arrow-key navigation (0–8). */
   let kbdFocusIdx = 0;
 
@@ -177,7 +179,7 @@ function initWopr() {
   }
 
   function updateKbdHighlight() {
-    const show = gameActive && !humanLocked;
+    const show = gameActive && !humanLocked && !gridRevealInProgress;
     squares.forEach((sq, i) => {
       sq.classList.toggle('wopr-square--kbd', show && i === kbdFocusIdx);
     });
@@ -187,7 +189,8 @@ function initWopr() {
     squares.forEach((sq, i) => {
       const v = board[i];
       sq.textContent = v ?? '';
-      sq.disabled = v !== null || humanLocked || gameActive === false;
+      sq.disabled =
+        v !== null || humanLocked || gameActive === false || gridRevealInProgress;
       sq.tabIndex = -1;
     });
     updateKbdHighlight();
@@ -213,19 +216,45 @@ function initWopr() {
     await typeText(row, text, 28, instant);
   }
 
-  let bootAnimTimer: ReturnType<typeof setTimeout> | undefined;
+  /** Raster the board in reading order — *WarGames* WOPR target grid. */
+  async function revealSquaresWarGames() {
+    if (!boardEl) return;
 
-  function runBoardBootAnimation() {
-    if (instant || !boardEl) return;
-    boardEl.classList.remove('wopr-board--boot');
-    if (bootAnimTimer) window.clearTimeout(bootAnimTimer);
-    requestAnimationFrame(() => {
-      boardEl!.classList.add('wopr-board--boot');
-      bootAnimTimer = window.setTimeout(() => {
-        boardEl!.classList.remove('wopr-board--boot');
-        bootAnimTimer = undefined;
-      }, 1020);
+    gridRevealInProgress = true;
+    renderBoard();
+
+    if (instant) {
+      squares.forEach((sq) => sq.classList.remove('wopr-square--enter-wait', 'wopr-square--enter-pop'));
+      boardEl.classList.remove('wopr-board--reveal');
+      gridRevealInProgress = false;
+      renderBoard();
+      return;
+    }
+
+    squares.forEach((sq) => {
+      sq.classList.remove('wopr-square--enter-pop');
+      sq.classList.add('wopr-square--enter-wait');
     });
+    boardEl.classList.add('wopr-board--reveal');
+
+    const firstDelay = 240;
+    const stagger = 105;
+    const popMs = 540;
+
+    for (let i = 0; i < squares.length; i++) {
+      await new Promise((r) => setTimeout(r, i === 0 ? firstDelay : stagger));
+      const sq = squares[i];
+      sq.classList.remove('wopr-square--enter-wait');
+      void sq.offsetWidth;
+      sq.classList.add('wopr-square--enter-pop');
+      window.setTimeout(() => sq.classList.remove('wopr-square--enter-pop'), popMs);
+    }
+
+    await new Promise((r) => setTimeout(r, popMs + 120));
+    boardEl.classList.remove('wopr-board--reveal');
+    squares.forEach((sq) => sq.classList.remove('wopr-square--enter-wait', 'wopr-square--enter-pop'));
+    gridRevealInProgress = false;
+    renderBoard();
   }
 
   function flashSquare(i: number) {
@@ -255,8 +284,7 @@ function initWopr() {
       await appendGameLine('> GREETINGS, PROFESSOR FALKEN.');
       await appendGameLine('> LET US PLAY TIC-TAC-TOE.');
       await appendGameLine('> YOU ARE X. I AM O. YOUR MOVE.');
-      renderBoard();
-      runBoardBootAnimation();
+      await revealSquaresWarGames();
       gamePanel.focus();
     } finally {
       startingGame = false;
@@ -286,7 +314,7 @@ function initWopr() {
   }
 
   async function onHumanMove(idx: number) {
-    if (board[idx] !== null || humanLocked || !gameActive) return;
+    if (board[idx] !== null || humanLocked || !gameActive || gridRevealInProgress) return;
     board[idx] = 'X';
     renderBoard();
     flashSquare(idx);
@@ -333,6 +361,9 @@ function initWopr() {
   }
 
   function declineOrExitGame() {
+    gridRevealInProgress = false;
+    squares.forEach((sq) => sq.classList.remove('wopr-square--enter-wait', 'wopr-square--enter-pop'));
+    boardEl?.classList.remove('wopr-board--reveal');
     setGameVisible(false);
     gameLines.textContent = '';
     statusEl.textContent = '';
@@ -359,7 +390,7 @@ function initWopr() {
       return;
     }
 
-    if (gameActive && !humanLocked) {
+    if (gameActive && !humanLocked && !gridRevealInProgress) {
       const arrows =
         e.key === 'ArrowUp' ||
         e.key === 'ArrowDown' ||
@@ -428,8 +459,7 @@ function initWopr() {
       humanLocked = false;
       kbdFocusIdx = 0;
       await appendGameLine('> NEW GAME. YOUR MOVE.');
-      renderBoard();
-      runBoardBootAnimation();
+      await revealSquaresWarGames();
       gamePanel.focus();
     })();
   });

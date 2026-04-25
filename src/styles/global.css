@@ -1536,59 +1536,56 @@ html.orange-mode {
   }
 }
 
-/* Boot: quantized flicker like an acquiring target grid */
-.wopr-board--boot .wopr-square {
-  animation: wopr-square-decode 0.09s step-end 11;
+/* *WarGames* WOPR: grid paints in cell-by-cell (JS adds classes per frame) */
+.wopr-board.wopr-board--reveal {
+  box-shadow:
+    inset 0 0 48px color-mix(in srgb, var(--accent) 8%, transparent),
+    0 0 28px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
-.wopr-board--boot .wopr-square:nth-child(1) {
-  animation-delay: 0ms;
-}
-.wopr-board--boot .wopr-square:nth-child(2) {
-  animation-delay: 15ms;
-}
-.wopr-board--boot .wopr-square:nth-child(3) {
-  animation-delay: 30ms;
-}
-.wopr-board--boot .wopr-square:nth-child(4) {
-  animation-delay: 8ms;
-}
-.wopr-board--boot .wopr-square:nth-child(5) {
-  animation-delay: 22ms;
-}
-.wopr-board--boot .wopr-square:nth-child(6) {
-  animation-delay: 38ms;
-}
-.wopr-board--boot .wopr-square:nth-child(7) {
-  animation-delay: 4ms;
-}
-.wopr-board--boot .wopr-square:nth-child(8) {
-  animation-delay: 26ms;
-}
-.wopr-board--boot .wopr-square:nth-child(9) {
-  animation-delay: 42ms;
+.wopr-square.wopr-square--enter-wait {
+  opacity: 0.12 !important;
+  transform: scale(0.1);
+  border-color: color-mix(in srgb, var(--accent) 15%, transparent) !important;
+  filter: blur(3px) brightness(0.32);
+  box-shadow: inset 0 0 22px color-mix(in srgb, var(--accent) 28%, transparent);
+  pointer-events: none;
 }
 
-@keyframes wopr-square-decode {
+.wopr-square.wopr-square--enter-pop {
+  pointer-events: none;
+  animation: wopr-square-wg-raster 0.54s steps(8, end) forwards !important;
+}
+
+@keyframes wopr-square-wg-raster {
   0% {
-    border-color: color-mix(in srgb, var(--accent) 28%, transparent);
-    filter: brightness(0.65) contrast(1.15);
-    color: color-mix(in srgb, var(--accent) 35%, var(--wopr-bg));
+    opacity: 0.12;
+    transform: scale(0.1);
+    filter: blur(4px) brightness(0.4);
+    border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+    box-shadow:
+      inset 0 0 32px color-mix(in srgb, var(--accent) 50%, transparent),
+      0 0 0 0 transparent;
   }
-  33% {
+  28% {
+    opacity: 1;
     border-color: color-mix(in srgb, var(--accent) 100%, transparent);
-    filter: brightness(1.55) contrast(1.05);
-    color: var(--accent);
+    filter: blur(0) brightness(2.1);
+    box-shadow:
+      inset 0 0 22px color-mix(in srgb, var(--accent) 70%, transparent),
+      0 0 20px color-mix(in srgb, var(--accent) 48%, transparent);
+    transform: scale(1.16);
   }
-  66% {
-    border-color: color-mix(in srgb, var(--accent) 42%, transparent);
-    filter: brightness(0.82) contrast(1.2);
-    color: color-mix(in srgb, var(--accent) 55%, var(--wopr-bg));
+  52% {
+    filter: brightness(0.72);
+    transform: scale(0.94);
   }
   100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0) brightness(1);
     border-color: color-mix(in srgb, var(--accent) 45%, transparent);
-    filter: brightness(1) contrast(1);
-    color: var(--accent);
+    box-shadow: none;
   }
 }
 
@@ -1620,6 +1617,11 @@ html.orange-mode {
   opacity: 0.85;
 }
 
+.wopr-square.wopr-square--enter-wait:disabled,
+.wopr-square.wopr-square--enter-pop:disabled {
+  opacity: 1;
+}
+
 .wopr-square:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: -1px;
@@ -1646,8 +1648,20 @@ html.orange-mode {
     animation: none;
   }
 
-  .wopr-board--boot .wopr-square {
-    animation: none;
+  .wopr-board.wopr-board--reveal {
+    box-shadow: none;
+  }
+
+  .wopr-square.wopr-square--enter-wait {
+    opacity: 1 !important;
+    transform: none;
+    filter: none;
+    box-shadow: none;
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent) !important;
+  }
+
+  .wopr-square.wopr-square--enter-pop {
+    animation: none !important;
   }
 
   .wopr-square.wopr-square--flash {
