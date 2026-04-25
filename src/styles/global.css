@@ -1543,6 +1543,11 @@ html.orange-mode {
     0 0 28px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
+/* Cells are disabled during reveal; dimmed :disabled opacity would mask WOPR raster (opacity/scale) animations */
+.wopr-board.wopr-board--reveal .wopr-square:disabled {
+  opacity: 1;
+}
+
 .wopr-square.wopr-square--enter-wait {
   opacity: 0.12 !important;
   transform: scale(0.1);

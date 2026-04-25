@@ -116,12 +116,9 @@ function initWopr() {
     return;
   }
 
-  /**
-   * When OS / browser has “Reduce motion” on, typing is instant and board FX are skipped
-   * (CSS @media (prefers-reduced-motion) also disables grid animations).
-   */
+  /** Typing / pauses only — grid reveal uses its own timing so squares always animate in. */
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const instant = reducedMotion;
+  const typingInstant = reducedMotion;
 
   let sequenceStarted = false;
   let promptReady = false;
@@ -136,7 +133,7 @@ function initWopr() {
 
   function setHeatmapVisible(on: boolean) {
     heatmap.classList.toggle('wopr-heatmap--visible', on);
-    if (instant) heatmap.style.opacity = on ? '1' : '0';
+    if (typingInstant) heatmap.style.opacity = on ? '1' : '0';
   }
 
   function showPromptChrome(show: boolean) {
@@ -151,28 +148,28 @@ function initWopr() {
     for (const lineEl of lineEls) {
       const text = lineEl.dataset.woprLine ?? '';
       const delayAfter = Number(lineEl.dataset.woprDelay ?? 0);
-      await typeText(lineEl, text, 28, instant);
-      await shortPause(delayAfter, instant);
+      await typeText(lineEl, text, 28, typingInstant);
+      await shortPause(delayAfter, typingInstant);
     }
 
     setHeatmapVisible(true);
-    if (!instant) await shortPause(320, false);
+    if (!typingInstant) await shortPause(320, false);
     else await shortPause(0, true);
 
     const entries = log.querySelectorAll<HTMLElement>('.wopr-log-entry');
     for (const entry of entries) {
       const text = entry.dataset.woprLine ?? '';
       const delayAfter = Number(entry.dataset.woprDelay ?? 0);
-      await typeText(entry, text, 28, instant);
-      await shortPause(delayAfter, instant);
+      await typeText(entry, text, 28, typingInstant);
+      await shortPause(delayAfter, typingInstant);
     }
 
-    await shortPause(1500, instant);
+    await shortPause(1500, typingInstant);
 
     promptEl.hidden = false;
     showPromptChrome(false);
     promptCursor.hidden = true;
-    await typeText(promptTextEl, '> SHALL WE PLAY A GAME? ', 28, instant);
+    await typeText(promptTextEl, '> SHALL WE PLAY A GAME? ', 28, typingInstant);
     showPromptChrome(true);
     terminal.tabIndex = 0;
     promptReady = true;
@@ -213,58 +210,115 @@ function initWopr() {
     const row = document.createElement('div');
     row.className = 'wopr-game-line';
     gameLines.appendChild(row);
-    await typeText(row, text, 28, instant);
+    await typeText(row, text, 28, typingInstant);
   }
 
-  /** Raster the board in reading order — *WarGames* WOPR target grid. */
+  function queryBoardCells(): HTMLButtonElement[] {
+    if (!boardEl) return [];
+    return [...boardEl.querySelectorAll<HTMLButtonElement>('.wopr-square')];
+  }
+
+  function clearSquareRevealInline(sq: HTMLButtonElement) {
+    sq.classList.remove('wopr-square--enter-wait', 'wopr-square--enter-pop', 'wopr-square--flash');
+    sq.style.removeProperty('opacity');
+    sq.style.removeProperty('transform');
+    sq.style.removeProperty('filter');
+  }
+
+  /**
+   * WarGames-style raster: cells materialize in reading order.
+   * Uses Web Animations API so motion isn’t dropped by CSS conflicts or “reduce motion” typing mode.
+   */
   async function revealSquaresWarGames() {
     if (!boardEl) return;
 
-    gridRevealInProgress = true;
-    renderBoard();
-
-    if (instant) {
-      squares.forEach((sq) => sq.classList.remove('wopr-square--enter-wait', 'wopr-square--enter-pop'));
-      boardEl.classList.remove('wopr-board--reveal');
+    const cells = queryBoardCells();
+    if (cells.length === 0) {
       gridRevealInProgress = false;
       renderBoard();
       return;
     }
 
-    squares.forEach((sq) => {
-      sq.classList.remove('wopr-square--enter-pop');
-      sq.classList.add('wopr-square--enter-wait');
+    gridRevealInProgress = true;
+    renderBoard();
+
+    cells.forEach((sq) => {
+      sq.getAnimations?.().forEach((a) => a.cancel());
+      clearSquareRevealInline(sq);
     });
+
     boardEl.classList.add('wopr-board--reveal');
 
-    const firstDelay = 240;
-    const stagger = 105;
-    const popMs = 540;
+    const light = reducedMotion;
+    const firstDelay = light ? 90 : 220;
+    const stagger = light ? 75 : 100;
+    const dur = light ? 200 : 520;
 
-    for (let i = 0; i < squares.length; i++) {
-      await new Promise((r) => setTimeout(r, i === 0 ? firstDelay : stagger));
-      const sq = squares[i];
-      sq.classList.remove('wopr-square--enter-wait');
-      void sq.offsetWidth;
-      sq.classList.add('wopr-square--enter-pop');
-      window.setTimeout(() => sq.classList.remove('wopr-square--enter-pop'), popMs);
+    for (const sq of cells) {
+      sq.style.opacity = '0.04';
+      sq.style.transform = light ? 'scale(0.82)' : 'scale(0.22)';
+      sq.style.removeProperty('filter');
     }
 
-    await new Promise((r) => setTimeout(r, popMs + 120));
-    boardEl.classList.remove('wopr-board--reveal');
-    squares.forEach((sq) => sq.classList.remove('wopr-square--enter-wait', 'wopr-square--enter-pop'));
+    await new Promise<void>((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    });
+
+    for (let i = 0; i < cells.length; i++) {
+      await new Promise((r) => setTimeout(r, i === 0 ? firstDelay : stagger));
+      const sq = cells[i];
+
+      // Opacity + transform only — filter in WAAPI is unreliable cross-browser; :disabled opacity in CSS can also fight WAAPI without .wopr-board--reveal override.
+      const keyframes = light
+        ? ([
+            { opacity: 0.04, transform: 'scale(0.82)' },
+            { opacity: 1, transform: 'scale(1)' },
+          ] as Keyframe[])
+        : ([
+            { opacity: 0.05, transform: 'scale(0.22)' },
+            { opacity: 1, transform: 'scale(1.12)', offset: 0.38 },
+            { opacity: 1, transform: 'scale(1)' },
+          ] as Keyframe[]);
+
+      if (typeof sq.animate === 'function') {
+        try {
+          const anim = sq.animate(keyframes, {
+            duration: dur,
+            easing: light ? 'ease-out' : 'cubic-bezier(0.18, 0.92, 0.34, 1)',
+            fill: 'forwards',
+          });
+          await anim.finished.catch(() => {});
+        } catch {
+          sq.style.opacity = '1';
+          sq.style.transform = 'scale(1)';
+        }
+      } else {
+        sq.style.opacity = '1';
+        sq.style.transform = 'scale(1)';
+      }
+    }
+
     gridRevealInProgress = false;
+    renderBoard();
+    boardEl.classList.remove('wopr-board--reveal');
+    cells.forEach((sq) => {
+      sq.getAnimations?.().forEach((a) => a.cancel());
+      clearSquareRevealInline(sq);
+    });
     renderBoard();
   }
 
   function flashSquare(i: number) {
-    if (instant) return;
-    const sq = squares[i];
-    if (!sq) return;
-    sq.classList.remove('wopr-square--flash');
-    void sq.offsetWidth;
-    sq.classList.add('wopr-square--flash');
-    window.setTimeout(() => sq.classList.remove('wopr-square--flash'), 450);
+    const sq = queryBoardCells()[i];
+    if (!sq || typeof sq.animate !== 'function') return;
+    const dur = reducedMotion ? 140 : 320;
+    sq.animate(
+      [
+        { filter: 'brightness(1.75)', transform: 'scale(1.07)' },
+        { filter: 'brightness(1)', transform: 'scale(1)' },
+      ],
+      { duration: dur, easing: 'ease-out' }
+    );
   }
 
   async function startGame() {
@@ -310,7 +364,7 @@ function initWopr() {
     line.className = 'wopr-game-line';
     line.setAttribute('data-wopr-calc-line', '');
     gameLines.appendChild(line);
-    await typeText(line, '> CALCULATING...', 28, instant);
+    await typeText(line, '> CALCULATING...', 28, typingInstant);
   }
 
   async function onHumanMove(idx: number) {
@@ -336,7 +390,7 @@ function initWopr() {
     });
 
     await woprThinkingLine(true);
-    if (!instant) await new Promise((r) => setTimeout(r, 420));
+    if (!typingInstant) await new Promise((r) => setTimeout(r, 420));
     await woprThinkingLine(false);
 
     const move = getBestMove(board);
@@ -362,7 +416,7 @@ function initWopr() {
 
   function declineOrExitGame() {
     gridRevealInProgress = false;
-    squares.forEach((sq) => sq.classList.remove('wopr-square--enter-wait', 'wopr-square--enter-pop'));
+    queryBoardCells().forEach(clearSquareRevealInline);
     boardEl?.classList.remove('wopr-board--reveal');
     setGameVisible(false);
     gameLines.textContent = '';
