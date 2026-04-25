@@ -157,13 +157,6 @@ export const aboutExperienceGroups: AboutExpGroup[] = [
         description: 'Webflow Expert assisting the team when it comes to making websites.',
         link: { label: 'kemdesign.co', href: 'https://kemdesign.co', icon: 'arrow' },
       },
-      {
-        name: 'Harvous',
-        range: 'Mar 2024 — Present',
-        description:
-          "My personal side project that is a Bible notes app. Hopefully one day I'll work on this full-time.",
-        link: { label: 'harvous.com', href: 'https://harvous.com', icon: 'arrow' },
-      },
     ],
   },
   {
