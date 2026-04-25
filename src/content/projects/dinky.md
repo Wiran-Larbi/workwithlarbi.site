@@ -6,6 +6,7 @@ year: 2026
 started: 2026-04-01
 role: Designer & builder
 stack: [Swift]
+image: /assets/images/projects/dinky-og.png
 featured: true
 order: 3
 status: active

@@ -6,6 +6,7 @@ year: 2026
 started: 2026-03-01
 role: Designer & builder
 stack: [React, Supabase]
+image: /assets/images/projects/heresmychurch-og.png
 featured: true
 order: 2
 status: active

@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import PostList from '../components/PostList.astro';
-import ProjectList from '../components/ProjectList.astro';
+import FeaturedProjectGrid from '../components/FeaturedProjectGrid.astro';
 import { projectStartTime } from '../lib/projectStart';
 import NowHomeTicker from '../components/NowHomeTicker.astro';
 import { schemaPersonId, schemaWebsiteId } from '../lib/schemaIds';
@@ -77,34 +77,30 @@ const githubData = await fetchGitHubActivity();
   )}
 
   <h2 class="section-title"><a href="/projects/">/ projects</a></h2>
-  <ProjectList projects={featuredProjects} />
+  <FeaturedProjectGrid projects={featuredProjects} />
   {(pausedCount > 0 || retiredCount > 0) && (
-    <ul class="project-cards home-status-summaries">
+    <ul class="entries home-status-summaries">
       {pausedCount > 0 && (
-        <li class="project-card">
-          <a href="/projects/#inactive" class="project-card-link home-status-summary-link">
-            <p class="card-foot home-status-summary-foot">
-              <span class="card-foot-lead">
-                <span class="card-status card-status--paused">inactive</span>
-                <span class="card-foot-date home-status-summary-date">
-                  {pausedCount} inactive {pausedCount === 1 ? 'project' : 'projects'}
-                </span>
-              </span>
-            </p>
+        <li>
+          <a href="/projects/#inactive" class="entry-link home-status-summary-link">
+            <span class="home-status-summary-pill-wrap">
+              <span class="card-status card-status--paused">inactive</span>
+            </span>
+            <span class="entry-title home-status-summary-title">
+              {pausedCount} inactive {pausedCount === 1 ? 'project' : 'projects'}
+            </span>
           </a>
         </li>
       )}
       {retiredCount > 0 && (
-        <li class="project-card">
-          <a href="/projects/#retired" class="project-card-link home-status-summary-link">
-            <p class="card-foot home-status-summary-foot">
-              <span class="card-foot-lead">
-                <span class="card-status card-status--retired">retired</span>
-                <span class="card-foot-date home-status-summary-date">
-                  {retiredCount} retired {retiredCount === 1 ? 'project' : 'projects'}
-                </span>
-              </span>
-            </p>
+        <li>
+          <a href="/projects/#retired" class="entry-link home-status-summary-link">
+            <span class="home-status-summary-pill-wrap">
+              <span class="card-status card-status--retired">retired</span>
+            </span>
+            <span class="entry-title home-status-summary-title">
+              {retiredCount} retired {retiredCount === 1 ? 'project' : 'projects'}
+            </span>
           </a>
         </li>
       )}
@@ -116,70 +112,36 @@ const githubData = await fetchGitHubActivity();
 
 <style>
   .home-status-summaries {
-    list-style: none;
-    padding: 0;
-    margin: var(--space-2) 0 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
+    margin-top: var(--space-4);
+    --home-status-summary-bg: #f9f7f3;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .home-status-summaries {
+      --home-status-summary-bg: #0c0800;
+    }
   }
 
   :global(main.main) .home-status-summary-link {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: auto;
-    padding: var(--space-3) var(--space-3);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
-    background: var(--bg);
-    text-decoration: none;
-    color: inherit;
-    min-height: 100%;
-    box-sizing: border-box;
-    transition:
-      background 0.2s ease,
-      border-color 0.2s ease,
-      box-shadow 0.2s ease;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--space-2);
+    background: var(--home-status-summary-bg);
   }
 
-  :global(main.main) .home-status-summary-link:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
+  .home-status-summary-pill-wrap {
+    display: inline-flex;
+    align-items: center;
   }
 
-  :global(main.main) .home-status-summary-link:hover {
-    background: var(--glass-active-bg);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    border-color: var(--glass-border);
-    box-shadow: var(--glass-inset), 0 1px 6px rgba(0, 0, 0, 0.06);
-  }
-
-  :global(main.main) .home-status-summary-link:hover .home-status-summary-date {
-    color: var(--accent);
-  }
-
-  .home-status-summary-foot {
-    margin: 0;
-    font-size: var(--size-meta);
+  .home-status-summary-title {
+    font-weight: 500;
     color: var(--muted-strong);
     font-variant-numeric: tabular-nums;
-    line-height: 1.35;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
   }
 
-  .card-foot-lead {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.35rem;
-  }
-
-  .home-status-summary-date {
-    font-variant-numeric: tabular-nums;
+  :global(main.main) .home-status-summary-link:hover .home-status-summary-title {
+    color: var(--accent);
   }
 
   .card-status {

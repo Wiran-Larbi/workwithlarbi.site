@@ -8,6 +8,7 @@ category: App
 burnerLevel: Front Burner
 role: Designer & builder
 stack: [React, Hono, Supabase, Clerk]
+image: /assets/images/projects/harvous-preview.webp
 featured: true
 order: 1
 status: active
