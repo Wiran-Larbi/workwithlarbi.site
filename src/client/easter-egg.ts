@@ -8,26 +8,66 @@ const KONAMI: string[] = [
 let konamiIndex = 0;
 let orangeModeTimer = 0;
 
+/** Retro arcade / “quest unlocked” sting — original, RPO-adjacent vibe (no borrowed melody). */
 async function playFanfare(): Promise<void> {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const ac = new AudioContext();
   await ac.resume();
-  const notes = [523, 659, 784, 1047]; // C5, E5, G5, C6
   const now = ac.currentTime;
-  notes.forEach((freq, i) => {
+  const master = ac.createGain();
+  master.gain.value = 0.32;
+  master.connect(ac.destination);
+
+  const beep = (freq: number, t: number, dur: number, vol: number): void => {
     const osc = ac.createOscillator();
-    const gain = ac.createGain();
-    osc.connect(gain);
-    gain.connect(ac.destination);
-    osc.type = 'sine';
-    const t = now + i * 0.1;
+    const g = ac.createGain();
+    osc.type = 'square';
+    osc.connect(g);
+    g.connect(master);
     osc.frequency.setValueAtTime(freq, t);
-    gain.gain.setValueAtTime(0, t);
-    gain.gain.linearRampToValueAtTime(0.22, t + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(vol, t + 0.006);
+    g.gain.setValueAtTime(vol, t + dur * 0.55);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
     osc.start(t);
-    osc.stop(t + 0.1);
+    osc.stop(t + dur + 0.02);
+  };
+
+  // Fast upward arpeggio — attract-mode / high-score table energy
+  const arp = [523.25, 659.25, 783.99, 987.77, 1174.66, 1318.51]; // C5 … E6 (bright, gamey)
+  const step = 0.042;
+  arp.forEach((f, i) => beep(f, now + i * step, 0.055, 0.16));
+
+  // Power chord stab + octave shimmer (classic coin-op “you did it”)
+  const chordT = now + arp.length * step + 0.018;
+  const roots = [196, 293.66, 392]; // G3, D4, G4 (open, heroic)
+  roots.forEach((f, i) => {
+    const osc = ac.createOscillator();
+    const g = ac.createGain();
+    osc.type = 'square';
+    osc.connect(g);
+    g.connect(master);
+    const t = chordT + i * 0.004;
+    osc.frequency.setValueAtTime(f, t);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.12 - i * 0.02, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+    osc.start(t);
+    osc.stop(t + 0.32);
   });
+
+  // Tiny triangle “bass thump” so it isn’t all buzz
+  const sub = ac.createOscillator();
+  const subG = ac.createGain();
+  sub.type = 'triangle';
+  sub.frequency.setValueAtTime(98, chordT);
+  sub.connect(subG);
+  subG.connect(master);
+  subG.gain.setValueAtTime(0, chordT);
+  subG.gain.linearRampToValueAtTime(0.14, chordT + 0.02);
+  subG.gain.exponentialRampToValueAtTime(0.001, chordT + 0.22);
+  sub.start(chordT);
+  sub.stop(chordT + 0.26);
 }
 
 function showToast(): void {
@@ -47,7 +87,7 @@ function showToast(): void {
 function activateOrangeMode(): void {
   window.clearTimeout(orangeModeTimer);
   document.documentElement.classList.add('orange-mode');
-  playFanfare();
+  void playFanfare();
   showToast();
   orangeModeTimer = window.setTimeout(() => {
     document.documentElement.classList.remove('orange-mode');

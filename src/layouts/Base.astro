@@ -173,40 +173,5 @@ const year = new Date().getFullYear();
     </div>
   <script src="../client/url-chip.ts"></script>
   <script src="../client/easter-egg.ts"></script>
-  <script>
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      let ac: AudioContext | null = null;
-      let lastPopMs = 0;
-      /** Keeps rapid taps from stacking oscillators (muddy / “weird” overlap). */
-      const POP_MIN_INTERVAL_MS = 72;
-
-      async function pop() {
-        const wall = performance.now();
-        if (wall - lastPopMs < POP_MIN_INTERVAL_MS) return;
-        lastPopMs = wall;
-
-        if (!ac) ac = new AudioContext();
-        if (ac.state === 'suspended') await ac.resume();
-        const now = ac.currentTime;
-        const osc = ac.createOscillator();
-        const gain = ac.createGain();
-        osc.connect(gain);
-        gain.connect(ac.destination);
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(370, now);
-        osc.frequency.exponentialRampToValueAtTime(110, now + 0.055);
-        gain.gain.setValueAtTime(0.27, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
-        osc.start(now);
-        osc.stop(now + 0.1);
-      }
-
-      document
-        .querySelectorAll('.sidebar-nav a, .entries a, .cta, .back-link a')
-        .forEach((el) => {
-          el.addEventListener('click', () => void pop());
-        });
-    }
-  </script>
   </body>
 </html>
