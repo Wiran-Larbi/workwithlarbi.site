@@ -3,7 +3,7 @@
    ============================================================ */
 :root {
   /* Surfaces */
-  --bg: #f5f3ef;
+  --bg: #faf9f6;
   --bg-elevated: #f0ede7;
   --bg-hover: rgba(234, 88, 12, 0.06);
 
@@ -1276,7 +1276,7 @@ html.orange-mode {
 
 .wopr-section {
   margin-top: var(--space-5);
-  --wopr-bg: #f3efe8;
+  --wopr-bg: #f9f7f3;
   --wopr-border: color-mix(in srgb, var(--accent) 22%, var(--border-strong));
 }
 
@@ -1294,7 +1294,7 @@ html.orange-mode {
   font-family: var(--font-mono);
   font-size: var(--size-meta);
   line-height: 1.5;
-  border: 1px solid var(--wopr-border);
+  border: 0;
   border-radius: var(--radius-md);
   padding: var(--space-4);
   overflow-x: auto;

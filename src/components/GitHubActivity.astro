@@ -43,6 +43,9 @@ const lastCommitRel = relativeFromPush(mostRecentPush);
 
 const line1 = `> LAST COMMIT: ${lastCommitRel}`;
 const line2 = `> ${data.totalContributions} COMMITS — PAST YEAR`;
+const sortedRecentRepos = [...data.recentRepos].sort(
+  (a, b) => new Date(b.pushedAt).getTime() - new Date(a.pushedAt).getTime()
+);
 
 function logLine(repo: GitHubData['recentRepos'][number]): string {
   const lang = repo.primaryLanguage?.name ?? '—';
@@ -86,7 +89,7 @@ function logLine(repo: GitHubData['recentRepos'][number]): string {
 
     <div class="wopr-log" data-wopr-log>
       {
-        data.recentRepos.map((repo) => (
+        sortedRecentRepos.map((repo) => (
           <div class="wopr-log-entry" data-wopr-line={logLine(repo)} data-wopr-delay="0" />
         ))
       }
