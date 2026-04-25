@@ -209,6 +209,31 @@ function initWopr() {
     await typeText(row, text, 28, instant);
   }
 
+  let bootAnimTimer: ReturnType<typeof setTimeout> | undefined;
+
+  function runBoardBootAnimation() {
+    if (instant || !boardEl) return;
+    boardEl.classList.remove('wopr-board--boot');
+    if (bootAnimTimer) window.clearTimeout(bootAnimTimer);
+    requestAnimationFrame(() => {
+      boardEl!.classList.add('wopr-board--boot');
+      bootAnimTimer = window.setTimeout(() => {
+        boardEl!.classList.remove('wopr-board--boot');
+        bootAnimTimer = undefined;
+      }, 980);
+    });
+  }
+
+  function flashSquare(i: number) {
+    if (instant) return;
+    const sq = squares[i];
+    if (!sq) return;
+    sq.classList.remove('wopr-square--flash');
+    void sq.offsetWidth;
+    sq.classList.add('wopr-square--flash');
+    window.setTimeout(() => sq.classList.remove('wopr-square--flash'), 360);
+  }
+
   async function startGame() {
     if (startingGame || !promptReady || gameActive) return;
     startingGame = true;
@@ -227,6 +252,7 @@ function initWopr() {
       await appendGameLine('> LET US PLAY TIC-TAC-TOE.');
       await appendGameLine('> YOU ARE X. I AM O. YOUR MOVE.');
       renderBoard();
+      runBoardBootAnimation();
       gamePanel.focus();
     } finally {
       startingGame = false;
@@ -259,6 +285,7 @@ function initWopr() {
     if (board[idx] !== null || humanLocked || !gameActive) return;
     board[idx] = 'X';
     renderBoard();
+    flashSquare(idx);
 
     if (winner(board) === 'X') {
       await appendGameLine('> ERROR: UNEXPECTED OUTCOME.');
@@ -283,6 +310,7 @@ function initWopr() {
     const move = getBestMove(board);
     if (move >= 0) board[move] = 'O';
     renderBoard();
+    if (move >= 0) flashSquare(move);
 
     const w = winner(board);
     if (w === 'O') {
@@ -397,6 +425,8 @@ function initWopr() {
       kbdFocusIdx = 0;
       await appendGameLine('> NEW GAME. YOUR MOVE.');
       renderBoard();
+      runBoardBootAnimation();
+      gamePanel.focus();
     })();
   });
 
