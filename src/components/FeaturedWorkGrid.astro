@@ -1,0 +1,153 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  work: CollectionEntry<'work'>[];
+}
+
+const { work } = Astro.props;
+
+const sorted = [...work].sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const fmtDateWithYear = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+---
+<ul class="project-grid">
+  {sorted.map((entry) => (
+    <li class="project-grid-item">
+      <a href={`/work/${entry.slug}/`} class="project-grid-card">
+        <div class="project-grid-visual">
+          {entry.data.thumbnail ? (
+            <img
+              src={entry.data.thumbnail}
+              alt={entry.data.title}
+              class="project-grid-img"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div class="project-grid-placeholder" aria-hidden="true">
+              {entry.data.title[0]}
+            </div>
+          )}
+        </div>
+        <div class="project-grid-footer">
+          <div class="project-grid-info">
+            <span class="project-grid-name">{entry.data.title}</span>
+            <span class="project-grid-date">{fmtDateWithYear(entry.data.date)}</span>
+          </div>
+          <span class="project-grid-arrow" aria-hidden="true">→</span>
+        </div>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+.project-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.project-grid-item {
+  margin: 0;
+  padding: 0;
+}
+
+:global(main.main) .project-grid-card {
+  display: block;
+  text-decoration: none;
+  border-bottom: none;
+  color: inherit;
+}
+
+.project-grid-visual {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--border);
+  position: relative;
+}
+
+.project-grid-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+:global(main.main) .project-grid-card:hover .project-grid-img {
+  transform: scale(1.03);
+}
+
+.project-grid-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--border);
+  user-select: none;
+}
+
+.project-grid-footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+  font-size: var(--size-body);
+}
+
+.project-grid-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.project-grid-name {
+  font-size: inherit;
+  font-weight: 600;
+  color: var(--fg);
+  line-height: 1.25;
+  transition: color 0.15s ease;
+}
+
+:global(main.main) .project-grid-card:hover .project-grid-name {
+  color: var(--accent);
+}
+
+.project-grid-arrow {
+  color: var(--muted);
+  font-size: 16px;
+  flex-shrink: 0;
+  line-height: 1.4;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+:global(main.main) .project-grid-card:hover .project-grid-arrow {
+  color: var(--accent);
+  transform: translateX(2px);
+}
+
+:global(main.main) .project-grid-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-md);
+}
+
+@media (max-width: 540px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

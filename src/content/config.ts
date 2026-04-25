@@ -12,7 +12,7 @@ const posts = defineCollection({
   }),
 });
 
-/** Case studies / client work — same shape as posts; lives under `/work/`. */
+/** Case studies / client work — from Webflow/CSV; lives under `/work/`. */
 const work = defineCollection({
   type: 'content',
   schema: z.object({
@@ -22,6 +22,31 @@ const work = defineCollection({
     tags: z.array(z.string()).optional(),
     draft: z.boolean().default(false),
     legacyUrl: z.string().url().optional(),
+    /** From CSV: work type (e.g. design-dev, design, development) */
+    workType: z.string().optional(),
+    industry: z.array(z.string()).optional(),
+    dateCompleted: z.coerce.date().optional(),
+    weeksToComplete: z.union([z.number(), z.string()]).optional(),
+    /** Featured on index / cards */
+    highlight: z.boolean().default(false),
+    liveLink: z.string().url().optional(),
+    waybackUrl: z.string().url().optional(),
+    /** CMS row archived */
+    archived: z.boolean().default(false),
+    partnership: z.string().optional(),
+    partnershipWorkLink: z.string().url().optional(),
+    soloOrAgency: z.string().optional(),
+    estimatedTimeSpent: z.string().optional(),
+    /** Narrative blocks (markdown) */
+    brief: z.string().optional(),
+    problem: z.string().optional(),
+    solution: z.string().optional(),
+    specificWork: z.string().optional(),
+    /** Local public paths, e.g. /images/work/slug/... */
+    thumbnail: z.string().optional(),
+    desktop: z.string().optional(),
+    mobile: z.string().optional(),
+    gallery: z.array(z.string()).optional(),
   }),
 });
 

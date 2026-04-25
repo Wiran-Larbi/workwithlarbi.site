@@ -2,6 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { schemaPersonId } from '../../lib/schemaIds';
+import { mdStringToHtml } from '../../lib/mdString';
 
 export async function getStaticPaths() {
   const items = await getCollection('work', ({ data }) => !data.draft);
@@ -25,42 +26,437 @@ const postDescription = post.data.description ?? defaultDesc;
 const postPath = `/work/${post.slug}/`;
 const postUrl = new URL(postPath, `${siteOrigin}/`).toString();
 const published = post.data.date.toISOString();
+const d = post.data;
+
+const industryOrTags = d.industry?.length ? d.industry : d.tags ?? [];
+const hasMetaChips = Boolean(
+  d.workType ||
+    industryOrTags.length ||
+    d.soloOrAgency ||
+    d.estimatedTimeSpent ||
+    d.partnership,
+);
+
+const briefHtml = mdStringToHtml(d.brief);
+const problemHtml = mdStringToHtml(d.problem);
+const solutionHtml = mdStringToHtml(d.solution);
+const specificWorkHtml = mdStringToHtml(d.specificWork);
+
+const hasDeviceRow = Boolean(d.desktop || d.mobile);
+const hasGallery = Boolean(d.gallery && d.gallery.length);
+
+/** Lightbox: desktop → mobile → gallery (deduped). Non-cover images first; hero `thumbnail` URL is only ever last (opens full cover there). */
+const thumb = d.thumbnail;
+const lightboxOrder: string[] = [];
+const pushLightbox = (u: string | undefined) => {
+  if (!u?.trim()) return;
+  if (!lightboxOrder.includes(u)) lightboxOrder.push(u);
+};
+pushLightbox(d.desktop);
+pushLightbox(d.mobile);
+for (const g of d.gallery ?? []) pushLightbox(g);
+
+const nonThumb = thumb ? lightboxOrder.filter((u) => u !== thumb) : [...lightboxOrder];
+
+let lightboxSrcs: string[];
+if (nonThumb.length > 0) {
+  lightboxSrcs = thumb ? [...nonThumb, thumb] : [...nonThumb];
+} else if (lightboxOrder.length > 0) {
+  lightboxSrcs = [...lightboxOrder];
+} else if (thumb) {
+  lightboxSrcs = [thumb];
+} else {
+  lightboxSrcs = [];
+}
+
+const hasLightbox =
+  lightboxSrcs.length > 0 && (hasGallery || hasDeviceRow || Boolean(thumb));
+
 const postJsonLd = {
   '@type': 'BlogPosting',
-  headline: post.data.title,
+  headline: d.title,
   description: postDescription,
   datePublished: published,
   url: postUrl,
   mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
   author: { '@type': 'Person', '@id': schemaPersonId(siteOrigin), name: 'Derek Castelli' },
   publisher: { '@type': 'Person', '@id': schemaPersonId(siteOrigin), name: 'Derek Castelli' },
-  ...(post.data.tags?.length ? { keywords: post.data.tags.join(', ') } : {}),
+  ...(industryOrTags.length ? { keywords: industryOrTags.join(', ') } : {}),
+  ...(d.thumbnail
+    ? {
+        image: d.thumbnail.startsWith('http')
+          ? d.thumbnail
+          : new URL(d.thumbnail, `${siteOrigin}/`).toString(),
+      }
+    : {}),
 };
 
-const fmtDate = (d: Date) =>
-  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const fmtDate = (date: Date) =>
+  date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+
+const ogImage = d.thumbnail && d.thumbnail.startsWith('/') ? d.thumbnail : '/derekj-og.png';
 ---
 <Base
-  title={`${post.data.title} — Derek Castelli`}
+  title={`${d.title} — Derek Castelli`}
   description={postDescription}
   ogType="article"
   articlePublishedTime={published}
   jsonLd={postJsonLd}
   canonical={postUrl}
+  ogImage={ogImage}
 >
-  <article class="prose">
-    <header class="post-header">
-      <h1>{post.data.title}</h1>
-      <div class="meta">
-        <time datetime={post.data.date.toISOString()}>{fmtDate(post.data.date)}</time>
-        {post.data.tags && post.data.tags.length > 0 && (
-          <span> · {post.data.tags.join(', ')}</span>
+  <article class="prose work-casestudy">
+    <header class="post-header work-post-header">
+      <div class="work-title-block">
+        <h1>{d.title}</h1>
+        {d.highlight && (
+          <span class="work-favorite" title="A personal favorite">
+            <i class="ph-fill ph-star" aria-hidden="true" />
+          </span>
         )}
       </div>
+      <div class="meta work-meta-line">
+        <time datetime={d.date.toISOString()}>{fmtDate(d.date)}</time>
+        {d.dateCompleted && d.dateCompleted.getTime() !== d.date.getTime() && (
+          <span> · completed {fmtDate(d.dateCompleted)}</span>
+        )}
+        {industryOrTags.length > 0 && <span> · {industryOrTags.join(', ')}</span>}
+      </div>
     </header>
-    <div class="post-content">
+
+    {d.archived && (
+      <p class="work-flags" aria-label="Status">
+        <span class="work-flag work-flag-archived">Archived</span>
+      </p>
+    )}
+
+    {hasMetaChips && (
+      <dl class="work-facts">
+        {d.workType && (
+          <div class="work-fact">
+            <dt>Type</dt>
+            <dd>{d.workType}</dd>
+          </div>
+        )}
+        {d.soloOrAgency && (
+          <div class="work-fact">
+            <dt>Context</dt>
+            <dd>{d.soloOrAgency}</dd>
+          </div>
+        )}
+        {d.partnership && (
+          <div class="work-fact">
+            <dt>Partner</dt>
+            <dd>{d.partnership}</dd>
+          </div>
+        )}
+        {d.estimatedTimeSpent && (
+          <div class="work-fact">
+            <dt>Time</dt>
+            <dd>{d.estimatedTimeSpent}</dd>
+          </div>
+        )}
+        {d.weeksToComplete !== undefined && d.weeksToComplete !== null && String(d.weeksToComplete) !== '' && (
+          <div class="work-fact">
+            <dt>Duration</dt>
+            <dd>
+              {typeof d.weeksToComplete === 'number'
+                ? `${d.weeksToComplete} week${d.weeksToComplete === 1 ? '' : 's'}`
+                : d.weeksToComplete}
+            </dd>
+          </div>
+        )}
+      </dl>
+    )}
+
+    {d.thumbnail && (
+      <figure class="work-hero-figure">
+        {hasLightbox && lightboxSrcs.indexOf(d.thumbnail) >= 0 ? (
+          <button
+            type="button"
+            class="work-lightbox-trigger"
+            data-lb-index={lightboxSrcs.indexOf(d.thumbnail)}
+            aria-label="View cover image at full size"
+          >
+            <img
+              class="work-hero"
+              src={d.thumbnail}
+              alt=""
+              width="1200"
+              height="675"
+              loading="eager"
+              decoding="async"
+            />
+          </button>
+        ) : (
+          <img
+            class="work-hero"
+            src={d.thumbnail}
+            alt=""
+            width="1200"
+            height="675"
+            loading="eager"
+            decoding="async"
+          />
+        )}
+      </figure>
+    )}
+
+    {hasDeviceRow && (
+      <div class="work-devices" aria-label="Desktop and mobile">
+        {d.desktop && (
+          <figure>
+            {hasLightbox && lightboxSrcs.indexOf(d.desktop) >= 0 ? (
+              <button
+                type="button"
+                class="work-lightbox-trigger"
+                aria-label="View desktop image at full size"
+                data-lb-index={lightboxSrcs.indexOf(d.desktop)}
+              >
+                <img src={d.desktop} alt="Desktop" loading="lazy" decoding="async" />
+              </button>
+            ) : (
+              <img src={d.desktop} alt="Desktop" loading="lazy" decoding="async" />
+            )}
+            <figcaption>Desktop</figcaption>
+          </figure>
+        )}
+        {d.mobile && (
+          <figure>
+            {hasLightbox && d.mobile && lightboxSrcs.indexOf(d.mobile) >= 0 ? (
+              <button
+                type="button"
+                class="work-lightbox-trigger"
+                aria-label="View mobile image at full size"
+                data-lb-index={lightboxSrcs.indexOf(d.mobile)}
+              >
+                <img src={d.mobile} alt="Mobile" loading="lazy" decoding="async" />
+              </button>
+            ) : (
+              <img src={d.mobile} alt="Mobile" loading="lazy" decoding="async" />
+            )}
+            <figcaption>Mobile</figcaption>
+          </figure>
+        )}
+      </div>
+    )}
+
+    {hasGallery && (
+      <div class="work-gallery" role="list">
+        {d.gallery!.map((src) => {
+          const lb = lightboxSrcs.indexOf(src);
+          const idx = lb >= 0 ? lb : 0;
+          return (
+            <figure class="work-gallery-item" role="listitem">
+              <button
+                type="button"
+                class="work-lightbox-trigger"
+                aria-label={
+                  hasLightbox
+                    ? `View image ${idx + 1} of ${lightboxSrcs.length} at full size`
+                    : 'View image at full size'
+                }
+                data-lb-index={idx}
+              >
+                <img src={src} alt="" loading="lazy" decoding="async" />
+              </button>
+            </figure>
+          );
+        })}
+      </div>
+    )}
+
+    {hasLightbox && (
+      <>
+        <div
+          id="work-lightbox"
+          class="work-lightbox"
+          hidden
+          role="dialog"
+          aria-modal="true"
+          aria-label="Image gallery"
+        >
+          <div class="work-lightbox__backdrop" data-lb-backdrop tabindex="-1" />
+          <div class="work-lightbox__content">
+            <button type="button" class="work-lightbox__close" data-lb-close aria-label="Close">
+              <span class="work-lightbox__close-icon" aria-hidden="true">×</span>
+            </button>
+            {lightboxSrcs.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  class="work-lightbox__nav work-lightbox__prev"
+                  data-lb-prev
+                  aria-label="Previous image"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  class="work-lightbox__nav work-lightbox__next"
+                  data-lb-next
+                  aria-label="Next image"
+                >
+                  ›
+                </button>
+                <p class="work-lightbox__count" data-lb-count aria-live="polite" />
+              </>
+            )}
+            <div class="work-lightbox__frame">
+              <img class="work-lightbox__img" data-lb-img src="" alt="Full size preview" width="1" height="1" />
+            </div>
+          </div>
+        </div>
+
+        <script define:vars={{ lightboxSrcs }}>
+          (() => {
+            const urls = lightboxSrcs;
+            const root = document.getElementById('work-lightbox');
+            if (!root) return;
+
+            const backdrop = root.querySelector('[data-lb-backdrop]');
+            const closeBtn = root.querySelector('[data-lb-close]');
+            const prevBtn = root.querySelector('[data-lb-prev]');
+            const nextBtn = root.querySelector('[data-lb-next]');
+            const img = root.querySelector('[data-lb-img]');
+            const countEl = root.querySelector('[data-lb-count]');
+            if (!img) return;
+
+            const triggers = document.querySelectorAll('.work-lightbox-trigger');
+            let index = 0;
+            let lastActive = null;
+
+            function setUrl(i) {
+              if (!urls.length) return;
+              index = (i + urls.length) % urls.length;
+              img.src = urls[index];
+              img.removeAttribute('srcset');
+              if (countEl) countEl.textContent = `${index + 1} / ${urls.length}`;
+            }
+
+            function open(at) {
+              lastActive = document.activeElement;
+              setUrl(at);
+              root.removeAttribute('hidden');
+              document.body.classList.add('work-lightbox-open');
+              setTimeout(function () {
+                if (closeBtn && closeBtn.focus) closeBtn.focus();
+              }, 0);
+            }
+
+            function close() {
+              root.setAttribute('hidden', '');
+              document.body.classList.remove('work-lightbox-open');
+              if (lastActive && lastActive.focus) lastActive.focus();
+            }
+
+            triggers.forEach((btn) => {
+              btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const i = parseInt(btn.getAttribute('data-lb-index') || '0', 10);
+                open(Number.isNaN(i) ? 0 : i);
+              });
+            });
+
+            if (closeBtn) closeBtn.addEventListener('click', close);
+            if (backdrop) backdrop.addEventListener('click', close);
+            if (prevBtn) prevBtn.addEventListener('click', function () { setUrl(index - 1); });
+            if (nextBtn) nextBtn.addEventListener('click', function () { setUrl(index + 1); });
+
+            root.addEventListener('click', function (e) {
+              if (e.target === root) close();
+            });
+
+            document.addEventListener('keydown', function (e) {
+              if (root.hasAttribute('hidden')) return;
+              if (e.key === 'Escape') {
+                e.preventDefault();
+                close();
+              } else if (e.key === 'ArrowLeft' && prevBtn) {
+                e.preventDefault();
+                setUrl(index - 1);
+              } else if (e.key === 'ArrowRight' && nextBtn) {
+                e.preventDefault();
+                setUrl(index + 1);
+              }
+            });
+          })();
+        </script>
+      </>
+    )}
+
+    {briefHtml && (
+      <section class="work-section" aria-labelledby="work-brief">
+        <h2 id="work-brief" class="work-section-title">Brief</h2>
+        <div class="work-md post-content" set:html={briefHtml} />
+      </section>
+    )}
+
+    {problemHtml && (
+      <section class="work-section" aria-labelledby="work-problem">
+        <h2 id="work-problem" class="work-section-title">Problem</h2>
+        <div class="work-md post-content" set:html={problemHtml} />
+      </section>
+    )}
+
+    {solutionHtml && (
+      <section class="work-section" aria-labelledby="work-solution">
+        <h2 id="work-solution" class="work-section-title">Solution</h2>
+        <div class="work-md post-content" set:html={solutionHtml} />
+      </section>
+    )}
+
+    {specificWorkHtml && (
+      <section class="work-section" aria-labelledby="work-specific">
+        <h2 id="work-specific" class="work-section-title">Specific work</h2>
+        <div class="work-md post-content" set:html={specificWorkHtml} />
+      </section>
+    )}
+
+    <div class="post-content work-body">
       <Content />
     </div>
+
+    {d.legacyUrl && (
+      <p class="work-legacy">
+        <a href={d.legacyUrl}>Previously published at a legacy URL</a>
+      </p>
+    )}
+
+    {(d.liveLink || d.waybackUrl || d.partnershipWorkLink) && (
+      <ul class="work-links" aria-label="Project links">
+        {d.liveLink && (
+          <li>
+            <a class="work-link-pill" href={d.liveLink} rel="noopener noreferrer" target="_blank">
+              <span>Live site</span>
+              <i class="ph-bold ph-arrow-up-right work-link-pill__icon" aria-hidden="true" />
+            </a>
+          </li>
+        )}
+        {d.waybackUrl && (
+          <li>
+            <a class="work-link-pill" href={d.waybackUrl} rel="noopener noreferrer" target="_blank">
+              <span>Wayback Machine</span>
+              <i class="ph-bold ph-arrow-up-right work-link-pill__icon" aria-hidden="true" />
+            </a>
+          </li>
+        )}
+        {d.partnershipWorkLink && (
+          <li>
+            <a
+              class="work-link-pill"
+              href={d.partnershipWorkLink}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <span>Partner case study</span>
+              <i class="ph-bold ph-arrow-up-right work-link-pill__icon" aria-hidden="true" />
+            </a>
+          </li>
+        )}
+      </ul>
+    )}
+
     <p class="back-link">
       <a href="/work/"><span class="arrow">&larr;</span> all work</a>
     </p>
