@@ -46,9 +46,10 @@ const line2 = `> ${data.totalContributions} COMMITS — PAST YEAR`;
 
 function logLine(repo: GitHubData['recentRepos'][number]): string {
   const lang = repo.primaryLanguage?.name ?? '—';
+  const repoName = repo.owner !== 'heyderekj' ? `${repo.owner}/${repo.name}` : repo.name;
   const desc = repo.description ? repo.description.replace(/\s+/g, ' ').slice(0, 48) : '';
   const tail = desc ? ` — ${desc}${repo.description && repo.description.length > 48 ? '…' : ''}` : '';
-  return `> ${repo.name} [${lang}]${tail}`;
+  return `> ${repoName} [${lang}]${tail}`;
 }
 ---
 

@@ -3,6 +3,7 @@ export interface GitHubData {
   weeks: { contributionDays: { contributionCount: number; date: string }[] }[];
   recentRepos: {
     name: string;
+    owner: string;
     description: string | null;
     pushedAt: string;
     url: string;
@@ -25,20 +26,14 @@ const QUERY = `
             }
           }
         }
-      }
-      repositories(
-        first: 7
-        orderBy: { field: PUSHED_AT, direction: DESC }
-        ownerAffiliations: [OWNER]
-        privacy: PUBLIC
-      ) {
-        nodes {
-          name
-          description
-          pushedAt
-          url
-          primaryLanguage {
+        commitContributionsByRepository(maxRepositories: 7) {
+          repository {
             name
+            owner { login }
+            description
+            pushedAt
+            url
+            primaryLanguage { name }
           }
         }
       }
@@ -81,8 +76,17 @@ export async function fetchGitHubActivity(): Promise<GitHubData> {
               totalContributions?: number;
               weeks?: GitHubData['weeks'];
             };
+            commitContributionsByRepository?: {
+              repository: {
+                name: string;
+                owner: { login: string };
+                description: string | null;
+                pushedAt: string;
+                url: string;
+                primaryLanguage: { name: string } | null;
+              };
+            }[];
           };
-          repositories?: { nodes?: GitHubData['recentRepos'] };
         };
       };
       errors?: unknown;
@@ -96,13 +100,16 @@ export async function fetchGitHubActivity(): Promise<GitHubData> {
     const cal = user.contributionsCollection?.contributionCalendar;
     const total = cal?.totalContributions ?? 0;
     const weeks = cal?.weeks ?? [];
-    const recentRepos = user.repositories?.nodes ?? [];
+    const recentRepos = (user.contributionsCollection?.commitContributionsByRepository ?? []).map(({ repository: r }) => ({
+      name: r.name,
+      owner: r.owner.login,
+      description: r.description,
+      pushedAt: r.pushedAt,
+      url: r.url,
+      primaryLanguage: r.primaryLanguage,
+    }));
 
-    return {
-      totalContributions: total,
-      weeks,
-      recentRepos,
-    };
+    return { totalContributions: total, weeks, recentRepos };
   } catch {
     return EMPTY;
   }
