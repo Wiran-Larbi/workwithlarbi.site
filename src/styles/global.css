@@ -350,6 +350,15 @@ img { max-width: 100%; height: auto; border-radius: var(--radius-md); }
    ============================================================ */
 .entries { list-style: none; padding: 0; margin: 0; }
 
+/* Tools page — name column; matches default .entries row hover */
+.tools-list li:not(:has(> a.entry-link)),
+.tools-list a.entry-link {
+  grid-template-columns: 160px 1fr;
+}
+.tools-list .entry-title {
+  font-weight: 500;
+}
+
 /* Plain rows (e.g. /tools) — grid + glass on the li */
 .entries li:not(:has(> a.entry-link)) {
   display: grid;
@@ -801,6 +810,10 @@ main.main .footer-links a:hover { color: var(--accent); }
   .entries a.entry-link {
     grid-template-columns: 80px 1fr;
     gap: var(--space-2);
+  }
+  .tools-list li:not(:has(> a.entry-link)),
+  .tools-list a.entry-link {
+    grid-template-columns: 80px 1fr;
   }
   .post-header h1 { font-size: 24px; }
 }

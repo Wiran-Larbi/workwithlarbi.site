@@ -5,40 +5,45 @@ const sections = [
   {
     title: 'Design web',
     items: [
-      ['Figma', 'UI and systems.'],
-      ['Webflow', 'Client sites.'],
-      ['Dinky', 'My app.'],
+      { name: 'Figma', note: 'UI and systems.', href: 'https://www.figma.com/' },
+      { name: 'Webflow', note: 'Client sites.', href: 'https://webflow.com/' },
+      { name: 'Dinky', note: 'My app.', href: 'https://dinkyfiles.com/' },
     ],
   },
   {
     title: 'Agentic coding',
     items: [
-      ['Claude Desktop App', 'Daily driver.'],
-      ['Cursor', 'Focused editing.'],
+      {
+        name: 'Claude Desktop App',
+        note: 'Daily driver.',
+        href: 'https://claude.com/download',
+      },
+      { name: 'Cursor', note: 'Focused editing.', href: 'https://cursor.com/' },
     ],
   },
   {
     title: 'Writing',
     items: [
-      ['iA Writer', 'Drafts.'],
-      ['HEY', 'Email.'],
+      { name: 'iA Writer', note: 'Drafts.', href: 'https://ia.net/writer' },
+      { name: 'HEY', note: 'Email.', href: 'https://www.hey.com/' },
     ],
   },
   {
     title: 'Infra',
     items: [
-      ['GitHub', 'Code.'],
-      ['Fathom', 'Analytics.'],
-      ['Netlify', 'Deploys.'],
+      { name: 'GitHub', note: 'Code.', href: 'https://github.com/' },
+      { name: 'Fathom', note: 'Analytics.', href: 'https://usefathom.com/' },
+      { name: 'Netlify', note: 'Deploys.', href: 'https://www.netlify.com/' },
     ],
   },
   {
     title: 'Hardware',
     items: [
-      [
-        'MacBook Air (M2, 2022)',
-        '24 GB memory · macOS Tahoe 26.3.1 (a).',
-      ],
+      {
+        name: 'MacBook Air (M2, 2022)',
+        note: '24 GB memory.',
+        href: 'https://www.apple.com/macbook-air/',
+      },
     ],
   },
 ];
@@ -51,11 +56,25 @@ const sections = [
     {sections.map((section) => (
       <>
         <h2 class="section-title">/ {section.title.toLowerCase().replace(/\s+/g, '-')}</h2>
-        <ul class="entries">
-          {section.items.map(([name, note]) => (
-            <li style="grid-template-columns: 160px 1fr;">
-              <span class="entry-title" style="font-weight: 500;">{name}</span>
-              <span class="entry-meta" style="align-self: center;">{note}</span>
+        <ul class="entries tools-list">
+          {section.items.map((item) => (
+            <li>
+              {item.href ? (
+                <a
+                  class="entry-link"
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <span class="entry-title">{item.name}</span>
+                  <span class="entry-meta" style="align-self: center;">{item.note}</span>
+                </a>
+              ) : (
+                <>
+                  <span class="entry-title">{item.name}</span>
+                  <span class="entry-meta" style="align-self: center;">{item.note}</span>
+                </>
+              )}
             </li>
           ))}
         </ul>
