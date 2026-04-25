@@ -1,75 +1,123 @@
-/** Activity terminal: typewriter lines + heatmap reveal (no game). */
+/** Activity terminal: typewriter lines → WOPR heatmap scan → log entries. */
 
-async function typeText(el: HTMLElement, text: string, speed = 28, instant: boolean): Promise<void> {
+// ── Utilities ────────────────────────────────────────────────────────────────
+
+async function typeText(el: HTMLElement, text: string, speed: number, instant: boolean): Promise<void> {
   el.textContent = '';
-  if (instant) {
-    el.textContent = text;
-    return;
-  }
+  if (instant) { el.textContent = text; return; }
   for (let i = 0; i < text.length; i++) {
     el.textContent += text[i];
-    await new Promise((r) => setTimeout(r, speed));
+    await new Promise<void>((r) => setTimeout(r, speed));
   }
 }
 
-async function shortPause(ms: number, instant: boolean) {
-  if (instant) return;
-  await new Promise((r) => setTimeout(r, ms));
+function pause(ms: number, instant: boolean): Promise<void> {
+  return instant ? Promise.resolve() : new Promise((r) => setTimeout(r, ms));
 }
 
-function qs<T extends HTMLElement>(sel: string, root: ParentNode = document): T | null {
-  return root.querySelector(sel) as T | null;
+// ── WOPR grid animation ──────────────────────────────────────────────────────
+
+function rnd() { return Math.floor(Math.random() * 5); }
+function setLevel(cell: HTMLElement, level: number) {
+  cell.style.setProperty('--wopr-level', String(level));
 }
+
+function animateGrid(heatmap: HTMLElement, instant: boolean): Promise<void> {
+  return new Promise((resolve) => {
+    const cells = Array.from(heatmap.querySelectorAll<HTMLElement>('.wopr-cell'));
+    if (!cells.length) { resolve(); return; }
+
+    if (instant) {
+      cells.forEach((c) => setLevel(c, Number(c.dataset.real ?? 0)));
+      resolve();
+      return;
+    }
+
+    // Group cells by week column
+    const weekMap = new Map<number, HTMLElement[]>();
+    cells.forEach((c) => {
+      const w = Number(c.dataset.week);
+      if (!weekMap.has(w)) weekMap.set(w, []);
+      weekMap.get(w)!.push(c);
+    });
+    const weeks = [...weekMap.keys()].sort((a, b) => a - b);
+    const locked = new Set<number>();
+
+    // Phase 1: all cells flicker randomly at 50ms
+    cells.forEach((c) => setLevel(c, rnd()));
+    const flickerTimer = setInterval(() => {
+      cells.forEach((c) => {
+        if (!locked.has(Number(c.dataset.week))) setLevel(c, rnd());
+      });
+    }, 50);
+
+    // Phase 2: after 700ms, scan left→right locking each column to real data
+    setTimeout(() => {
+      let i = 0;
+      const scanTimer = setInterval(() => {
+        if (i >= weeks.length) {
+          clearInterval(scanTimer);
+          clearInterval(flickerTimer);
+          startIdleFlicker(cells);
+          resolve();
+          return;
+        }
+        const wk = weeks[i++];
+        locked.add(wk);
+        weekMap.get(wk)!.forEach((c) => setLevel(c, Number(c.dataset.real ?? 0)));
+      }, 16);
+    }, 700);
+  });
+}
+
+function startIdleFlicker(cells: HTMLElement[]) {
+  setInterval(() => {
+    if (Math.random() > 0.25) return;
+    const c = cells[Math.floor(Math.random() * cells.length)];
+    const real = Number(c.dataset.real ?? 0);
+    if (real === 0) return;
+    setLevel(c, Math.min(4, real + 1 + Math.floor(Math.random() * 2)));
+    setTimeout(() => setLevel(c, real), 80 + Math.random() * 100);
+  }, 250);
+}
+
+// ── Main sequence ────────────────────────────────────────────────────────────
 
 function initActivityTerminal() {
   const terminal = document.querySelector<HTMLElement>('[data-wopr]');
   if (!terminal) return;
 
-  const heatmap = qs<HTMLElement>('[data-wopr-heatmap]', terminal);
-  const log = qs<HTMLElement>('[data-wopr-log]', terminal);
-  if (!log) return;
+  const heatmap = terminal.querySelector<HTMLElement>('[data-wopr-heatmap]');
+  const log = terminal.querySelector<HTMLElement>('[data-wopr-log]');
+  const instant = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let started = false;
 
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const instant = reducedMotion;
-
-  let sequenceStarted = false;
-
-  function setHeatmapVisible(on: boolean) {
-    if (!heatmap) return;
-    heatmap.classList.toggle('wopr-heatmap--visible', on);
-    if (instant) heatmap.style.opacity = on ? '1' : '0';
-  }
-
-  async function runIntroSequence() {
-    const lineEls = terminal.querySelectorAll<HTMLElement>('.wopr-lines [data-wopr-line]');
-    for (const lineEl of lineEls) {
-      const text = lineEl.dataset.woprLine ?? '';
-      const delayAfter = Number(lineEl.dataset.woprDelay ?? 0);
-      await typeText(lineEl, text, 28, instant);
-      await shortPause(delayAfter, instant);
+  async function runSequence() {
+    // 1. Type header lines
+    for (const el of terminal.querySelectorAll<HTMLElement>('.wopr-lines [data-wopr-line]')) {
+      await typeText(el, el.dataset.woprLine ?? '', 28, instant);
+      await pause(Number(el.dataset.woprDelay ?? 0), instant);
     }
 
-    setHeatmapVisible(true);
-    if (heatmap) {
-      if (!instant) await shortPause(320, false);
-      else await shortPause(0, true);
-    }
+    // 2. WOPR scan animation on the heatmap
+    if (heatmap) await animateGrid(heatmap, instant);
 
-    const entries = log.querySelectorAll<HTMLElement>('.wopr-log-entry');
-    for (const entry of entries) {
-      const text = entry.dataset.woprLine ?? '';
-      const delayAfter = Number(entry.dataset.woprDelay ?? 0);
-      await typeText(entry, text, 28, instant);
-      await shortPause(delayAfter, instant);
+    // 3. Type log entries after scan completes
+    if (log) {
+      await pause(200, instant);
+      for (const el of log.querySelectorAll<HTMLElement>('[data-wopr-line]')) {
+        await typeText(el, el.dataset.woprLine ?? '', 20, instant);
+        await pause(Number(el.dataset.woprDelay ?? 0), instant);
+      }
     }
   }
 
   const io = new IntersectionObserver(
     (entries) => {
-      if (!entries[0]?.isIntersecting || sequenceStarted) return;
-      sequenceStarted = true;
+      if (!entries[0]?.isIntersecting || started) return;
+      started = true;
       io.disconnect();
-      void runIntroSequence();
+      void runSequence();
     },
     { threshold: 0.12 }
   );

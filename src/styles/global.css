@@ -1298,17 +1298,27 @@ html.orange-mode {
   word-break: break-word;
 }
 
+/* Full width clip: keep fixed-size cells; overflow on the left (oldest weeks), newest stay visible */
+.wopr-heatmap-clip {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-3);
+  direction: ltr;
+}
+
 .wopr-heatmap {
+  --wopr-heatmap-cell: 9px;
   --wopr-heatmap-gap: clamp(2px, 0.5vw, 3px);
   display: grid;
-  width: 100%;
-  height: 81px;
+  width: max-content;
+  flex-shrink: 0;
   box-sizing: border-box;
-  grid-template-columns: repeat(var(--wopr-weeks, 1), minmax(0, 1fr));
-  grid-template-rows: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--wopr-weeks, 1), var(--wopr-heatmap-cell));
+  grid-template-rows: repeat(7, var(--wopr-heatmap-cell));
   grid-auto-flow: column;
   gap: var(--wopr-heatmap-gap);
-  margin-top: var(--space-3);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -1341,10 +1351,8 @@ html.orange-mode {
 }
 
 .wopr-cell {
-  min-width: 0;
-  min-height: 0;
-  width: 100%;
-  height: 100%;
+  width: var(--wopr-heatmap-cell, 9px);
+  height: var(--wopr-heatmap-cell, 9px);
   border-radius: 2px;
   background: color-mix(
     in srgb,

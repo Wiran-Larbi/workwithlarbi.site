@@ -63,25 +63,27 @@ function logLine(repo: GitHubData['recentRepos'][number]): string {
 
     {
       data.weeks.length > 0 ? (
-        <div
-          class="wopr-heatmap"
-          data-wopr-heatmap
-          style={`--wopr-weeks: ${data.weeks.length}`}
-          role="img"
-          aria-label={`GitHub contributions: ${data.totalContributions} in the past year`}
-        >
-          {data.weeks.map((week) =>
-            week.contributionDays.map((day) => (
-              <div
-                class="wopr-cell"
-                style={`--wopr-level: ${contributionLevel(day.contributionCount)}`}
-                data-count={day.contributionCount}
-                data-date={day.date}
-                title={`${day.contributionCount} commit${day.contributionCount !== 1 ? 's' : ''} on ${day.date}`}
-                aria-hidden="true"
-              />
-            ))
-          )}
+        <div class="wopr-heatmap-clip">
+          <div
+            class="wopr-heatmap"
+            data-wopr-heatmap
+            style={`--wopr-weeks: ${data.weeks.length}`}
+            role="img"
+            aria-label={`GitHub contributions: ${data.totalContributions} in the past year`}
+          >
+            {data.weeks.map((week, wi) =>
+              week.contributionDays.map((day) => (
+                <div
+                  class="wopr-cell"
+                  style="--wopr-level: 0"
+                  data-real={contributionLevel(day.contributionCount)}
+                  data-week={wi}
+                  title={`${day.contributionCount} commit${day.contributionCount !== 1 ? 's' : ''} on ${day.date}`}
+                  aria-hidden="true"
+                />
+              ))
+            )}
+          </div>
         </div>
       ) : (
         <p class="wopr-heatmap-empty" aria-live="polite">
