@@ -1263,18 +1263,14 @@ html.orange-mode {
 
 .wopr-section {
   margin-top: var(--space-5);
-  /* Light theme (default) */
   --wopr-bg: #f3efe8;
   --wopr-border: color-mix(in srgb, var(--accent) 22%, var(--border-strong));
-  --wopr-heatmap-base: #e5dfd4;
 }
 
 @media (prefers-color-scheme: dark) {
   .wopr-section {
-    /* Dark theme — phosphor-style panel */
     --wopr-bg: #0c0800;
     --wopr-border: color-mix(in srgb, var(--accent) 18%, transparent);
-    --wopr-heatmap-base: #0c0800;
   }
 }
 
@@ -1298,42 +1294,6 @@ html.orange-mode {
   word-break: break-word;
 }
 
-/* Full width clip: keep fixed-size cells; overflow on the left (oldest weeks), newest stay visible */
-.wopr-heatmap-clip {
-  width: 100%;
-  overflow: hidden;
-  display: flex;
-  justify-content: flex-end;
-  margin-top: var(--space-3);
-  direction: ltr;
-}
-
-.wopr-heatmap {
-  --wopr-heatmap-cell: 9px;
-  --wopr-heatmap-gap: clamp(2px, 0.5vw, 3px);
-  display: grid;
-  width: max-content;
-  flex-shrink: 0;
-  box-sizing: border-box;
-  grid-template-columns: repeat(var(--wopr-weeks, 1), var(--wopr-heatmap-cell));
-  grid-template-rows: repeat(7, var(--wopr-heatmap-cell));
-  grid-auto-flow: column;
-  gap: var(--wopr-heatmap-gap);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.wopr-heatmap-empty {
-  margin: var(--space-3) 0 0;
-  opacity: 0.85;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.wopr-heatmap--visible {
-  opacity: 1;
-}
-
 .wopr-log {
   margin-top: var(--space-3);
 }
@@ -1344,24 +1304,3 @@ html.orange-mode {
   word-break: break-word;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .wopr-heatmap {
-    transition: none;
-  }
-}
-
-.wopr-cell {
-  width: var(--wopr-heatmap-cell, 9px);
-  height: var(--wopr-heatmap-cell, 9px);
-  border-radius: 2px;
-  background: color-mix(
-    in srgb,
-    var(--accent) calc(var(--wopr-level, 0) * 22%),
-    var(--wopr-heatmap-base)
-  );
-}
-
-.wopr-cell:hover {
-  outline: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
-  outline-offset: 1px;
-}

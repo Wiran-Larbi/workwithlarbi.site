@@ -61,37 +61,6 @@ function logLine(repo: GitHubData['recentRepos'][number]): string {
       <div data-wopr-line={line2} data-wopr-delay="0"></div>
     </div>
 
-    {
-      data.weeks.length > 0 ? (
-        <div class="wopr-heatmap-clip">
-          <div
-            class="wopr-heatmap"
-            data-wopr-heatmap
-            style={`--wopr-weeks: ${data.weeks.length}`}
-            role="img"
-            aria-label={`GitHub contributions: ${data.totalContributions} in the past year`}
-          >
-            {data.weeks.map((week, wi) =>
-              week.contributionDays.map((day) => (
-                <div
-                  class="wopr-cell"
-                  style="--wopr-level: 0"
-                  data-real={contributionLevel(day.contributionCount)}
-                  data-week={wi}
-                  title={`${day.contributionCount} commit${day.contributionCount !== 1 ? 's' : ''} on ${day.date}`}
-                  aria-hidden="true"
-                />
-              ))
-            )}
-          </div>
-        </div>
-      ) : (
-        <p class="wopr-heatmap-empty" aria-live="polite">
-          &gt; CONTRIBUTION CALENDAR UNAVAILABLE
-        </p>
-      )
-    }
-
     <div class="wopr-log" data-wopr-log>
       {
         data.recentRepos.map((repo) => (

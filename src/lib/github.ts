@@ -27,7 +27,7 @@ const QUERY = `
         }
       }
       repositories(
-        first: 6
+        first: 7
         orderBy: { field: PUSHED_AT, direction: DESC }
         ownerAffiliations: [OWNER]
         privacy: PUBLIC
