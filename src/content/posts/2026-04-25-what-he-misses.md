@@ -2,6 +2,7 @@
 title: "What he misses"
 date: 2026-04-25
 draft: false
+tags: [life, poem]
 ---
 
 You create.</br>
