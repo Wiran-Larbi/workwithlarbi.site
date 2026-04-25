@@ -145,6 +145,13 @@ export const aboutExperienceGroups: AboutExpGroup[] = [
           'Freelance web designer partnering with clients and teams to make websites in Webflow.',
       },
       {
+        name: 'Jamm Designs',
+        range: 'Jan 2025 — Present',
+        description:
+          'Senior Web Designer (Freelance), designing websites and developing them in Webflow one update at a time.',
+        link: { label: 'jamm.co', href: 'https://jamm.co', icon: 'arrow' },
+      },
+      {
         name: 'Kem Design Co.',
         range: 'May 2024 — Present',
         description: 'Webflow Expert assisting the team when it comes to making websites.',
