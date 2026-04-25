@@ -8,14 +8,14 @@ const first = nowHomeTickerItems[0];
 <span
   class="now-ticker"
   role="region"
-  aria-label="NLT verses on Bible.com — Proverbs 25:2, Ephesians 2:10, Hebrews 11:1"
+  aria-label="Verse links on Bible.com — Proverbs 25:2 (NLT), Ephesians 2:10 (NIV), Hebrews 11:1 (NLT)"
 >
   <a
     class="now-ticker__static now-ticker__verse"
     href={first.href}
     target="_blank"
     rel="noopener noreferrer"
-    aria-label={`${first.verseLabel}, New Living Translation on Bible.com`}
+    aria-label={`${first.verseLabel}, ${first.translationName} on Bible.com`}
   >
     {first.line}
   </a>
@@ -36,7 +36,7 @@ const first = nowHomeTickerItems[0];
                 target="_blank"
                 rel="noopener noreferrer"
                 tabindex={repeatIndex === 1 ? -1 : undefined}
-                aria-label={`${item.verseLabel}, New Living Translation on Bible.com`}
+                aria-label={`${item.verseLabel}, ${item.translationName} on Bible.com`}
               >
                 {item.line}
               </a>

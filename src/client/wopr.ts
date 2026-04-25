@@ -27,7 +27,7 @@ function initActivityTerminal() {
 
   const heatmap = qs<HTMLElement>('[data-wopr-heatmap]', terminal);
   const log = qs<HTMLElement>('[data-wopr-log]', terminal);
-  if (!heatmap || !log) return;
+  if (!log) return;
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const instant = reducedMotion;
@@ -35,6 +35,7 @@ function initActivityTerminal() {
   let sequenceStarted = false;
 
   function setHeatmapVisible(on: boolean) {
+    if (!heatmap) return;
     heatmap.classList.toggle('wopr-heatmap--visible', on);
     if (instant) heatmap.style.opacity = on ? '1' : '0';
   }
@@ -49,8 +50,10 @@ function initActivityTerminal() {
     }
 
     setHeatmapVisible(true);
-    if (!instant) await shortPause(320, false);
-    else await shortPause(0, true);
+    if (heatmap) {
+      if (!instant) await shortPause(320, false);
+      else await shortPause(0, true);
+    }
 
     const entries = log.querySelectorAll<HTMLElement>('.wopr-log-entry');
     for (const entry of entries) {
