@@ -10,7 +10,11 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "import:posts": "node scripts/import-posts.mjs"
+    "import:posts": "node scripts/import-posts.mjs",
+    "new:content": "node scripts/new-content.mjs",
+    "new:post": "node scripts/new-content.mjs --type post",
+    "new:work": "node scripts/new-content.mjs --type work",
+    "new:project": "node scripts/new-content.mjs --type project"
   },
   "devDependencies": {
     "@astrojs/rss": "^4.0.18",

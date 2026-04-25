@@ -7,7 +7,7 @@ export async function GET(context) {
 
   const posts = await getCollection('posts', ({ data }) => !data.draft);
   const work = await getCollection('work', ({ data }) => !data.draft);
-  const projects = await getCollection('projects');
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
 
   const urls = [
     ...staticPaths.map((p) => ({ loc: `${site}${p}`, lastmod: null })),

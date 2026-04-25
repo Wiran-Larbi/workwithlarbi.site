@@ -19,11 +19,12 @@ npm run preview   # preview the production build
 
 ## Write
 
-- **Posts:** add a markdown file under `src/content/posts/`. Filename: `YYYY-MM-DD-slug.md`. See frontmatter schema in `src/content/config.ts`. Set `draft: false` to publish.
-- **Work:** add a markdown file under `src/content/work/`. Filename: `slug.md` (no date prefix). Published at `/work/slug/`. Same frontmatter shape as posts.
-- **Projects:** add a markdown file under `src/content/projects/`. Set `featured: true` to surface on the homepage.
-- **About:** edit `src/data/about.ts` and rebuild. Home page Bible verse marquee copy stays in `src/data/now.ts`.
-- **Tools:** edit `src/pages/tools/index.astro`.
+- **Posts:** add markdown files under `src/content/posts/` using `YYYY-MM-DD-slug.md`.
+- **Work:** add markdown files under `src/content/work/` using `slug.md`.
+- **Projects:** add markdown files under `src/content/projects/` using `slug.md`.
+- **Drafts:** `posts`, `work`, and `projects` support `draft: true` and stay hidden until set to `false`.
+- **Scaffold commands:** use `npm run new:post`, `npm run new:work`, `npm run new:project`, or `npm run new:content`.
+- **About/Tools:** edit `src/data/about.ts`, `src/data/now.ts`, and `src/pages/tools/index.astro`.
 
 ## Import posts from CSV
 

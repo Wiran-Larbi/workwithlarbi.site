@@ -43,6 +43,7 @@ const projects = defineCollection({
     featured: z.boolean().default(false),
     order: z.number().default(0),
     status: z.enum(['active', 'paused', 'retired']).default('active'),
+    draft: z.boolean().default(false),
   }),
 });
 

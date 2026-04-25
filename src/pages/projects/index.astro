@@ -4,7 +4,7 @@ import Base from '../../layouts/Base.astro';
 import ProjectList from '../../components/ProjectList.astro';
 import { projectStartTime } from '../../lib/projectStart';
 
-const projects = await getCollection('projects');
+const projects = await getCollection('projects', ({ data }) => !data.draft);
 const activeProjects = projects
   .filter((p) => p.data.status === 'active')
   .sort((a, b) => projectStartTime(b) - projectStartTime(a));

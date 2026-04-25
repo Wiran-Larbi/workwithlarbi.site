@@ -6,7 +6,7 @@ import { displayProjectStatus } from '../../lib/projectStatus';
 import { schemaPersonId } from '../../lib/schemaIds';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
   return projects.map((project) => ({
     params: { slug: project.slug },
     props: { project },
