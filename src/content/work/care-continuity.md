@@ -4,7 +4,7 @@ date: 2026-04-09
 description: "Website design and development for Care Continuity, focused on clear healthcare messaging, solution storytelling, and conversion-ready page sections."
 draft: false
 highlight: true
-workType: "design-dev"
+workType: "Design & Development"
 industry:
   - "healthcare"
   - "saas"

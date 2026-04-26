@@ -3,7 +3,7 @@ title: "Eternity Church"
 date: 2025-10-02
 draft: false
 highlight: true
-workType: "design-dev"
+workType: "Design & Development"
 industry:
   - "church"
 dateCompleted: 2025-10-02

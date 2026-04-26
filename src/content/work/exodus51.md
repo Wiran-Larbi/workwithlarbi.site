@@ -4,7 +4,7 @@ date: 2024-04-03
 description: "Exodus51 is a non-profit that frees slaves in Pakistan while providing housing, education, and church. I report directly to the founder for all marketing efforts now."
 draft: false
 highlight: true
-workType: "design-dev"
+workType: "Design & Development"
 industry:
   - "non-profit"
   - "organization"

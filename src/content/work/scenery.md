@@ -4,7 +4,7 @@ date: 2023-11-14
 description: "With a launch weeks away, a brand refinement and new website was needed to better present this cloud-based professional video editor. They'd later be acquired by Adobe."
 draft: false
 highlight: true
-workType: "design-dev"
+workType: "Design & Development"
 industry:
   - "startup"
   - "app"

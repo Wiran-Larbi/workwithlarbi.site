@@ -2,7 +2,7 @@
 title: "The Modern Freelancer"
 date: 2025-02-27
 draft: false
-workType: "development"
+workType: "Development"
 industry:
   - "education"
 dateCompleted: 2025-02-27
@@ -11,7 +11,7 @@ gallery:
   - "/images/work/the-modern-freelancer/gallery-01.png"
   - "/images/work/the-modern-freelancer/gallery-02.png"
 liveLink: "https://www.themodernfreelancer.com/"
-partnership: "kem-design"
+partnership: "Kem Design"
 soloOrAgency: "Agency"
 estimatedTimeSpent: "4 weeks"
 tags:

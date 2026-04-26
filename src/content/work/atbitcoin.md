@@ -2,7 +2,7 @@
 title: "@bitcoin"
 date: 2025-05-06
 draft: false
-workType: "development"
+workType: "Development"
 industry:
   - "finance"
   - "technology"
@@ -12,7 +12,7 @@ gallery:
   - "/images/work/atbitcoin/gallery-01.webp"
   - "/images/work/atbitcoin/gallery-02.webp"
   - "/images/work/atbitcoin/gallery-03.webp"
-partnership: "jamm"
+partnership: "Jamm"
 soloOrAgency: "Agency"
 estimatedTimeSpent: "2 weeks"
 tags:

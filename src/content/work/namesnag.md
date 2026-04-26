@@ -3,7 +3,7 @@ title: "NameSnag"
 date: 2025-07-20
 description: "Again, one of Josh Pigford's idea would spin up quickly—a feature-packed domain availably service. He then realized he needed to rebuild some of it. So, I too redesigned his logo to be more professio…"
 draft: false
-workType: "design"
+workType: "Design"
 industry:
   - "app"
   - "ai"

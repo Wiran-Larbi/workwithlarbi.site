@@ -2,7 +2,7 @@
 title: "Gazel AI"
 date: 2025-04-23
 draft: false
-workType: "development"
+workType: "Development"
 industry:
   - "ai"
   - "app"
@@ -12,7 +12,7 @@ gallery:
   - "/images/work/gazel-ai/gallery-01.webp"
   - "/images/work/gazel-ai/gallery-02.webp"
   - "/images/work/gazel-ai/gallery-03.webp"
-partnership: "jamm"
+partnership: "Jamm"
 soloOrAgency: "Agency"
 estimatedTimeSpent: "6 weeks"
 tags:

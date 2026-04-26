@@ -2,7 +2,7 @@
 title: "Emily Trampel Insurance Agency"
 date: 2025-12-19
 draft: false
-workType: "design-dev"
+workType: "Design & Development"
 industry:
   - "health"
   - "small-business"

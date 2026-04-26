@@ -3,7 +3,7 @@ title: "Hilary Prall"
 date: 2024-05-14
 description: "Hillary Prall is an interior designer turned influencer. In migrating from Squarespace to Webflow I designed and developed a much more functional blog to increase affiliate sales."
 draft: false
-workType: "development"
+workType: "Development"
 dateCompleted: 2024-05-14
 thumbnail: "/images/work/hilary-prall/thumbnail.webp"
 gallery:
@@ -11,7 +11,7 @@ gallery:
   - "/images/work/hilary-prall/gallery-02.webp"
   - "/images/work/hilary-prall/gallery-03.webp"
 liveLink: "http://hilaryprall.com"
-partnership: "one-branding"
+partnership: "One Branding"
 soloOrAgency: "Agency"
 estimatedTimeSpent: "4 weeks"
 brief: |

@@ -3,7 +3,7 @@ title: "Claimable"
 date: 2025-11-03
 draft: false
 highlight: true
-workType: "design-dev"
+workType: "Design & Development"
 industry:
   - "health"
   - "startup"
@@ -18,7 +18,7 @@ gallery:
   - "/images/work/claimable/gallery-05.webp"
   - "/images/work/claimable/gallery-06.webp"
 liveLink: "https://www.getclaimable.com"
-partnership: "kem-design"
+partnership: "Kem Design"
 partnershipWorkLink: "https://www.kemdesign.co/work/claimable"
 soloOrAgency: "Agency"
 tags:

@@ -3,7 +3,7 @@ title: "Matter"
 date: 2024-07-25
 description: "Matter needed a new landing page to be part of their sales funnel. I implemented their unique Figma designs for desktop vs mobile in Webflow. The team was very pleased as it only took 1 day."
 draft: false
-workType: "development"
+workType: "Development"
 industry:
   - "startup"
   - "app"

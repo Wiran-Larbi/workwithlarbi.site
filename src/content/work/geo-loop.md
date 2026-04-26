@@ -2,7 +2,7 @@
 title: "Geo-Loop"
 date: 2022-02-28
 draft: false
-workType: "design-dev"
+workType: "Design & Development"
 dateCompleted: 2022-02-28
 thumbnail: "/images/work/geo-loop/thumbnail.webp"
 gallery:

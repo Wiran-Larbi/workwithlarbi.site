@@ -2,7 +2,7 @@
 title: "Seacoast Church"
 date: 2024-11-28
 draft: false
-workType: "design-dev"
+workType: "Design & Development"
 industry:
   - "non-profit"
   - "church"
@@ -13,7 +13,7 @@ gallery:
   - "/images/work/seacoast-church/gallery-02.webp"
   - "/images/work/seacoast-church/gallery-03.webp"
 liveLink: "https://www.seacoast.org/"
-partnership: "apollos"
+partnership: "Apollos"
 soloOrAgency: "Agency"
 estimatedTimeSpent: "4 weeks"
 tags:

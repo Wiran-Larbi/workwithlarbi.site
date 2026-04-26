@@ -3,14 +3,14 @@ title: "Miravoice"
 date: 2026-03-25
 draft: false
 description: "Miravoice is an AI phone interview platform focused on faster, lower-cost research calls, built with a refined brand and Webflow implementation in partnership with Kem Design."
-workType: "development"
+workType: "Development"
 industry:
   - "startup"
   - "ai"
 dateCompleted: 2026-03-25
 thumbnail: "/images/work/miravoice/thumbnail.png"
 liveLink: "https://miravoice.com/"
-partnership: "kem-design"
+partnership: "Kem Design"
 partnershipWorkLink: "https://www.kemdesign.co/work/miravoice"
 soloOrAgency: "Agency"
 highlight: false
