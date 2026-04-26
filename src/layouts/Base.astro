@@ -13,6 +13,8 @@ interface Props {
   articleModifiedTime?: string;
   /** Schema.org nodes (merged into a single JSON-LD `@graph`). */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** When true, adds `noindex` so the page is omitted from search indexes (e.g. 404). */
+  noindex?: boolean;
 }
 
 const {
@@ -25,6 +27,7 @@ const {
   articlePublishedTime,
   articleModifiedTime,
   jsonLd,
+  noindex = false,
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString() ?? 'https://heyderekj.com';
@@ -63,6 +66,7 @@ const year = new Date().getFullYear();
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <meta name="author" content="Derek Castelli" />
     <link rel="canonical" href={canonicalUrl} />
 
