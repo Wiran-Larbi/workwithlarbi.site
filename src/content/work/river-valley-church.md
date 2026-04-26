@@ -4,9 +4,6 @@ date: 2024-12-04
 draft: false
 highlight: true
 workType: "Design & Development"
-industry:
-  - "non-profit"
-  - "church"
 dateCompleted: 2024-12-04
 thumbnail: "/images/work/river-valley-church/thumbnail.webp"
 gallery:
@@ -17,8 +14,6 @@ liveLink: "https://rivervalley.org/"
 partnership: "Apollos"
 soloOrAgency: "Agency"
 estimatedTimeSpent: "4 weeks"
-tags:
-  - "non-profit"
-  - "church"
 ---
 
+_Imported from CSV — expand this post._

@@ -3,9 +3,6 @@ title: "@bitcoin"
 date: 2025-05-06
 draft: false
 workType: "Development"
-industry:
-  - "finance"
-  - "technology"
 dateCompleted: 2025-05-06
 thumbnail: "/images/work/atbitcoin/thumbnail.webp"
 gallery:
@@ -15,8 +12,6 @@ gallery:
 partnership: "Jamm"
 soloOrAgency: "Agency"
 estimatedTimeSpent: "2 weeks"
-tags:
-  - "finance"
-  - "technology"
 ---
 
+_Imported from CSV — expand this post._

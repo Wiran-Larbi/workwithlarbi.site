@@ -3,9 +3,6 @@ title: "Community Circle"
 date: 2024-05-27
 draft: false
 workType: "Design"
-industry:
-  - "non-profit"
-  - "organization"
 dateCompleted: 2024-05-27
 thumbnail: "/images/work/community-circle/thumbnail.png"
 gallery:
@@ -15,8 +12,6 @@ liveLink: "http://communitycircle.org"
 partnership: "One Branding"
 soloOrAgency: "Agency"
 estimatedTimeSpent: "6 weeks"
-tags:
-  - "non-profit"
-  - "organization"
 ---
 
+_Imported from CSV — expand this post._

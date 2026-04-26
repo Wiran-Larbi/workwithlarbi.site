@@ -5,9 +5,6 @@ description: "AI Explorer needed a temp landing page to build hype. They wanted 
 draft: false
 highlight: true
 workType: "Development"
-industry:
-  - "ai"
-  - "startup"
 dateCompleted: 2025-04-15
 thumbnail: "/images/work/ai-explorer/thumbnail.png"
 gallery:
@@ -20,8 +17,5 @@ soloOrAgency: "Agency"
 estimatedTimeSpent: "10 hours"
 brief: |
   AI Explorer needed a temp landing page to build hype. They wanted a BIOS style page and through custom javascript with CSS animations this is what they got and loved.
-tags:
-  - "ai"
-  - "startup"
 ---
 

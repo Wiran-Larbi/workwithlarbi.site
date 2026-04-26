@@ -3,9 +3,6 @@ title: "Seacoast Church"
 date: 2024-11-28
 draft: false
 workType: "Design & Development"
-industry:
-  - "non-profit"
-  - "church"
 dateCompleted: 2024-11-28
 thumbnail: "/images/work/seacoast-church/thumbnail.webp"
 gallery:
@@ -16,8 +13,6 @@ liveLink: "https://www.seacoast.org/"
 partnership: "Apollos"
 soloOrAgency: "Agency"
 estimatedTimeSpent: "4 weeks"
-tags:
-  - "non-profit"
-  - "church"
 ---
 
+_Imported from CSV — expand this post._

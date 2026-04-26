@@ -3,9 +3,6 @@ title: "Gazel AI"
 date: 2025-04-23
 draft: false
 workType: "Development"
-industry:
-  - "ai"
-  - "app"
 dateCompleted: 2025-04-23
 thumbnail: "/images/work/gazel-ai/thumbnail.webp"
 gallery:
@@ -15,8 +12,6 @@ gallery:
 partnership: "Jamm"
 soloOrAgency: "Agency"
 estimatedTimeSpent: "6 weeks"
-tags:
-  - "ai"
-  - "app"
 ---
 
+_Imported from CSV — expand this post._

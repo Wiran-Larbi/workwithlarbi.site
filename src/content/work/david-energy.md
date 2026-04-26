@@ -5,9 +5,6 @@ description: "David Energy is an energy startup with a big vision for the future
 draft: false
 highlight: true
 workType: "Design & Development"
-industry:
-  - "startup"
-  - "technology"
 dateCompleted: 2024-10-31
 thumbnail: "/images/work/david-energy/thumbnail.webp"
 gallery:
@@ -21,8 +18,5 @@ soloOrAgency: "Agency"
 estimatedTimeSpent: "6 weeks"
 brief: |
   David Energy is an energy startup with a big vision for the future of electricity. In partnership with Kem Design and the David Energy team I expanded upon their existing brand for a more refined design.
-tags:
-  - "startup"
-  - "technology"
 ---
 

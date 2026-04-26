@@ -3,7 +3,9 @@
  * Works CSV → src/content/work/<slug>.md + public/images/work/<slug>/*
  *
  * Usage:
- *   node scripts/import-work.mjs <path/to/works.csv> [--dry-run]
+ *   node scripts/import-work.mjs <path/to/works.csv> [--dry-run] [--force]
+ *
+ *   --force  Re-download images even if files already exist (use when CSV asset URLs change).
  *
  * Only updates slugs that already have a matching .md in src/content/work.
  */
@@ -18,7 +20,10 @@ const workContentDir = resolve(projectRoot, 'src/content/work');
 const publicWorkImagesRoot = resolve(projectRoot, 'public/images/work');
 
 const DRY = process.argv.includes('--dry-run') || process.argv.includes('--dryRun');
-const argvArgs = process.argv.slice(2).filter((a) => a !== '--dry-run' && a !== '--dryRun');
+const FORCE = process.argv.includes('--force');
+const argvArgs = process.argv
+  .slice(2)
+  .filter((a) => a !== '--dry-run' && a !== '--dryRun' && a !== '--force');
 const inputPath = resolve(projectRoot, argvArgs[0] ?? 'data/works.csv');
 
 if (!existsSync(inputPath)) {
@@ -159,6 +164,32 @@ const yamlLiteralBlock = (s) => {
   return `|\n${lines.map((l) => `  ${l}`).join('\n')}`;
 };
 
+/** Webflow / CSV value → same strings used in hand-written work posts */
+const WORK_TYPE_LABEL = {
+  'design-dev': 'Design & Development',
+  design: 'Design',
+  development: 'Development',
+};
+
+const PARTNERSHIP_LABEL = {
+  'kem-design': 'Kem Design',
+  apollos: 'Apollos',
+  jamm: 'Jamm',
+  'one-branding': 'One Branding',
+};
+
+function displayWorkType(raw) {
+  if (!raw) return '';
+  const k = String(raw).trim().toLowerCase();
+  return WORK_TYPE_LABEL[k] ?? raw.trim();
+}
+
+function displayPartnership(raw) {
+  if (!raw) return '';
+  const k = String(raw).trim().toLowerCase();
+  return PARTNERSHIP_LABEL[k] ?? raw.trim();
+}
+
 function extFromUrl(u) {
   try {
     const p = new URL(u).pathname;
@@ -220,6 +251,13 @@ async function run() {
       missingSlugs.push(slug);
       skippedNoFile++;
       continue;
+    }
+
+    let preservedHighlight;
+    if (existsSync(mdPath)) {
+      const oldMd = readFileSync(mdPath, 'utf8');
+      const hm = oldMd.match(/^highlight:\s*(true|false)\s*$/m);
+      if (hm) preservedHighlight = hm[1] === 'true';
     }
 
     const archived = parseBool(getCell(row, 'archived'));
@@ -295,7 +333,7 @@ async function run() {
           console.log(`[dry-run] would download ${url} → ${dest}`);
           return pubPath;
         }
-        if (existsSync(dest) && statSync(dest).size > 0) return pubPath;
+        if (!FORCE && existsSync(dest) && statSync(dest).size > 0) return pubPath;
         await downloadTo(url, dest);
       } catch (e) {
         console.error(`Download failed [${slug}] ${url}:`, e?.message || e);
@@ -323,7 +361,9 @@ async function run() {
     fm.push(`draft: ${draft}`);
     if (archived) fm.push(`archived: ${archived}`);
     if (highlight) fm.push(`highlight: ${highlight}`);
-    if (workType) fm.push(`workType: ${yamlEscape(workType)}`);
+    else if (preservedHighlight === true) fm.push(`highlight: true`);
+    const workTypeLabel = displayWorkType(workType);
+    if (workTypeLabel) fm.push(`workType: ${yamlEscape(workTypeLabel)}`);
 
     if (industry.length) {
       fm.push('industry:');
@@ -361,7 +401,8 @@ async function run() {
         /* skip */
       }
     }
-    if (partnership) fm.push(`partnership: ${yamlEscape(partnership)}`);
+    const partnershipLabel = displayPartnership(partnership);
+    if (partnershipLabel) fm.push(`partnership: ${yamlEscape(partnershipLabel)}`);
     if (partnershipWorkLink) {
       try {
         new URL(partnershipWorkLink);

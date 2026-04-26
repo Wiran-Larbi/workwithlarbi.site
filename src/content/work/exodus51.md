@@ -5,9 +5,6 @@ description: "Exodus51 is a non-profit that frees slaves in Pakistan while provi
 draft: false
 highlight: true
 workType: "Design & Development"
-industry:
-  - "non-profit"
-  - "organization"
 dateCompleted: 2024-04-03
 thumbnail: "/images/work/exodus51/thumbnail.webp"
 gallery:
@@ -22,8 +19,5 @@ problem: |
   The website was put together by the founder. While the website did the job of providing information and a way to donate it lacked professionalism and brand continuity. Future fundraising efforts would need the site to be upgraded.
 solution: |
   Went back to the content for a solid foundation. The "We free slaves" was my bold attempt to quickly communicate what the organization does. The site would have various sections communicating what the org does, why them, and then overall very clear "donate" buttons.
-tags:
-  - "non-profit"
-  - "organization"
 ---
 

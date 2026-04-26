@@ -3,8 +3,6 @@ title: "The Modern Freelancer"
 date: 2025-02-27
 draft: false
 workType: "Development"
-industry:
-  - "education"
 dateCompleted: 2025-02-27
 thumbnail: "/images/work/the-modern-freelancer/thumbnail.png"
 gallery:
@@ -14,7 +12,6 @@ liveLink: "https://www.themodernfreelancer.com/"
 partnership: "Kem Design"
 soloOrAgency: "Agency"
 estimatedTimeSpent: "4 weeks"
-tags:
-  - "education"
 ---
 
+_Imported from CSV — expand this post._

@@ -5,9 +5,6 @@ description: "TutorMe was a K-12 learning and tutor platform for schools. It got
 draft: false
 highlight: true
 workType: "Design & Development"
-industry:
-  - "education"
-  - "technology"
 dateCompleted: 2022-11-22
 thumbnail: "/images/work/tutorme/thumbnail.webp"
 gallery:
@@ -18,8 +15,5 @@ soloOrAgency: "Agency"
 estimatedTimeSpent: "6 weeks"
 brief: |
   TutorMe was a K-12 learning and tutor platform for schools. It got acquired by GoGuardian and so I partnered with the TutorMe team to develop their Figma designs using the Relume library. Since then the product has been defunct.
-tags:
-  - "education"
-  - "technology"
 ---
 

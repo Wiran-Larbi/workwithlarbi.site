@@ -4,9 +4,6 @@ date: 2025-11-03
 draft: false
 highlight: true
 workType: "Design & Development"
-industry:
-  - "health"
-  - "startup"
 dateCompleted: 2025-11-03
 weeksToComplete: 8
 thumbnail: "/images/work/claimable/thumbnail.webp"
@@ -21,8 +18,6 @@ liveLink: "https://www.getclaimable.com"
 partnership: "Kem Design"
 partnershipWorkLink: "https://www.kemdesign.co/work/claimable"
 soloOrAgency: "Agency"
-tags:
-  - "health"
-  - "startup"
 ---
 
+_Imported from CSV — expand this post._

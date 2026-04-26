@@ -2,7 +2,6 @@
 title: "ManchestorStory"
 date: 2023-05-03
 draft: false
-archived: true
 workType: "Design"
 dateCompleted: 2023-05-03
 thumbnail: "/images/work/manchestorstory/thumbnail.png"
@@ -16,3 +15,4 @@ soloOrAgency: "Agency"
 estimatedTimeSpent: "2 weeks"
 ---
 
+_Imported from CSV — expand this post._

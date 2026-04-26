@@ -1,6 +1,7 @@
 ---
 title: "Revise.dev"
 date: 2024-09-14
+description: "Josh Pigford, again, was creating a new app that would use AI to connect with Sentry to fix and improve your code over time. Josh loved it, but changed the colors."
 draft: false
 workType: "Design"
 dateCompleted: 2024-09-14
@@ -11,3 +12,4 @@ estimatedTimeSpent: "2 hours"
 brief: |
   Josh Pigford, again, was creating a new app that would use AI to connect with Sentry to fix and improve your code over time. Josh loved it, but changed the colors.
 ---
+

@@ -5,9 +5,6 @@ description: "With a launch weeks away, a brand refinement and new website was n
 draft: false
 highlight: true
 workType: "Design & Development"
-industry:
-  - "startup"
-  - "app"
 dateCompleted: 2023-11-14
 weeksToComplete: 8
 thumbnail: "/images/work/scenery/thumbnail.webp"
@@ -19,8 +16,5 @@ waybackUrl: "https://web.archive.org/web/20240712095004/https://scenery.video/"
 soloOrAgency: "Solo"
 brief: |
   With a launch weeks away, a brand refinement and new website was needed to better present this cloud-based professional video editor. They'd later be acquired by Adobe.
-tags:
-  - "startup"
-  - "app"
 ---
 
