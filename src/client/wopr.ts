@@ -1,5 +1,7 @@
 /** Activity terminal: typewriter lines → WOPR heatmap scan → log entries. */
 
+import { relativeTimeFromIso } from '../lib/relativeTime';
+
 // ── Utilities ────────────────────────────────────────────────────────────────
 
 async function typeText(el: HTMLElement, text: string, speed: number, instant: boolean): Promise<void> {
@@ -107,9 +109,14 @@ function initActivityTerminal() {
   let started = false;
 
   async function runSequence() {
-    // 1. Type header lines
+    // 1. Type header lines (recompute "last push" from ISO so SSG does not freeze "just now")
     for (const el of terminal.querySelectorAll<HTMLElement>('.wopr-lines [data-wopr-line]')) {
-      await typeText(el, el.dataset.woprLine ?? '', 28, instant);
+      const pushIso = el.dataset.woprPushIso;
+      const line =
+        pushIso !== undefined && pushIso !== ''
+          ? `> LAST COMMIT: ${relativeTimeFromIso(pushIso)}`
+          : (el.dataset.woprLine ?? '');
+      await typeText(el, line, 28, instant);
       await pause(Number(el.dataset.woprDelay ?? 0), instant);
     }
 
