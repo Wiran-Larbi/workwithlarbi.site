@@ -1,27 +1,27 @@
 /** Content for `/about/`. Edit here; layout lives in `src/pages/about.astro`. */
 
 export const aboutMeta = {
-  title: 'About — Derek Castelli',
+  title: 'About — Larbi Wiran',
   description:
     'Design journey from Micro Machines sketches to Webflow, client work, and Harvous. Freelance designer, Lead UI/UX at One Branding, Webflow Expert with Kem Design Co.',
-  ogImage: '/assets/about/derek-photo.jpeg',
+  ogImage: '/assets/about/larbi-photo.jpeg',
 };
 
 export const aboutHero = {
-  headline: 'I tell my family that I make rectangles for a living.',
+  headline: 'I tell people I fix things for a living. That\'s not entirely wrong.',
   introParagraphs: [
-    "People say that I'm able to adapt to various styles, work fast, and always think through possible better experiences that challenge the norm.",
-    'At the end of the day, I like the color orange and try to stay minimal for my own sake while also being playful.',
+    'People say I bring a strong sense of ownership to everything I work on, that I ask the right questions before touching a keyboard, and that I\'m the kind of engineer you can trust to see things through.',
+    'At the end of the day, I care about work that actually helps people — and I happen to also be the person who fixes the network when it goes down.',
   ],
-  designJourneyKicker: "Here's my design journey…",
-  photoSrc: '/assets/about/derek-photo.jpeg',
-  photoAlt: 'Derek Castelli',
-  avatarSrc: '/assets/about/derek-avatar.png',
-  avatarAlt: 'Illustrated avatar of Derek',
+  designJourneyKicker: "Here's my journey so far…",
+  photoSrc: '/assets/about/larbi-photo.jpeg',
+  photoAlt: 'Wiran Larbi',
+  avatarSrc: '/assets/about/larbi-avatar.jpeg',
+  avatarAlt: 'Illustrated avatar of Larbi',
   /** Shown in a slide-up panel on hero hover / focus. */
   avatarCredit: {
-    href: 'https://tiny.supply/pfp/derek',
-    artist: 'Darius Dan',
+    href: 'https://www.kamalasam.net/larbi',
+    artist: 'Kamala Sam',
     line: 'Illustration by',
   },
 };
@@ -32,58 +32,47 @@ export type AboutSection = {
   bulletsTitle?: string;
   bullets?: string[];
 };
-
 export const aboutSections: AboutSection[] = [
   {
-    heading: 'How I got into design',
+    heading: 'How I got into engineering',
     paragraphs: [
-      'The first moment of me designing that I remember is creating custom environments for my Micro Machines on notebook paper with markers. From there, I would witness my dad design our house in AutoCad and would enjoy drawing floor plans and elevations on grid paper.',
-      "Then came downloading the Sketch app, my first digital design tool that wasn't MS Paint.",
+      'It started with Turok in 2004. Not just playing it — obsessing over how it worked. From there it was fixing the home network when it went down, unlocking phones, debugging anything with a power button.',
+      'Technology was never just a hobby, it was the thing I always gravitated toward. That curiosity eventually found its way into code, and it turned out that\'s exactly what software engineering rewards.',
     ],
   },
   {
-    heading: 'My first ever client',
+    heading: 'The degree that set the foundation',
     paragraphs: [
-      'My first ever client was Chris Ducker. He needed a logo for his blog and I only charged $100. This would be in 2010 and throughout my college days I would contribute to a blog about blogging, tinker with Wordpress themes on Themeforest, and launch a design blog and then a college tips blog while having an opinion column in the student newspaper, Iowa State Daily.',
-      'Side note: The Chris Ducker logo has been slightly updated but the core still exists today.',
+      'I went on to earn a Master\'s-level Engineering Degree in Software Engineering at the National School of Applied Sciences Al Hoceima, covering everything from systems architecture and distributed systems to cybersecurity and project management.',
+      'It gave me the fundamentals. What came after gave me the perspective.',
     ],
   },
   {
-    heading: 'First serious design job',
+    heading: 'First serious engineering work',
     paragraphs: [
-      'In 2018, I was given the opportunity to lead experience design at my then church. The responsibilities included designing all physical spaces, digital screens, and managing our digital properties.',
-      'Months prior to the world shutting down in 2020 I learned Webflow and began redesigning the entire website. One of the new features of the site was something called “Chat with a Pastor” where I used no-code tools to create a service that would allow anyone to schedule a chat with a pastor as soon as same day. This got the attention of Hillsong Church.',
+      'My first real taste of professional engineering was at CBI, contributing to the advancement of an Odoo module. It was a short engagement but a meaningful one — I took full ownership of the development cycle, identifying needed features and proposing solutions independently.',
+      'That experience taught me early on what good ownership looks like, and I\'ve carried that mindset into every project since.',
     ],
   },
   {
-    heading: 'Freelancing full-time',
+    heading: 'Going deeper',
     paragraphs: [
-      'Shortly after Easter I started thinking about leaving my design job at the church. Then came June and I had left to start my own business for the first time. Setup an LLC, focused on the connections I did have, and slowly got business.',
-      "Things weren't great, but from June till March I was able to get by. In late March I would work at a local creative agency to focus on making Webflow websites. This would last less than 30 days as my personal life quickly fell apart and needed to regroup.",
+      'From there came Omnishore, where I worked on an omnichannel project for a major banking facilitator. The challenge was real — complex workflows, high stakes, and a need for something built to last. We delivered an end-to-end solution that moved the entire operation from manual processes to fully automated workflows.',
+      'Then came Premium Technology and Services, where I worked on integrating a tokenization product with Mastercard and Visa APIs within banking core systems. Payment workflows, cryptography services, cross-team stakeholder communication — the kind of project that sharpens you fast.',
     ],
   },
   {
     heading: 'The latest',
     paragraphs: [
-      "Fast forward to October 2022 when I was able to go full-time as a freelancer for a different local creative agency (One Branding) focused again on Webflow. They've worked with Yelp and so far I've had the opportunity to work with GoGuardian, IGN, and many others.",
-      "While contracting full-time, I have focused more on my design skills in Figma where I'm the Lead UI/UX Designer at said agency. We have a small, nimble team. Outside of the agency I take on my own clients from time-to-time where I focus on a content-first approach to designing and developing websites. I'm also a Webflow Expert with Kem Design Co., supporting the team on website builds.",
+      'As of early 2026 I\'ve gone independent, taking on freelance work as a Full-Stack Software Engineer. I work directly with clients and stakeholders to design, build, and deploy scalable systems — from the architecture decisions all the way to production.',
+      'What I care about most is work that actually means something. Solutions that remove friction, automate what shouldn\'t be manual, and hold up long after the project wraps.',
     ],
   },
   {
     heading: 'In my free time',
     paragraphs: [
-      "A goal of mine has always been to transition away from doing client work. I'd rather have customers. Ever since I worked directly with customers in Apple Retail from 2012 to 2018 I loved to surprise and delight customers. Designing and contributing to the customer journey was also rewarding for me so I want to design my own for my own product/service.",
-      'This adventure started in 2021 when I had the idea of a family journaling app called Hike (fully designed in Webflow).',
-      "Now, I'm focused on building a Bible app called Harvous.",
-      "When I'm not working, I'm spending time with my fiancé (my best friend), my pets (my kids), friends over coffee or on X, and family FaceTime sessions.",
-    ],
-    bulletsTitle: 'Oh, I also like to:',
-    bullets: [
-      'Drive around playing music',
-      'Watch movies with a good soundtrack',
-      'Watch Dr. Disrespect play (shoutout to #ChampionsClub)',
-      'Play Cities: Skylines',
-      'Watch F1',
+      'Away from the screen you\'ll find me on the tennis court, out on a morning jog, or in the kitchen working through a new recipe.',
+      'Three very different things that somehow teach the same lesson — patience, consistency, and the quiet satisfaction of doing something well.',
     ],
   },
 ];
@@ -115,22 +104,22 @@ export type Testimonial = {
 
 export const testimonials: Testimonial[] = [
   {
-    quote: "Derek helped me revamp Scenery's brand, logo, and website in the first two months of my tenure and was a crucial, fun partner to work with throughout the process. Derek had a well defined process, integrated into the team well, and came up with creative approaches when they were most needed — at both the start and finish of the project. Thank you Derek!",
-    author: 'Barrett Johnson',
-    role: 'Product & Marketing at Mercury',
-    context: "Barrett was Derek's client · Nov 2023",
+    quote: "Working with them at CBI was a pleasure from start to finish. They brought a strong sense of ownership and autonomy to the project — independently identifying what was needed and proposing well-thought-out solutions without waiting to be told. Their technical knowledge runs deep, and what sets them apart is how they pair that with genuine empathy and a collaborative spirit. Super approachable, easy to work with, and someone you'd want on any team.",
+    author: 'Senior Engineer',
+    role: 'Senior Engineer at CBI',
+    context: 'Worked together at CBI · Sep 2023',
   },
   {
-    quote: 'I highly recommend Derek Jensen for his exceptional skills in User Interface (UI) design and Webflow Development. Derek\'s creative approach to UI consistently delivers visually exceptional and user-friendly interfaces that drives results. His proficiency in Webflow empowers him to bring his designs to life with seamless functionality and responsiveness. Derek\'s attention to detail, collaborative nature, and commitment to staying current with design trends makes him a valuable asset to any project.',
-    author: 'Danny Begnoche',
-    role: 'Award winning branding and Webflow sites · webflow.com/@onebranding',
-    context: 'Danny worked with Derek on the same team · Aug 2023',
+    quote: "The work delivered on our omnichannel project for a major banking client was outstanding. They took what were entirely manual processes and transformed them into fully automated workflows — delivering a complete end-to-end solution that was not only high-performing but clean, well-documented, and built to be maintainable long-term. Beyond the technical excellence, they were a pleasure to work with — professional, communicative, and genuinely invested in delivering the best outcome. A real asset to the project.",
+    author: 'Business Manager',
+    role: 'Business Manager at Omnishore',
+    context: 'Worked together on omnichannel banking project · Jul 2024',
   },
   {
-    quote: 'Derek is an incredibly talented Designer and Webflow Developer with a unique drive to always seek out the best solution and learn new things along the way.',
-    author: 'Corey Moen',
-    role: 'Lead Brand Designer and Web Developer',
-    context: "Corey was Derek's mentor · Apr 2023",
+    quote: "Working on our tokenization project together was a genuinely great experience. They grasped the complexity of our payment workflows quickly and hit the ground running — contributing meaningfully to our solutions without missing a beat. What also stood out was their ability to communicate effectively across all our different stakeholders, making collaboration seamless. Punctual, highly professional, and with an incredible eye for detail. An amazing time working together — the kind of person you hope to cross paths with again.",
+    author: 'Manager',
+    role: 'Manager at PTS',
+    context: 'Collaborated on tokenization project · Dec 2025',
   },
 ];
 
@@ -139,23 +128,10 @@ export const aboutExperienceGroups: AboutExpGroup[] = [
     title: 'Current',
     items: [
       {
-        name: 'Derek J Design',
-        range: 'Jun 2020 — Present',
+        name: 'Freelance',
+        range: 'Jan 2026 — Present',
         description:
-          'Freelance web designer partnering with clients and teams to make websites in Webflow.',
-      },
-      {
-        name: 'Jamm Designs',
-        range: 'Jan 2025 — Present',
-        description:
-          'Senior Web Designer (Freelance), designing websites and developing them in Webflow one update at a time.',
-        link: { label: 'jamm.co', href: 'https://jamm.co', icon: 'arrow' },
-      },
-      {
-        name: 'Kem Design Co.',
-        range: 'May 2024 — Present',
-        description: 'Webflow Expert assisting the team when it comes to making websites.',
-        link: { label: 'kemdesign.co', href: 'https://kemdesign.co', icon: 'arrow' },
+          'Freelance Full-Stack Software Engineer delivering end-to-end solutions for diverse clients. Designed, developed, and deployed scalable web applications while advising on technical feasibility, architecture decisions, and technology selection. Collaborated directly with stakeholders to translate business requirements into robust, production-ready systems.',
       },
     ],
   },
@@ -163,28 +139,22 @@ export const aboutExperienceGroups: AboutExpGroup[] = [
     title: 'Past experience',
     items: [
       {
-        name: 'Apollos',
-        range: 'Jun 2024 — Sep 2025',
+        name: 'Premium Technology and Services',
+        range: 'Oct 2024 — Dec 2025',
         description:
-          'Partnered with the Apollos web team to design and develop Webflow websites for churches.',
+          'Worked on integrating a tokenization product with Mastercard and Visa APIs within banking core systems. Delivered cryptography services and frontend interfaces using Java, Spring Boot, Golang, and Vue.js.',
       },
       {
-        name: 'One Branding',
-        range: 'Oct 2022 — Sep 2024',
+        name: 'Omnishore',
+        range: 'Feb 2024 — Jul 2024',
         description:
-          'Web designer and Webflow developer working with various clients from edutech to video gaming.',
+          'Worked on an omnichannel project for a major banking facilitator, delivering an end-to-end solution that moved operations from manual processes to fully automated workflows. Built with Java, Apache FOP, Docker, GitLab CI, Angular, and HTML.',
       },
       {
-        name: 'Eternity Church',
-        range: 'Oct 2018 — Jun 2020',
+        name: 'CBI',
+        range: 'Jul 2023 — Sep 2023',
         description:
-          'Created and oversaw all creative elements of the church from graphics to merch to production.',
-      },
-      {
-        name: 'Apple Retail',
-        range: 'Aug 2012 — Oct 2018',
-        description:
-          'A mentor and leader in sales connecting with customers to truly get the Apple products they need.',
+          'Contributed to the advancement of an Odoo module, taking full ownership of the development cycle — from identifying needed features to proposing and implementing solutions. Built with Python, PostgreSQL, JavaScript, HTML, and CSS.',
       },
     ],
   },
@@ -192,13 +162,13 @@ export const aboutExperienceGroups: AboutExpGroup[] = [
     title: 'Education',
     items: [
       {
-        name: 'Iowa State University',
-        range: 'Aug 2007 — May 2014',
+        name: 'National School of Applied Sciences Al Hoceima',
+        range: 'Sep 2019 — Jun 2024',
         description:
-          'Obtained a Bachelor of Arts in Communication Studies with supplementary time in Advertising and the College of Design.',
-        link: {
-          label: 'Articles at Iowa State Daily',
-          href: 'https://iowastatedaily.com/staff_name/derek-jensen/',
+          'Master\'s-level Engineering Degree in Software Engineering. Covered Software Engineering and Systems Architecture, Web and Mobile Application Development, Databases and Information Systems, Algorithms and Data Structures, Networks and Distributed Systems, IT Project Management (Agile, Scrum), and Cybersecurity and OWASP Standards.',
+          link: {
+          label: 'Major Subjects studied',
+          href: 'https://ensah.ma/public/gi.php',
           icon: 'newspaper',
         },
       },

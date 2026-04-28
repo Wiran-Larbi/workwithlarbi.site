@@ -4,7 +4,7 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
-  /** Path under `public/` (~1200×630). Defaults to `/derekj-og.png`; override per page if needed. */
+  /** Path under `public/` (~1200×630). Defaults to `/larbi-og.jpeg`; override per page if needed. */
   ogImage?: string;
   canonical?: string;
   /** Open Graph type; use `article` for blog posts. */
@@ -20,10 +20,10 @@ interface Props {
 }
 
 const {
-  title = 'Derek Castelli',
+  title = 'Wiran Larbi',
   description =
-    'Agentic design engineer, still making websites full-time. Writing on faith and technology.',
-  ogImage = '/derekj-og.png',
+    'Full-stack engineer. I build software full-time and write about the intersection of technology and the people who use it.',
+  ogImage = '/larbi-og.jpeg',
   canonical,
   ogType = 'website',
   articlePublishedTime,
@@ -33,7 +33,7 @@ const {
   includeAnalytics = true,
 } = Astro.props;
 
-const siteUrl = Astro.site?.toString() ?? 'https://heyderekj.com';
+const siteUrl = Astro.site?.toString() ?? 'https://workwithlarbi.site';
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteUrl).toString();
 const ogImageUrl = new URL(ogImage, siteUrl).toString();
 
@@ -48,6 +48,7 @@ const mainNav = [
   { href: '/projects/', label: 'Projects', icon: 'ph-folder-open' },
 ];
 const extraNav = [
+  { href: '/agentic-skills/', label: 'Agentic Skills', icon: 'ph-robot' },
   { href: '/about/', label: 'About', icon: 'ph-user' },
   { href: '/tools/', label: 'Tools', icon: 'ph-wrench' },
 ];
@@ -70,11 +71,11 @@ const year = new Date().getFullYear();
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
-    <meta name="author" content="Derek Castelli" />
+    <meta name="author" content="Wiran Larbi" />
     <link rel="canonical" href={canonicalUrl} />
 
     <meta property="og:type" content={ogType} />
-    <meta property="og:site_name" content="Derek Castelli" />
+    <meta property="og:site_name" content="Wiran Larbi" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -88,15 +89,18 @@ const year = new Date().getFullYear();
     )}
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@heyderekj" />
-    <meta name="twitter:creator" content="@heyderekj" />
+    <meta name="twitter:site" content="@dotci0her" />
+    <meta name="twitter:creator" content="@dotci0her" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
-
-    <link rel="icon" href="/derekagon-fav.png" type="image/png" />
-    <link rel="apple-touch-icon" href="/derekagon-web.png" />
-    <link rel="alternate" type="application/rss+xml" title="Derek Castelli" href="/rss.xml" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Wiran Larbi Site" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="alternate" type="application/rss+xml" title="Wiran Larbi" href="/rss.xml" />
     <link rel="sitemap" href="/sitemap.xml" />
     <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
 
@@ -149,8 +153,8 @@ const year = new Date().getFullYear();
 
         <main class="main">
           <header class="site-masthead">
-            <a href="/" aria-label="Derek Castelli — Home" data-url-chip="Derek Castelli">
-              <img src="/assets/brand/signature.svg" alt="Derek Castelli" class="masthead-sig" />
+            <a href="/" aria-label="Wiran Larbi — Home" data-url-chip="Wiran Larbi">
+              <img src="/assets/brand/signature.svg" alt="Wiran Larbi" class="masthead-sig" />
             </a>
           </header>
 
@@ -159,9 +163,11 @@ const year = new Date().getFullYear();
           <div class="main-prefooter-grow" aria-hidden="true"></div>
           <footer class="main-footer">
             <div class="footer-links">
-              <a href="mailto:derekj@hey.com">Email</a>
-              <a href="https://x.com/heyderekj" target="_blank" rel="noopener">X.com</a>
-              <a href="https://github.com/heyderekj" target="_blank" rel="noopener">GitHub</a>
+              <a href="mailto:wiranlarbiofficial@gmail.com">Email</a>
+              <a href="https://x.com/dotci0her" target="_blank" rel="noopener">X.com</a>
+              <a href="https://github.com/Wiran-Larbi" target="_blank" rel="noopener">GitHub</a>
+              <a href="https://linkedin.com/in/larbi-wiran" target="_blank" rel="noopener">Linkedin</a>
+              <a href="https://cal.com/larbi-wiran" target="_blank" rel="noopener">Schedule a Call</a>
               <a href="/rss.xml">RSS</a>
             </div>
             <div class="footer-version">&copy; {year}</div>

@@ -5,7 +5,7 @@
   /* Surfaces */
   --bg: #faf9f6;
   --bg-elevated: #f0ede7;
-  --bg-hover: rgba(234, 88, 12, 0.06);
+  --bg-hover: rgba(19, 78, 142, 0.06);
 
   /* Ink */
   --fg: #1a1a1a;
@@ -17,10 +17,10 @@
   --border: rgba(0, 0, 0, 0.08);
   --border-strong: rgba(0, 0, 0, 0.14);
 
-  /* Orange */
-  --accent: #ea580c;
-  --accent-hover: #f97316;
-  --accent-soft: rgba(234, 88, 12, 0.1);
+  /* Blue */
+  --accent: #134E8E;
+  --accent-hover: #1a6bc4;
+  --accent-soft: rgba(19, 78, 142, 0.1);
   /* Nav current page: barely off --bg, whisper of --accent (keep very subtle) */
   --nav-active-bg: color-mix(
     in srgb,
@@ -76,16 +76,16 @@
   :root {
     --bg: #000000;
     --bg-elevated: #0d0d0d;
-    --bg-hover: rgba(251, 146, 60, 0.08);
+    --bg-hover: rgba(19, 78, 142, 0.08);
     --fg: #f2f0ec;
     --fg-soft: #c9c6c0;
     --muted: #7f7c76;
     --muted-strong: #a09d96;
     --border: rgba(255, 255, 255, 0.08);
     --border-strong: rgba(255, 255, 255, 0.14);
-    --accent: #fb923c;
-    --accent-hover: #fdba74;
-    --accent-soft: rgba(251, 146, 60, 0.12);
+    --accent: #3b82f6;
+    --accent-hover: #60a5fa;
+    --accent-soft: rgba(59, 130, 246, 0.12);
     --nav-active-bg: color-mix(
       in srgb,
       var(--accent) 3%,
@@ -171,7 +171,7 @@ body {
   text-decoration: none;
 }
 .masthead-sig {
-  width: 140px;
+  width: 240px;
   height: auto;
   display: block;
 }
@@ -970,23 +970,23 @@ main.main .cta {
   font-size: var(--size-meta);
   padding: 6px 14px;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(234, 88, 12, 0.2);
-  background: rgba(234, 88, 12, 0.06);
+  border: 1px solid rgba(19, 78, 142, 0.2);
+  background: rgba(19, 78, 142, 0.06);
   transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 main.main .cta .arrow { display: inline-block; transition: transform 0.25s var(--easing); }
 main.main .cta:hover {
   color: var(--accent-hover);
   text-decoration: none;
-  background: rgba(234, 88, 12, 0.1);
-  border-color: rgba(234, 88, 12, 0.35);
-  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.12);
+  background: rgba(19, 78, 142, 0.1);
+  border-color: rgba(19, 78, 142, 0.35);
+  box-shadow: 0 2px 8px rgba(19, 78, 142, 0.12);
 }
 main.main .cta:hover .arrow { transform: translateX(3px); }
 
 @media (prefers-color-scheme: dark) {
-  main.main .cta { border-color: rgba(251, 146, 60, 0.2); background: rgba(251, 146, 60, 0.07); }
-  main.main .cta:hover { background: rgba(251, 146, 60, 0.12); border-color: rgba(251, 146, 60, 0.35); box-shadow: 0 2px 8px rgba(251, 146, 60, 0.1); }
+  main.main .cta { border-color: rgba(59, 130, 246, 0.2); background: rgba(59, 130, 246, 0.07); }
+  main.main .cta:hover { background: rgba(59, 130, 246, 0.12); border-color: rgba(59, 130, 246, 0.35); box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1); }
 }
 
 .back-link { margin-top: var(--space-5); font-size: var(--size-meta); }
@@ -1020,7 +1020,7 @@ main.main .back-link a:hover,
 main.main .work-link-pill:hover {
   color: var(--accent);
   background: var(--glass-active-bg);
-  border-color: rgba(234, 88, 12, 0.25);
+  border-color: rgba(19, 78, 142, 0.25);
   text-decoration: none;
 }
 main.main .back-link a:hover .arrow { transform: translateX(-3px); }
@@ -1591,18 +1591,18 @@ main.main .about-page .about-exp-pill--link:hover {
    Easter eggs
    ============================================================ */
 html.orange-mode {
-  --bg: #fff3e8;
-  --bg-elevated: #ffe8d0;
-  --bg-hover: rgba(234, 88, 12, 0.12);
-  --accent: #f97316;
-  --accent-hover: #fb923c;
-  --accent-soft: rgba(249, 115, 22, 0.15);
+  --bg: #e8f2ff;
+  --bg-elevated: #d0e5ff;
+  --bg-hover: rgba(19, 78, 142, 0.12);
+  --accent: #1a6bc4;
+  --accent-hover: #3b82f6;
+  --accent-soft: rgba(19, 78, 142, 0.15);
 }
 @media (prefers-color-scheme: dark) {
   html.orange-mode {
-    --bg: #180b00;
-    --bg-elevated: #271200;
-    --bg-hover: rgba(251, 146, 60, 0.15);
+    --bg: #001018;
+    --bg-elevated: #001827;
+    --bg-hover: rgba(59, 130, 246, 0.15);
   }
 }
 
@@ -1694,7 +1694,7 @@ html.orange-mode {
 }
 
 .wopr-cell:hover {
-  outline: 1px solid rgba(251, 146, 60, 0.5);
+  outline: 1px solid rgba(59, 130, 246, 0.5);
   outline-offset: 1px;
 }
 

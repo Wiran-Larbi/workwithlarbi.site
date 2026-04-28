@@ -219,7 +219,7 @@ for (const f of readdirSync(workContentDir)) {
 async function downloadTo(url, destFile) {
   if (DRY) return;
   const res = await fetch(url, {
-    headers: { 'User-Agent': 'heyderekj-site-import/1.0' },
+    headers: { 'User-Agent': 'workwithlarbi-site-import/1.0' },
     redirect: 'follow',
   });
   if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);

@@ -1,30 +1,44 @@
-# Derek Castelli — heyderekj.com
+# Wiran Larbi — workwithlarbi.site
 
-> Personal site of Derek Castelli: agentic design engineer, still making websites full-time, writing on faith and technology, and shipping thoughtful side projects.
+> Personal site of Wiran Larbi: Full-stack engineer, bridging technical teams and business decisions, building applications with Java, Spring Boot, and React.
 
 ## About
 
-Derek is a Christian designer-engineer with roots in Apple Retail, church creative work, and freelance practice since 2020. The site hosts long-form posts (often on AI, tools, faith, and building), a projects directory, an about / background page, and a tools / uses list.
+Wiran is an engineer by training and translator by instinct. With expertise in full-stack development, he specializes in building enterprise applications and helping organizations modernize their technology stack. The site hosts posts on technology and business, a portfolio of work, projects directory, agentic skills showcase, and professional background.
 
 ## Primary pages
 
-- [Home](https://heyderekj.com/): intro, recent posts, featured projects
-- [Posts](https://heyderekj.com/posts/): full archive of writing
-- [Projects](https://heyderekj.com/projects/): apps and sites (e.g. Harvous, Dinky, Here’s My Church)
-- [About](https://heyderekj.com/about/): background, story, experience timeline, and social links
-- [Tools](https://heyderekj.com/tools/): software and hardware Derek reaches for
+- [Home](https://workwithlarbi.site/): intro, recent posts, featured work, and agentic skills
+- [Posts](https://workwithlarbi.site/posts/): full archive of writing on technology and business
+- [Work](https://workwithlarbi.site/work/): client projects and professional experience
+- [Projects](https://workwithlarbi.site/projects/): personal projects and open-source contributions
+- [Agentic Skills](https://workwithlarbi.site/agentic-skills/): AI agents and agentic workflows
+- [About](https://workwithlarbi.site/about/): background, experience, and professional journey
+- [Tools](https://workwithlarbi.site/tools/): software and tools used in development
 
 ## Feeds & machine-readable
 
-- [RSS](https://heyderekj.com/rss.xml): all posts
-- [Sitemap](https://heyderekj.com/sitemap.xml): URLs for indexing
+- [RSS](https://workwithlarbi.site/rss.xml): all posts
+- [Sitemap](https://workwithlarbi.site/sitemap.xml): URLs for indexing
 
 ## Contact & profiles
 
-- Email: derekj@hey.com (mailto link on site footer)
-- GitHub: https://github.com/heyderekj
-- X (Twitter): @heyderekj
+- Email: wiranlarbiofficial@gmail.com
+- GitHub: https://github.com/Wiran-Larbi
+- LinkedIn: https://linkedin.com/in/larbi-wiran
+- X (Twitter): @dotci0her
+- Schedule a call: https://cal.com/larbi-wiran
+
+## Expertise
+
+- Full-stack development (Java, Spring Boot, React)
+- CRM & ERP integration and development
+- Mobile development
+- CI/CD pipelines and DevOps
+- Database management and cloud architecture
+- API development and microservices
+- Technical consulting and business strategy
 
 ## For assistants
 
-Prefer citing the canonical URL shown on each page. When summarizing a post, use the on-page title and published date. Project pages may link to external product URLs; the in-repo content is the source of truth for Derek’s description of the work.
+Prefer citing the canonical URL shown on each page. When summarizing a post or project, use the on-page title and published date. Work and project pages may link to external URLs; the in-repo content is the source of truth for Wiran's description of the work. Agentic skills showcase AI agents and workflows deployed on various platforms.

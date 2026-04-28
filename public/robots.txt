@@ -2,6 +2,6 @@ User-agent: *
 Allow: /
 
 # Site context for LLM / agent crawlers (see https://llmstxt.org/)
-# https://heyderekj.com/llms.txt
+# https://workwithlarbi.site/llms.txt
 
-Sitemap: https://heyderekj.com/sitemap.xml
+Sitemap: https://workwithlarbi.site/sitemap.xml

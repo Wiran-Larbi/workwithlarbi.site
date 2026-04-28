@@ -59,7 +59,7 @@ export async function fetchGitHubActivity(): Promise<GitHubData> {
       body: JSON.stringify({
         query: QUERY,
         variables: {
-          login: 'heyderekj',
+          login: 'Wiran-Larbi',
           from: from.toISOString(),
           to: to.toISOString(),
         },

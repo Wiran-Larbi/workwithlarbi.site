@@ -73,4 +73,18 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { posts, work, projects };
+const agenticSkills = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    tags: z.array(z.string()).optional(),
+    deployedAt: z.string().optional(), // e.g., "Agensio", "GitHub", etc.
+    deployedUrl: z.string().url().optional(),
+    draft: z.boolean().default(false),
+    featured: z.boolean().default(false),
+  }),
+});
+
+export const collections = { posts, work, projects, agenticSkills };

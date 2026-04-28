@@ -19,9 +19,9 @@ interface Props {
 const { post } = Astro.props;
 const { Content } = await post.render();
 
-const siteOrigin = (Astro.site?.toString() ?? 'https://heyderekj.com/').replace(/\/$/, '');
+const siteOrigin = (Astro.site?.toString() ?? 'https://workwithlarbi.site/').replace(/\/$/, '');
 const defaultDesc =
-  'Agentic design engineer, still making websites full-time. Writing on faith and technology.';
+  'Full-stack engineer. I build software full-time and write about the intersection of technology and the people who use it.';
 const postDescription = post.data.description ?? defaultDesc;
 const postPath = `/work/${post.slug}/`;
 const postUrl = new URL(postPath, `${siteOrigin}/`).toString();
@@ -79,8 +79,8 @@ const postJsonLd = {
   datePublished: published,
   url: postUrl,
   mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
-  author: { '@type': 'Person', '@id': schemaPersonId(siteOrigin), name: 'Derek Castelli' },
-  publisher: { '@type': 'Person', '@id': schemaPersonId(siteOrigin), name: 'Derek Castelli' },
+  author: { '@type': 'Person', '@id': schemaPersonId(siteOrigin), name: 'Wiran Larbi' },
+  publisher: { '@type': 'Person', '@id': schemaPersonId(siteOrigin), name: 'Wiran Larbi' },
   ...(industryOrTags.length ? { keywords: industryOrTags.join(', ') } : {}),
   ...(d.thumbnail
     ? {
@@ -94,10 +94,10 @@ const postJsonLd = {
 const fmtDate = (date: Date) =>
   date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 
-const ogImage = d.thumbnail && d.thumbnail.startsWith('/') ? d.thumbnail : '/derekj-og.png';
+const ogImage = d.thumbnail && d.thumbnail.startsWith('/') ? d.thumbnail : '/larbi-og.jpeg';
 ---
 <Base
-  title={`${d.title} — Derek Castelli`}
+  title={`${d.title} — Wiran Larbi`}
   description={postDescription}
   ogType="article"
   articlePublishedTime={published}

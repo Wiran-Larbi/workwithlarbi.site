@@ -24,20 +24,20 @@ const startLabel = formatProjectStartLabel(project);
 const status = project.data.status;
 const showMeta = Boolean(startLabel || status);
 
-const siteOrigin = (Astro.site?.toString() ?? 'https://heyderekj.com/').replace(/\/$/, '');
+const siteOrigin = (Astro.site?.toString() ?? 'https://workwithlarbi.site/').replace(/\/$/, '');
 const pageUrl = new URL(`/projects/${project.slug}/`, `${siteOrigin}/`).toString();
 const projectJsonLd: Record<string, unknown> = {
   '@type': 'SoftwareApplication',
   name: project.data.name,
   description: project.data.tagline,
   url: project.data.url ?? pageUrl,
-  author: { '@type': 'Person', '@id': schemaPersonId(siteOrigin), name: 'Derek Castelli' },
+  author: { '@type': 'Person', '@id': schemaPersonId(siteOrigin), name: 'Wiran Larbi' },
 };
 if (project.data.url) {
   projectJsonLd.sameAs = [project.data.url];
 }
 ---
-<Base title={`${project.data.name} — Derek Castelli`} description={project.data.tagline} jsonLd={projectJsonLd}>
+<Base title={`${project.data.name} — Wiran Larbi`} description={project.data.tagline} jsonLd={projectJsonLd}>
   <article class="prose">
     <header class="post-header project-detail-header">
       {project.data.url ? (

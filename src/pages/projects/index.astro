@@ -15,10 +15,10 @@ const retiredProjects = projects
   .filter((p) => p.data.status === 'retired')
   .sort((a, b) => projectStartTime(a) - projectStartTime(b));
 ---
-<Base title="Projects — Derek Castelli" description="Apps and sites built by Derek Castelli.">
+<Base title="Projects — Wiran Larbi" description="Apps and sites built by Wiran Larbi.">
   <h1>Projects</h1>
   <p style="color: var(--fg-soft); max-width: var(--max-prose);">
-    Apps and experiments—design, code, and AI.
+    Apps, code, and AI.
   </p>
 
   {activeProjects.length > 0 && <ProjectList projects={activeProjects} />}

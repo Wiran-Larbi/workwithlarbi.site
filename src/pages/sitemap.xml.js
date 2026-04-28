@@ -1,13 +1,14 @@
 import { getCollection } from 'astro:content';
 
 export async function GET(context) {
-  const site = context.site?.toString().replace(/\/$/, '') ?? 'https://heyderekj.com';
+  const site = context.site?.toString().replace(/\/$/, '') ?? 'https://workwithlarbi.site';
 
-  const staticPaths = ['/', '/posts/', '/work/', '/projects/', '/about/', '/tools/'];
+  const staticPaths = ['/', '/posts/', '/work/', '/projects/', '/about/', '/tools/', '/agentic-skills/'];
 
   const posts = await getCollection('posts', ({ data }) => !data.draft);
   const work = await getCollection('work', ({ data }) => !data.draft);
   const projects = await getCollection('projects', ({ data }) => !data.draft);
+  const agenticSkills = await getCollection('agenticSkills', ({ data}) => !data.draft);
 
   const urls = [
     ...staticPaths.map((p) => ({ loc: `${site}${p}`, lastmod: null })),
@@ -23,6 +24,10 @@ export async function GET(context) {
       loc: `${site}/projects/${p.slug}/`,
       lastmod: null,
     })),
+    ...agenticSkills.map((p) => ({
+      loc: `${site}/agenticSkills/${p.slug}/`,
+      lastmod: null, 
+    }))
   ];
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>

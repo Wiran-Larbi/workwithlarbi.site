@@ -1,59 +1,49 @@
 ---
 import Base from '../../layouts/Base.astro';
-
 const sections = [
   {
-    title: 'Design web',
+    title: 'Development',
     items: [
-      { name: 'Figma', note: 'UI and systems.', href: 'https://www.figma.com/' },
-      { name: 'Webflow', note: 'Client sites.', href: 'https://webflow.com/' },
-      { name: 'Astro', note: 'This site.', href: 'https://astro.build/' },
-      { name: 'Dinky', note: 'My app.', href: 'https://dinkyfiles.com/' },
+      { name: 'IntelliJ IDEA', note: 'Primary IDE.', href: 'https://www.jetbrains.com/idea/' },
+      { name: 'VS Code', note: 'Lightweight editing.', href: 'https://code.visualstudio.com/' },
+      { name: 'GitHub Copilot', note: 'AI pair programmer.', href: 'https://github.com/features/copilot' },
+      { name: 'Termius', note: 'SSH client.', href: 'https://termius.com/' },
+      { name: 'DBeaver', note: 'Database management.', href: 'https://dbeaver.io/' },
     ],
   },
   {
-    title: 'Agentic coding',
+    title: 'Infra & Cloud',
     items: [
-      {
-        name: 'Claude Desktop App',
-        note: 'Daily driver.',
-        href: 'https://claude.com/download',
-      },
-      { name: 'Cursor', note: 'Focused editing.', href: 'https://cursor.com/' },
+      { name: 'GitHub', note: 'Code and CI/CD.', href: 'https://github.com/' },
+      { name: 'AWS', note: 'Cloud infrastructure.', href: 'https://aws.amazon.com/' },
+      { name: 'Azure', note: 'Cloud services.', href: 'https://azure.microsoft.com/' },
+      { name: 'Cloudflare', note: 'DNS and security.', href: 'https://www.cloudflare.com/' },
     ],
   },
   {
-    title: 'Writing',
+    title: 'Productivity',
     items: [
-      { name: 'iA Writer', note: 'Focused writing.', href: 'https://ia.net/writer' },
-      { name: 'Clearly', note: 'Organizing and editing.', href: 'https://clearly.md/' },
-      { name: 'HEY', note: 'Email.', href: 'https://www.hey.com/' },
-    ],
-  },
-  {
-    title: 'Infra',
-    items: [
-      { name: 'GitHub', note: 'Code.', href: 'https://github.com/' },
-      { name: 'Fathom', note: 'Analytics.', href: 'https://usefathom.com/' },
-      { name: 'Netlify', note: 'Deploys.', href: 'https://www.netlify.com/' },
+      { name: 'Raycast', note: 'Launcher and shortcuts.', href: 'https://www.raycast.com/' },
+      { name: 'Obsidian', note: 'Notes and knowledge base.', href: 'https://obsidian.md/' },
+      { name: 'Outlook', note: 'Email.', href: 'https://www.microsoft.com/en-us/microsoft-365/outlook/' },
+      { name: 'MS Project', note: 'Project planning.', href: 'https://www.microsoft.com/en-us/microsoft-365/project/' },
+      { name: 'Slack', note: 'Team communication.', href: 'https://slack.com/' },
+      { name: 'Odoo', note: 'Business management.', href: 'https://www.odoo.com/' },
     ],
   },
   {
     title: 'Hardware',
     items: [
-      {
-        name: 'MacBook Air (M2, 2022)',
-        note: '24 GB memory.',
-        href: 'https://www.apple.com/macbook-air/',
-      },
+      { name: 'Mac Mini (M1)', note: 'Daily driver.', href: 'https://www.apple.com/mac-mini/' },
+      { name: 'AOC 24" Monitor', note: 'Primary display.', href: 'https://www.aoc.com/' },
     ],
   },
 ];
 ---
-<Base title="Tools — Derek Castelli" description="Tools Derek reaches for daily.">
+<Base title="Tools — Wiran Larbi" description="Tools Larbi reaches for daily.">
   <article class="prose">
     <h1>Tools</h1>
-    <p style="color: var(--fg-soft);">What I use to design, build, write, and ship.</p>
+    <p style="color: var(--fg-soft);">What I use to communicate, build, write, and ship.</p>
 
     {sections.map((section) => (
       <>

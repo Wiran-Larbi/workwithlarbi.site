@@ -10,7 +10,7 @@ import { schemaPersonId, schemaWebsiteId } from '../lib/schemaIds';
 import GitHubActivity from '../components/GitHubActivity.astro';
 import { fetchGitHubActivity } from '../lib/github';
 
-const siteOrigin = (Astro.site?.toString() ?? 'https://heyderekj.com/').replace(/\/$/, '');
+const siteOrigin = (Astro.site?.toString() ?? 'https://workwithlarbi.site/').replace(/\/$/, '');
 const defaultDesc =
   'Agentic design engineer, still making websites full-time. Writing on faith and technology.';
 const homeJsonLd = [
@@ -18,7 +18,7 @@ const homeJsonLd = [
     '@type': 'WebSite',
     '@id': schemaWebsiteId(siteOrigin),
     url: `${siteOrigin}/`,
-    name: 'Derek Castelli',
+    name: 'Wiran Larbi',
     description: defaultDesc,
     inLanguage: 'en-US',
     publisher: { '@id': schemaPersonId(siteOrigin) },
@@ -26,49 +26,101 @@ const homeJsonLd = [
   {
     '@type': 'Person',
     '@id': schemaPersonId(siteOrigin),
-    name: 'Derek Castelli',
+    name: 'Wiran Larbi',
     url: siteOrigin,
-    jobTitle: 'Agentic design engineer',
-    sameAs: ['https://github.com/heyderekj', 'https://twitter.com/heyderekj'],
+    jobTitle: 'Full Stack Software Engineer',
+    sameAs: ['https://github.com/Wiran-Larbi', 'https://x.com/dotci0her'],
   },
 ];
 
-const recentPosts = (await getCollection('posts', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+const recentPosts = (await getCollection('posts', ({ data }: any) => !data.draft))
+  .sort((a:any, b:any) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 5);
 
-const highlightedWork = (await getCollection('work', ({ data }) => !data.draft && data.highlight)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
-const homeHighlightedWork = highlightedWork.filter(({ slug }) => slug !== 'harvouscom').slice(0, 2);
+const recentAgenticSkills = (await getCollection('agenticSkills', ({ data }: any) => !data.draft))
+  .sort((a:any, b:any) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
 
-const allProjects = await getCollection('projects', ({ data }) => !data.draft);
+const highlightedWork = (await getCollection('work', ({ data }: any) => !data.draft && data.highlight)).sort(
+  (a:any, b:any) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const homeHighlightedWork = highlightedWork.filter(({ slug }: any) => slug !== 'secoraprep-affiliate').slice(0, 2);
+
+const allProjects = await getCollection('projects', ({ data }: any) => !data.draft);
 const featuredProjects = allProjects
-  .filter(({ data }) => data.featured)
-  .sort((a, b) => projectStartTime(b) - projectStartTime(a));
-const pausedProjects = allProjects.filter((p) => p.data.status === 'paused');
-const retiredProjects = allProjects.filter((p) => p.data.status === 'retired');
+  .filter(({ data }: any) => data.featured)
+  .sort((a: any, b: any) => projectStartTime(b) - projectStartTime(a));
+const pausedProjects = allProjects.filter((p: any) => p.data.status === 'paused');
+const retiredProjects = allProjects.filter((p: any) => p.data.status === 'retired');
 const pausedCount = pausedProjects.length;
 const retiredCount = retiredProjects.length;
 
 const githubData = await fetchGitHubActivity();
+
+const skills = [
+  'Web Development',
+  'CRM Integration',
+  'ERP Development',
+  'Mobile Development',
+  'CI/CD Pipelines',
+  'Database Management',
+  'Cloud Architecture',
+  'API Development',
+  'DevOps',
+  'Consulting',
+];
 ---
 <Base jsonLd={homeJsonLd}>
   <section class="intro">
     <p>
-      An agentic design engineer and Christian making websites with{' '}
-      <a href="https://kemdesign.co" rel="noopener noreferrer">Kem Design</a> and apps on the side. I write about my life, faith, and tech, drawing on work in Apple Retail, design work for a church, and freelance work since 2020.
+      Engineer by training. 
+      Translator by instinct.
+      <br class="simple-margin"/>
+
+      I build full-stack applications with Java, Spring Boot, and React and I've spent years learning how to take that work and make it mean something in a boardroom. 
+
+      <br class="simple-margin"/>
+
+      I bridge the space between technical teams and business decisions, and I think that's where real impact happens.
+      I work full-time and take on side projects in cloud and application development.
     </p>
     <p class="now-line">
       <NowHomeTicker />
     </p>
   </section>
 
+  <div class="skills-section">
+    <h2 class="skills-title">What I Can Help With</h2>
+    <div class="skills-tags">
+      {skills.map((skill) => (
+        <span class="skill-tag">{skill}</span>
+      ))}
+    </div>
+  </div>
+
   <h2 class="section-title"><a href="/posts/">/ posts</a></h2>
   {recentPosts.length > 0 ? (
     <PostList entries={recentPosts} />
   ) : (
     <p style="color: var(--muted);">No posts yet — adding soon.</p>
+  )}
+
+  <h2 class="section-title"><a href="/agentic-skills/">/ agentic skills</a></h2>
+  {recentAgenticSkills.length > 0 ? (
+    <ul class="entries">
+      {recentAgenticSkills.map((entry: any) => (
+        <li>
+          <a href={`/agentic-skills/${entry.slug}/`} class="entry-link">
+            <span class="entry-date">
+              {entry.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+            </span>
+            <span class="entry-title">{entry.data.title}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p style="color: var(--muted);">No agentic skills yet.</p>
   )}
 
   <h2 class="section-title"><a href="/work/">/ work</a></h2>
@@ -113,6 +165,46 @@ const githubData = await fetchGitHubActivity();
 </Base>
 
 <style>
+  .skills-section {
+    margin: var(--space-5) 0;
+    padding: var(--space-4);
+    background: var(--bg-elevated);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+  }
+
+  .skills-title {
+    font-size: var(--size-h2);
+    font-weight: 600;
+    margin: 0 0 var(--space-3);
+    color: var(--fg);
+  }
+
+  .skills-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .skill-tag {
+    display: inline-block;
+    padding: 6px 14px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: var(--size-meta);
+    font-weight: 500;
+    border-radius: var(--radius-pill);
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+    transition: all 0.2s ease;
+  }
+
+  .skill-tag:hover {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
   .home-status-summaries {
     margin-top: var(--space-4);
   }
@@ -159,6 +251,10 @@ const githubData = await fetchGitHubActivity();
     color: var(--muted);
     background: rgba(0, 0, 0, 0.04);
     border: 1px solid var(--border);
+  }
+
+  .simple-margin {
+    margin: 8px 0;
   }
 
   @media (prefers-color-scheme: dark) {

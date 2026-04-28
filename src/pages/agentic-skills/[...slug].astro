@@ -1,0 +1,83 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('agenticSkills', ({ data }: any) => !data.draft);
+  return entries.map((entry: any) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { title, description, date, tags, deployedAt, deployedUrl } = entry.data;
+---
+<Base 
+  title={`${title} — Wiran Larbi`}
+  description={description}
+  ogType="article"
+  articlePublishedTime={date.toISOString()}
+>
+  <article class="post-article">
+    <header class="post-header">
+      <h1>{title}</h1>
+      <div class="meta">
+        <time datetime={date.toISOString()}>
+          {date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </time>
+        {deployedAt && (
+          <>
+            {' · '}
+            {deployedUrl ? (
+              <a href={deployedUrl} target="_blank" rel="noopener noreferrer">
+                Deployed at {deployedAt}
+              </a>
+            ) : (
+              <span>Deployed at {deployedAt}</span>
+            )}
+          </>
+        )}
+      </div>
+      {tags && tags.length > 0 && (
+        <div class="tags">
+          {tags.map((tag: string) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="post-content prose">
+      <Content />
+    </div>
+
+    <div class="back-link">
+      <a href="/agentic-skills/">
+        <span class="arrow">←</span> All Agentic Skills
+      </a>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: var(--size-micro);
+    font-weight: 500;
+    border-radius: var(--radius-pill);
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+</style>

@@ -1,6 +1,6 @@
-# heyderekj.com
+# workwithlarbi.site
 
-Personal site for Derek Castelli. Built with [Astro](https://astro.build), hosted on Netlify.
+Personal site for Wiran Larbi. Built with [Astro](https://astro.build), hosted on Netlify.
 
 ## Stack
 
