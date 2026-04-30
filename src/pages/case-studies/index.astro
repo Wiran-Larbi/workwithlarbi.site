@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+
+const entries = (await getCollection('caseStudies', ({ data }: any) => !data.draft)).sort(
+  (a: any, b: any) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+<Base title="Case Studies — Wiran Larbi" description="In-depth case studies of real-world projects, challenges solved, and results delivered by Wiran Larbi.">
+  <h1>Case Studies</h1>
+  <p style="color: var(--fg-soft); max-width: var(--max-prose);">
+    Deep dives into real-world projects, technical challenges, and solutions. Each case study explores the problem, approach, and measurable results.
+  </p>
+
+  {entries.length > 0 ? (
+    <PostList entries={entries} showYearHeaders={true} />
+  ) : (
+    <p style="color: var(--muted);">No case studies yet. Check back soon!</p>
+  )}
+</Base>

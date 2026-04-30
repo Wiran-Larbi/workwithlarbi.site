@@ -60,4 +60,4 @@ In 2026, auditors are placing a "Tone from the Top" emphasis on **Supply Chain R
 
 **The bottom line:** Don't chase a SOC report just to tick a box. Treat it as a fundamental shift in how your company operates. By building evidence collection into your daily workflows, compliance becomes a byproduct of your security culture, not a yearly crisis.
 
-[Read the full technical deep dive on Medium](https://medium.com/@dotcipher/unlock-the-power-of-cloud-governance-aws-iam-case-study-88fd2ce5e043)
+[Read the full technical deep dive on Medium](https://medium.com/@dotcipher/soc-reports-demystified-types-criteria-and-audit-roadmap-b0725f9cc878)

@@ -1,0 +1,114 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { schemaPersonId } from '../../lib/schemaIds';
+
+export async function getStaticPaths() {
+  const caseStudies = await getCollection('caseStudies', ({ data }) => !data.draft);
+  return caseStudies.map((caseStudy) => ({
+    params: { slug: caseStudy.slug },
+    props: { caseStudy },
+  }));
+}
+
+interface Props {
+  caseStudy: CollectionEntry<'caseStudies'>;
+}
+
+const { caseStudy } = Astro.props;
+const { Content } = await caseStudy.render();
+
+const siteOrigin = (Astro.site?.toString() ?? 'https://workwithlarbi.site/').replace(/\/$/, '');
+const defaultDesc =
+  'Full-stack engineer. I build software full-time and write about the intersection of technology and the people who use it.';
+const caseStudyDescription = caseStudy.data.description ?? defaultDesc;
+const caseStudyPath = `/case-studies/${caseStudy.slug}/`;
+const caseStudyUrl = new URL(caseStudyPath, `${siteOrigin}/`).toString();
+const published = caseStudy.data.date.toISOString();
+const caseStudyJsonLd = {
+  '@type': 'Article',
+  headline: caseStudy.data.title,
+  description: caseStudyDescription,
+  datePublished: published,
+  url: caseStudyUrl,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': caseStudyUrl },
+  author: { '@type': 'Person', '@id': schemaPersonId(siteOrigin), name: 'Wiran Larbi' },
+  publisher: { '@type': 'Person', '@id': schemaPersonId(siteOrigin), name: 'Wiran Larbi' },
+  ...(caseStudy.data.tags?.length
+    ? { keywords: caseStudy.data.tags.join(', ') }
+    : {}),
+};
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+---
+<Base
+  title={`${caseStudy.data.title} — Wiran Larbi`}
+  description={caseStudyDescription}
+  ogType="article"
+  articlePublishedTime={published}
+  jsonLd={caseStudyJsonLd}
+  canonical={caseStudyUrl}
+>
+  <article class="prose">
+    <header class="post-header">
+      <h1>{caseStudy.data.title}</h1>
+      <div class="meta">
+        <time datetime={caseStudy.data.date.toISOString()}>{fmtDate(caseStudy.data.date)}</time>
+        {caseStudy.data.client && <span> · {caseStudy.data.client}</span>}
+        {caseStudy.data.industry && <span> · {caseStudy.data.industry}</span>}
+      </div>
+      {caseStudy.data.tags && caseStudy.data.tags.length > 0 && (
+        <div class="tags" style="margin-top: 0.5rem; color: var(--fg-soft); font-size: 0.9rem;">
+          {caseStudy.data.tags.join(' · ')}
+        </div>
+      )}
+    </header>
+    
+    {(caseStudy.data.challenge || caseStudy.data.solution || caseStudy.data.results) && (
+      <div class="case-study-summary" style="background: var(--bg-soft); padding: 1.5rem; border-radius: 8px; margin: 2rem 0;">
+        {caseStudy.data.challenge && (
+          <div style="margin-bottom: 1rem;">
+            <strong style="color: var(--accent);">Challenge:</strong>
+            <p style="margin: 0.5rem 0 0 0;">{caseStudy.data.challenge}</p>
+          </div>
+        )}
+        {caseStudy.data.solution && (
+          <div style="margin-bottom: 1rem;">
+            <strong style="color: var(--accent);">Solution:</strong>
+            <p style="margin: 0.5rem 0 0 0;">{caseStudy.data.solution}</p>
+          </div>
+        )}
+        {caseStudy.data.results && caseStudy.data.results.length > 0 && (
+          <div>
+            <strong style="color: var(--accent);">Results:</strong>
+            <ul style="margin: 0.5rem 0 0 0; padding-left: 1.5rem;">
+              {caseStudy.data.results.map((result: any) => (
+                <li>{result}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {caseStudy.data.technologies && caseStudy.data.technologies.length > 0 && (
+          <div style="margin-top: 1rem;">
+            <strong style="color: var(--accent);">Technologies:</strong>
+            <div style="margin-top: 0.5rem;">
+              {caseStudy.data.technologies.map((tech: any) => (
+                <span style="display: inline-block; background: var(--bg); padding: 0.25rem 0.75rem; border-radius: 4px; margin: 0.25rem 0.25rem 0 0; font-size: 0.85rem;">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    )}
+
+    <div class="post-content">
+      <Content />
+    </div>
+    <p class="back-link">
+      <a href="/case-studies/"><span class="arrow">&larr;</span> all case studies</a>
+    </p>
+  </article>
+</Base>

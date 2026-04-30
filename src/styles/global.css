@@ -499,6 +499,25 @@ img { max-width: 100%; height: auto; border-radius: var(--radius-md); }
 .work-casestudy { max-width: min(100%, 42rem); }
 .work-meta-line { flex-wrap: wrap; }
 /* Favorite star: same flex row as the h1 (siblings, not inside the heading) */
+.work-header-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.work-header-title-row .work-title-block {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.work-header-cta {
+  flex-shrink: 0;
+}
+
 .work-post-header .work-title-block {
   display: flex;
   flex-direction: row;

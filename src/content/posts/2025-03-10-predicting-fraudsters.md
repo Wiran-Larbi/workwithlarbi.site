@@ -19,4 +19,4 @@ Fraud detection isn't just about catching "bad guys"; it's about identifying pat
 ### Ethics and Adaptation
 A disciplined approach requires constant vigilance against **Model Drift** (as fraudsters change their tactics) and **Bias Mitigation** to ensure fairness across all user groups.
 
-[Read the full article on Medium](https://medium.com/@dotcipher/unlock-the-power-of-cloud-governance-aws-iam-case-study-88fd2ce5e043)
+[Read the full article on Medium](https://medium.com/@dotcipher/predicting-fraudsters-doordash-usecase-dd4b7b7da63d)

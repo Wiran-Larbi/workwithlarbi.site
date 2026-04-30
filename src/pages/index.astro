@@ -37,6 +37,10 @@ const recentPosts = (await getCollection('posts', ({ data }: any) => !data.draft
   .sort((a:any, b:any) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 5);
 
+const recentCaseStudies = (await getCollection('caseStudies', ({ data }: any) => !data.draft))
+  .sort((a:any, b:any) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
 const recentAgenticSkills = (await getCollection('agenticSkills', ({ data }: any) => !data.draft))
   .sort((a:any, b:any) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 5);
@@ -98,36 +102,25 @@ const skills = [
     </div>
   </div>
 
-  <h2 class="section-title"><a href="/posts/">/ posts</a></h2>
-  {recentPosts.length > 0 ? (
-    <PostList entries={recentPosts} />
-  ) : (
-    <p style="color: var(--muted);">No posts yet — adding soon.</p>
-  )}
-
-  <h2 class="section-title"><a href="/agentic-skills/">/ agentic skills</a></h2>
-  {recentAgenticSkills.length > 0 ? (
-    <ul class="entries">
-      {recentAgenticSkills.map((entry: any) => (
-        <li>
-          <a href={`/agentic-skills/${entry.slug}/`} class="entry-link">
-            <span class="entry-date">
-              {entry.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-            </span>
-            <span class="entry-title">{entry.data.title}</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <p style="color: var(--muted);">No agentic skills yet.</p>
-  )}
-
   <h2 class="section-title"><a href="/work/">/ work</a></h2>
 {homeHighlightedWork.length > 0 ? (
     <FeaturedWorkGrid work={homeHighlightedWork} />
   ) : (
     <p style="color: var(--muted);">No highlighted work posts yet.</p>
+  )}
+
+  <h2 class="section-title"><a href="/case-studies/">/ case studies</a></h2>
+  {recentCaseStudies.length > 0 ? (
+    <PostList entries={recentCaseStudies} />
+  ) : (
+    <p style="color: var(--muted);">No case studies yet — adding soon.</p>
+  )}
+
+  <h2 class="section-title"><a href="/posts/">/ posts</a></h2>
+  {recentPosts.length > 0 ? (
+    <PostList entries={recentPosts} />
+  ) : (
+    <p style="color: var(--muted);">No posts yet — adding soon.</p>
   )}
 
   <h2 class="section-title"><a href="/projects/">/ projects</a></h2>
@@ -159,6 +152,24 @@ const skills = [
         </li>
       )}
     </ul>
+  )}
+
+  <h2 class="section-title"><a href="/agentic-skills/">/ agentic skills</a></h2>
+  {recentAgenticSkills.length > 0 ? (
+    <ul class="entries">
+      {recentAgenticSkills.map((entry: any) => (
+        <li>
+          <a href={`/agentic-skills/${entry.slug}/`} class="entry-link">
+            <span class="entry-date">
+              {entry.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+            </span>
+            <span class="entry-title">{entry.data.title}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p style="color: var(--muted);">No agentic skills yet.</p>
   )}
 
   <GitHubActivity data={githubData} />

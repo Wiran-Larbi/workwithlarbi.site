@@ -49,4 +49,4 @@ To secure these endpoints, organizations should implement **OAuth 2.0**, enforce
 
 **The bottom line:** Protecting data today isn't about passing an audit—it's about building an agile, multi-layered defense capable of defending against the threats of tomorrow.
 
-[Read the full article on Medium](https://medium.com/@dotcipher/unlock-the-power-of-cloud-governance-aws-iam-case-study-88fd2ce5e043)
+[Read the full article on Medium](https://medium.com/@dotcipher/the-modern-playbook-for-data-protection-lessons-from-pci-dss-v4-0-a51ad0cd4f1f)

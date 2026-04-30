@@ -107,14 +107,31 @@ const ogImage = d.thumbnail && d.thumbnail.startsWith('/') ? d.thumbnail : '/lar
 >
   <article class="prose work-casestudy">
     <header class="post-header work-post-header">
-      <div class="work-title-block">
-        <h1>{d.title}</h1>
-        {d.highlight && (
-          <span class="work-favorite" title="A personal favorite">
-            <i class="ph-fill ph-star" aria-hidden="true" />
-          </span>
-        )}
-      </div>
+      {d.liveLink ? (
+        <div class="work-header-title-row">
+          <div class="work-title-block">
+            <h1>{d.title}</h1>
+            {d.highlight && (
+              <span class="work-favorite" title="A personal favorite">
+                <i class="ph-fill ph-star" aria-hidden="true" />
+              </span>
+            )}
+          </div>
+          <a href={d.liveLink} target="_blank" rel="noopener noreferrer" class="cta work-header-cta">
+            Live site
+            <span class="arrow">&rarr;</span>
+          </a>
+        </div>
+      ) : (
+        <div class="work-title-block">
+          <h1>{d.title}</h1>
+          {d.highlight && (
+            <span class="work-favorite" title="A personal favorite">
+              <i class="ph-fill ph-star" aria-hidden="true" />
+            </span>
+          )}
+        </div>
+      )}
       <div class="meta work-meta-line">
         <time datetime={d.date.toISOString()}>{fmtDate(d.date)}</time>
         {d.dateCompleted && d.dateCompleted.getTime() !== d.date.getTime() && (
@@ -423,39 +440,6 @@ const ogImage = d.thumbnail && d.thumbnail.startsWith('/') ? d.thumbnail : '/lar
       </p>
     )}
 
-    {(d.liveLink || d.waybackUrl || d.partnershipWorkLink) && (
-      <ul class="work-links" aria-label="Project links">
-        {d.liveLink && (
-          <li>
-            <a class="work-link-pill" href={d.liveLink} rel="noopener noreferrer" target="_blank">
-              <span>Live site</span>
-              <i class="ph-bold ph-arrow-up-right work-link-pill__icon" aria-hidden="true" />
-            </a>
-          </li>
-        )}
-        {d.waybackUrl && (
-          <li>
-            <a class="work-link-pill" href={d.waybackUrl} rel="noopener noreferrer" target="_blank">
-              <span>Wayback Machine</span>
-              <i class="ph-bold ph-arrow-up-right work-link-pill__icon" aria-hidden="true" />
-            </a>
-          </li>
-        )}
-        {d.partnershipWorkLink && (
-          <li>
-            <a
-              class="work-link-pill"
-              href={d.partnershipWorkLink}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <span>Partner case study</span>
-              <i class="ph-bold ph-arrow-up-right work-link-pill__icon" aria-hidden="true" />
-            </a>
-          </li>
-        )}
-      </ul>
-    )}
 
     <p class="back-link">
       <a href="/work/"><span class="arrow">&larr;</span> all work</a>

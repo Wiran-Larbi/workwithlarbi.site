@@ -43,4 +43,4 @@ A globally recognized stamp of approval for building an **Information Security M
 ### Compliance is a Journey, Not a Destination
 You don’t just "get compliant" and coast. Threats change and rules evolve. Real security is a continuous process of monitoring and improvement. Getting it right isn't about passing an audit—it's about building a resilient organization that your customers can trust.
 
-[Read the full technical deep dive on Medium](https://medium.com/@dotcipher/unlock-the-power-of-cloud-governance-aws-iam-case-study-88fd2ce5e043)
+[Read the full technical deep dive on Medium](https://medium.com/@dotcipher/jargon-free-guide-to-security-compliance-43d342a3e750)

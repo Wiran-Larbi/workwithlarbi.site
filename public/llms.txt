@@ -10,6 +10,7 @@ Wiran is an engineer by training and translator by instinct. With expertise in f
 
 - [Home](https://workwithlarbi.site/): intro, recent posts, featured work, and agentic skills
 - [Posts](https://workwithlarbi.site/posts/): full archive of writing on technology and business
+- [Case Studies](https://workwithlarbi.site/case-studies/): in-depth analysis of real-world projects and solutions
 - [Work](https://workwithlarbi.site/work/): client projects and professional experience
 - [Projects](https://workwithlarbi.site/projects/): personal projects and open-source contributions
 - [Agentic Skills](https://workwithlarbi.site/agentic-skills/): AI agents and agentic workflows

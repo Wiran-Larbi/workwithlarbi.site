@@ -43,4 +43,4 @@ Tokenization is the "engine" of the blockchain. It allows us to represent everyt
 **Conclusion:**
 Tokenization transforms raw computational power into actionable security. Whether you are protecting a DoorDash refund or architecting a global payment gateway, replacing sensitive data with tokens is a critical step in building a provably secure system.
 
-[Read the full technical deep dive on Medium](https://medium.com/@dotcipher/unlock-the-power-of-cloud-governance-aws-iam-case-study-88fd2ce5e043)
+[Read the full technical deep dive on Medium](https://medium.com/@dotcipher/what-is-tokenization-and-why-should-you-care-8e04c444694e)

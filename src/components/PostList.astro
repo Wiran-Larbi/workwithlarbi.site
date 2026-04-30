@@ -29,6 +29,11 @@ const years = groupedByYear
 
 const isHighlightedWork = (post: ListableEntry) =>
   post.collection === 'work' && Boolean((post.data as { highlight?: boolean }).highlight);
+
+const isFeaturedCaseStudy = (post: ListableEntry) =>
+  post.collection === 'caseStudies' && Boolean((post.data as { featured?: boolean }).featured);
+
+const isStarred = (post: ListableEntry) => isHighlightedWork(post) || isFeaturedCaseStudy(post);
 ---
 {showYearHeaders && groupedByYear ? (
   years.map((year) => (
@@ -41,7 +46,7 @@ const isHighlightedWork = (post: ListableEntry) =>
               <time datetime={post.data.date.toISOString()} class="entry-date">{fmtDate(post.data.date)}</time>
               <span class="entry-title">
                 {post.data.title}
-                {isHighlightedWork(post) && (
+                {isStarred(post) && (
                   <span class="entry-favorite" title="A personal favorite">
                     <i class="ph-fill ph-star" aria-hidden="true" />
                   </span>
@@ -61,7 +66,7 @@ const isHighlightedWork = (post: ListableEntry) =>
           <time datetime={post.data.date.toISOString()} class="entry-date">{fmtDateWithYear(post.data.date)}</time>
           <span class="entry-title">
             {post.data.title}
-            {isHighlightedWork(post) && (
+            {isStarred(post) && (
               <span class="entry-favorite" title="A personal favorite">
                 <i class="ph-fill ph-star" aria-hidden="true" />
               </span>

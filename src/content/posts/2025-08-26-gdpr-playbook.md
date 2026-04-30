@@ -45,4 +45,4 @@ A **SIEM (Security Information & Event Management)** system is the pragmatic sho
 
 GDPR isn't a monster under the bed; it's a nudge toward **accountable systems**. By treating privacy as a product requirement and instrumenting everything, you make compliance a signal of quality, not a source of noise.
 
-[Read the full technical deep dive on Medium](https://medium.com/@dotcipher/unlock-the-power-of-cloud-governance-aws-iam-case-study-88fd2ce5e043)
+[Read the full technical deep dive on Medium](https://medium.com/@dotcipher/a-practical-gdpr-playbook-for-engineers-c4d86403d84e)

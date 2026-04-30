@@ -3,9 +3,10 @@ import { getCollection } from 'astro:content';
 export async function GET(context) {
   const site = context.site?.toString().replace(/\/$/, '') ?? 'https://workwithlarbi.site';
 
-  const staticPaths = ['/', '/posts/', '/work/', '/projects/', '/about/', '/tools/', '/agentic-skills/'];
+  const staticPaths = ['/', '/posts/', '/case-studies/', '/work/', '/projects/', '/about/', '/tools/', '/agentic-skills/'];
 
   const posts = await getCollection('posts', ({ data }) => !data.draft);
+  const caseStudies = await getCollection('caseStudies', ({ data }) => !data.draft);
   const work = await getCollection('work', ({ data }) => !data.draft);
   const projects = await getCollection('projects', ({ data }) => !data.draft);
   const agenticSkills = await getCollection('agenticSkills', ({ data}) => !data.draft);
@@ -14,6 +15,10 @@ export async function GET(context) {
     ...staticPaths.map((p) => ({ loc: `${site}${p}`, lastmod: null })),
     ...posts.map((p) => ({
       loc: `${site}/posts/${p.slug}/`,
+      lastmod: p.data.date.toISOString().slice(0, 10),
+    })),
+    ...caseStudies.map((p) => ({
+      loc: `${site}/case-studies/${p.slug}/`,
       lastmod: p.data.date.toISOString().slice(0, 10),
     })),
     ...work.map((p) => ({

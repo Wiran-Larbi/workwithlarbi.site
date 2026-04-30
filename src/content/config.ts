@@ -87,4 +87,24 @@ const agenticSkills = defineCollection({
   }),
 });
 
-export const collections = { posts, work, projects, agenticSkills };
+const caseStudies = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    description: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    draft: z.boolean().default(false),
+    featured: z.boolean().default(false),
+    client: z.string().optional(),
+    industry: z.string().optional(),
+    challenge: z.string().optional(),
+    solution: z.string().optional(),
+    results: z.array(z.string()).optional(),
+    technologies: z.array(z.string()).optional(),
+    duration: z.string().optional(),
+    thumbnail: z.string().optional(),
+  }),
+});
+
+export const collections = { posts, work, projects, agenticSkills, caseStudies };
