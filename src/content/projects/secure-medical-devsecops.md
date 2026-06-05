@@ -3,7 +3,7 @@ name: SecureApp — Medical Records Portal
 tagline: A highly secure, robust, and observable medical records portal deployed on Google Kubernetes Engine (GKE) Autopilot.
 url: https://github.com/Wiran-Larbi/secure-medical-app
 year: 2026
-started: 2026-06-01
+started: 2026-05-01
 role: DevSecOps Engineer
 stack: [Kubernetes, GKE, Spring Boot, React, GitLab CI, Prometheus]
 image: /assets/images/projects/secureapp.png
