@@ -27,6 +27,8 @@ A highly secure, robust, and observable medical records portal deployed on **Goo
 
 ## 🏗️ Architecture
 
+![SecureApp Architecture](/images/projects/secure-medical/latest_diagram.drawio.png)
+
 The application runs across two namespaces in GKE Autopilot:
 - **`secureapp`**: Houses the application components, ConfigMaps, and Secrets.
 - **`monitoring`**: Houses the Prometheus Operator, Grafana, and Alertmanager.
@@ -74,6 +76,17 @@ To access Grafana locally (Login: `admin` / `admin`):
 ```bash
 kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
 ```
+
+---
+
+## 📸 Application Screenshots
+
+![Dashboard](/images/projects/secure-medical/1.png)
+![Login](/images/projects/secure-medical/4.png)
+![Records](/images/projects/secure-medical/6.png)
+![Metrics](/images/projects/secure-medical/9.png)
+![Grafana](/images/projects/secure-medical/10.png)
+![Alerts](/images/projects/secure-medical/11.png)
 
 ---
 
